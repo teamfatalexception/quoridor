@@ -1,0 +1,76 @@
+import java.util.*;
+
+public class MazeBuilder2{
+    private static int columns;
+    private static int rows;
+    public static void main(String[] args){
+
+	if(args.length != 2)
+	    System.out.println(new Exception("Require two integer parameters"));
+
+	rows = Integer.parseInt(args[0]);
+	columns = Integer.parseInt(args[1]);
+	Random rand = new Random();
+	int numElements = rows * columns;
+	int num = 8/20;
+	Maze maze = new Maze(rows,columns);
+		System.out.println(num);
+	System.out.print(maze.toString());
+	DisjSets disj = new DisjSets(numElements);
+	int xcor = rand.nextInt(numElements);
+	int ycor = rand.nextInt(numElements);
+
+	//for( int k = 0; k < numElements;k++){
+	while(disj.find(0) != disj.find(numElements-1)){
+	    if((disj.find(ycor) != disj.find(xcor)) && isNeighbor(xcor,ycor)){
+		
+		if(disj.find(ycor) == ycor){
+		    disj.union(disj.find(ycor), disj.find(xcor));
+		System.out.println("y is root");
+	
+		}
+		else{
+			disj.union(disj.find(xcor), disj.find(ycor));
+			System.out.println("x is root");
+		}
+		
+	    }
+	     System.out.println("x = " + xcor + " y = " + ycor);
+		 maze.kickOutWall(xcor%numElements,xcor/numElements,ycor%numElements,ycor/numElements);
+	    
+	   
+	   
+		 xcor = rand.nextInt(numElements);
+		 ycor = rand.nextInt(numElements);
+	 
+	 		System.out.println(disj.toString());
+		System.out.println(maze.toString());
+	}
+
+    }
+
+
+	
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+       private static boolean isNeighbor(int x, int y) {
+    return x == y-1 || x == y+1 || x == y+columns || x == y-columns;
+       }
+
+
+}

@@ -1,0 +1,58 @@
+import java.util.*;
+
+public class MazeBuilder{
+    public static void main(String[] args){
+	if(args.length != 2)
+	    System.out.println(new Exception("Wrong number of parameters."));
+
+        int rows = Integer.parseInt(args[0]);
+	int columns = Integer.parseInt(args[1]);
+	Random rand = new Random();
+	int numElements = rows * columns;
+
+
+
+	Maze maze = new Maze(rows,columns);
+	System.out.print(maze.toString());
+	DisjSets disj = new DisjSets(numElements);
+	int set1, set2;
+		System.out.println(disj.toString());
+		for(int i = 1; i < (numElements); i*=2){
+		    for(int j = 0; j + i < (numElements); j += 2 * i){
+			set1 = disj.find(j);
+			set2 = disj.find(j + i);
+			disj.union(set1,set2);
+		    }
+		}
+		System.out.println(disj.toString());
+	
+		for(int k = 0; k< numElements; k++){
+	
+		    int a = rand.nextInt(rows);
+		    int b = rand.nextInt(columns);
+		    int c = rand.nextInt(rows);
+		    int d = rand.nextInt(columns);
+		    
+
+		    
+		    if(disj.find(numElements-1) == 0)
+			maze.kickOutWall(a,b,c,d);
+			disj.union(a,b);
+		    
+		}       		    		
+			System.out.print(maze.toString());
+			System.out.println(disj.setNumber());
+
+		}
+
+		}
+
+	    
+
+	
+
+
+		
+	
+    
+
