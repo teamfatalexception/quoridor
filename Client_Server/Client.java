@@ -150,49 +150,68 @@ public class Client2  {
 	 * when a GUI id used, the GUI is informed of the disconnection
 	 */
 	public static void main(String[] args) {
-		// default values
+		//Line to be used for regex
 		String line = "";
+		//Loop through commands and add them to line
 		for (int n = 0; n < args.length; n++){
 			line += args[n] + " ";
 		}
-		int portNumber = 1500;
-	
-		String serverAddress = "localhost";
-		String userName = "Anonymous";
 		
+		//Replace all colons in line with whitespace
+		String my_line = line.replaceAll(":", " ");
+		
+		//Split line up into individual string components
+		String[] words = my_line.split("\\s+");
+		
+		// default values
+		int portNumber = 1500;  //Default port
+		String serverAddress = "localhost";  // Default hostname
+		
+		
+		//Instantiate several clients to use
 		Client2 client = new Client2(serverAddress, portNumber);
 		Client2 client2 = new Client2(serverAddress, portNumber);
 		Client2 client3 = new Client2(serverAddress, portNumber);
 		Client2 client4 = new Client2(serverAddress, portNumber);
+		
+		//List for holding all clients
 		ArrayList<Client2> clients =  new ArrayList<Client2>();
 		
-		String pattern = "(.*)(\\s)(:)(\\s)(\\d+)(\\s)(.*)(\\s)(:)(\\s)(\\d+)";
-		String pattern2 = "(.*)(\\s)(:)(\\s)(\\d+)(\\s)(.*)(\\s)(:)(\\s)(\\d+)(.*)(\\s)(:)(\\s)(\\d+)(\\s)(.*)(\\s)(:)(\\s)(\\d+)";
+		//Patter to use for checking if two players
+		String pattern = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
+		
+		//Pattern to use for checking if four players
+		String pattern2 = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
+		
+		//Compile both patterns
 		Pattern r = Pattern.compile(pattern);
 		Pattern mr = Pattern.compile(pattern2);
+		
+		//Create matcher object to check for matching string
 		Matcher m = r.matcher(line);
 		Matcher m2 = mr.matcher(line);
-		System.out.println(args[3] + " " + args[5]);
 		
 		// depending of the number of arguments provided we fall through
+		//Only runs if there are four players
 		if(m2.find()) {
 			try {
-				serverAddress = args[0];
-				portNumber = Integer.parseInt(args[2]);
+				serverAddress = words[0];
+				portNumber = Integer.parseInt(words[1]);
 				client = new Client2(serverAddress, portNumber);
-				serverAddress = args[3];
-				portNumber = Integer.parseInt(args[5]);
+				serverAddress = words[2];
+				portNumber = Integer.parseInt(words[3]);
 				client2 = new Client2(serverAddress, portNumber);
-				serverAddress = args[6];
-				portNumber = Integer.parseInt(args[8]);
+				serverAddress = words[4];
+				portNumber = Integer.parseInt(words[5]);
 				client3 = new Client2(serverAddress, portNumber);
-				serverAddress = args[9];
-				portNumber = Integer.parseInt(args[11]);
+				serverAddress = words[6];
+				portNumber = Integer.parseInt(words[7]);
 				client4 = new Client2(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
 				clients.add(client3);
 				clients.add(client4);
+				
 				// test if we can start the connection to the Server
 				// if it failed nothing we can do
 				if(!client.start())
@@ -212,16 +231,19 @@ public class Client2  {
 					return;
 				}
 			}
+		
+		//Only runs if there are two players
 		else if(m.find()) {
 			try {
-				serverAddress = args[0];
-				portNumber = Integer.parseInt(args[2]);
+				serverAddress = words[0];
+				portNumber = Integer.parseInt(words[1]);
 				client = new Client2(serverAddress, portNumber);
-				serverAddress = args[3];
-				portNumber = Integer.parseInt(args[5]);
+				serverAddress = words[2];
+				portNumber = Integer.parseInt(words[3]);
 				client2 = new Client2(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
+				
 				// test if we can start the connection to the Server
 				// if it failed nothing we can do
 				if(!client.start())
@@ -264,12 +286,15 @@ public class Client2  {
 			}
 			else {
 				// default to ordinary message
+				//Checks if four players present.  Echo between all four.
 				if(clients.size() == 4){
 				client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
 				client2.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
 				client3.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
 				client4.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
 				}
+				
+				//If not four players at this point can only be two.  Echo between the two.
 				else{
 					client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
 					client2.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
