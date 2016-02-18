@@ -1,4 +1,4 @@
-package Client_Server;
+
 
 import java.net.*;
 import java.io.*;
@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /*
  * The Client that can be run both as a console or a GUI
  */
-public class Client2  {
+public class Client  {
 
 	// for I/O
 	private ObjectInputStream sInput;		// to read from the socket
@@ -29,7 +29,7 @@ public class Client2  {
 	 *  port: the port number
 	 *  username: the username
 	 */
-	Client2(String server, int port) {
+	Client(String server, int port) {
 		// which calls the common constructor with the GUI set to null
 		this(server, port, null);
 	}
@@ -38,7 +38,7 @@ public class Client2  {
 	 * Constructor call when used from a GUI
 	 * in console mode the ClientGUI parameter is null
 	 */
-	Client2(String server, int port, ClientGUI cg) {
+	Client(String server, int port, ClientGUI cg) {
 		this.server = server;
 		this.port = port;
 		// save if we are in GUI mode or not
@@ -169,13 +169,13 @@ public class Client2  {
 		
 		
 		//Instantiate several clients to use
-		Client2 client = new Client2(serverAddress, portNumber);
-		Client2 client2 = new Client2(serverAddress, portNumber);
-		Client2 client3 = new Client2(serverAddress, portNumber);
-		Client2 client4 = new Client2(serverAddress, portNumber);
+		Client client = new Client(serverAddress, portNumber);
+		Client client2 = new Client(serverAddress, portNumber);
+		Client client3 = new Client(serverAddress, portNumber);
+		Client client4 = new Client(serverAddress, portNumber);
 		
 		//List for holding all clients
-		ArrayList<Client2> clients =  new ArrayList<Client2>();
+		ArrayList<Client> clients =  new ArrayList<Client>();
 		
 		//Patter to use for checking if two players
 		String pattern = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
@@ -197,16 +197,16 @@ public class Client2  {
 			try {
 				serverAddress = words[0];
 				portNumber = Integer.parseInt(words[1]);
-				client = new Client2(serverAddress, portNumber);
+				client = new Client(serverAddress, portNumber);
 				serverAddress = words[2];
 				portNumber = Integer.parseInt(words[3]);
-				client2 = new Client2(serverAddress, portNumber);
+				client2 = new Client(serverAddress, portNumber);
 				serverAddress = words[4];
 				portNumber = Integer.parseInt(words[5]);
-				client3 = new Client2(serverAddress, portNumber);
+				client3 = new Client(serverAddress, portNumber);
 				serverAddress = words[6];
 				portNumber = Integer.parseInt(words[7]);
-				client4 = new Client2(serverAddress, portNumber);
+				client4 = new Client(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
 				clients.add(client3);
@@ -237,10 +237,10 @@ public class Client2  {
 			try {
 				serverAddress = words[0];
 				portNumber = Integer.parseInt(words[1]);
-				client = new Client2(serverAddress, portNumber);
+				client = new Client(serverAddress, portNumber);
 				serverAddress = words[2];
 				portNumber = Integer.parseInt(words[3]);
-				client2 = new Client2(serverAddress, portNumber);
+				client2 = new Client(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
 				
