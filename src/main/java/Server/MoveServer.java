@@ -126,7 +126,7 @@ public class MoveServer {
                         int kickedPlayer = (int) Integer.valueOf(msgArgs[1]);
                         if (kickedPlayer == playerNumber) {
                             // oh shit we just got kicked out of the game
-                            isGameOn = false:
+                            isGameOn = false;
                             System.exit(0);
                         }
 
