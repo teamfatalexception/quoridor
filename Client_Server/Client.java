@@ -103,7 +103,7 @@ public class Client  {
 	/*
 	 * To send a message to the server
 	 */
-	void sendMessage(ChatMessage msg) {
+	void sendMessage(String msg) {
 		try {
 			sOutput.writeObject(msg);
 		}
@@ -274,35 +274,20 @@ public class Client  {
 			System.out.print("> ");
 			// read message from user
 			String msg = scan.nextLine();
-			// logout if message is LOGOUT
-			if(msg.equalsIgnoreCase("LOGOUT")) {
-				client.sendMessage(new ChatMessage(ChatMessage.LOGOUT, ""));
-				// break to do the disconnect
-				break;
-			}
-			// message WhoIsIn
-			else if(msg.equalsIgnoreCase("WHOISIN")) {
-				client.sendMessage(new ChatMessage(ChatMessage.WHOISIN, ""));				
-			}
-			else {
-				// default to ordinary message
-				//Checks if four players present.  Echo between all four.
 				if(clients.size() == 4){
-				client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
-				client2.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
-				client3.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
-				client4.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
+				client.sendMessage(msg);
+				client2.sendMessage(msg);
+				client3.sendMessage(msg);
+				client4.sendMessage(msg);
 				}
 				
 				//If not four players at this point can only be two.  Echo between the two.
 				else{
-					client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
-					client2.sendMessage(new ChatMessage(ChatMessage.MESSAGE, msg));
-				}
-			}
-		}
-	       
-		client.disconnect();	
+					client.sendMessage(msg);
+					client2.sendMessage(msg);
+				}	
+			}   
+	    
 	}
 
 	/*

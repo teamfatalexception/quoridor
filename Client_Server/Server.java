@@ -196,7 +196,7 @@ public class Server {
 		// the Username of the Client
 		String username;
 		// the only type of message a will receive
-		ChatMessage cm;
+		String cm;
 		// the date I connect
 		String date;
 
@@ -235,7 +235,7 @@ public class Server {
 			while(keepGoing) {
 				// read a String (which is an object)
 				try {
-					cm = (ChatMessage) sInput.readObject();
+					cm = (String) sInput.readObject();
 				}
 				catch (IOException e) {
 					display(username + " Exception reading Streams: " + e);
@@ -245,10 +245,11 @@ public class Server {
 					break;
 				}
 				// the message part of the ChatMessage
-				String message = cm.getMessage();
+				String message = cm;
 
 				// Switch on the type of message receive
-				switch(cm.getType()) {
+				broadcast(message);
+				/*(	switch(cm) {
 
 				case ChatMessage.MESSAGE:
 					broadcast(username + ": " + message);
@@ -263,9 +264,10 @@ public class Server {
 					for(int i = 0; i < al.size(); ++i) {
 						ClientThread ct = al.get(i);
 						writeMsg((i+1) + ") " + ct.username + " since " + ct.date);
-					}
+						
 					break;
 				}
+				}*/
 			}
 			// remove myself from the arrayList containing the list of the
 			// connected Clients
