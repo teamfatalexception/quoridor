@@ -1,14 +1,16 @@
-
-
 import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 /*
  * The Client that can be run both as a console or a GUI
  */
+
 public class Client  {
+
+	private ArrayList<Player> players = new ArrayList<Player>();
 
 	// for I/O
 	private ObjectInputStream sInput;		// to read from the socket
