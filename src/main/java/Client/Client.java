@@ -253,9 +253,13 @@ public class Client  {
 			try {
 				serverAddress = words[0];
 				portNumber = Integer.parseInt(words[1]);
+				//
+                                players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
 				client = new Client(serverAddress, portNumber);
 				serverAddress = words[2];
 				portNumber = Integer.parseInt(words[3]);
+				//
+                                players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
 				client2 = new Client(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
@@ -280,23 +284,46 @@ public class Client  {
 				System.out.println("Usage is: > java Client [username] [portNumber] {serverAddress]");
 			return;
 			}
-		
-		
-		
-
 		// wait for messages from user
 		Scanner scan = new Scanner(System.in);
 		// loop forever for message from the user
+		int turn = 0;
+/*
+			Main Interaction Loop
+*/
 		while(true) {
 			System.out.print("> ");
 			// read message from user
 			String msg = scan.nextLine();
 
+			// String parsing users input, looking for next turn so next move can be requested.
 			if(msg.equalsIgnoreCase("exit")){
+
 				System.exit(0);
 			}else if(msg.equalsIgnoreCase("next")){
+
 				// Ask for a move from the next player.
-				System.out.println("	>> Functionality not yet complete!\n" + "	Current player's name is: " + currentPlayer.getName());
+				System.out.println("	>> Functionality not yet complete!\n" + "	It is player " + turn + "'s turn.");
+
+				// This functionality could easily go inside a wrapper method, but just gonna place move request inside here.
+				if(turn == 0){
+					client.sendMessage("MYOUSHU");
+				}else if(turn == 1){
+					client2.sendMessage("MYOUSHU");
+				}else if(turn == 1){
+                                        client3.sendMessage("MYOUSHU");
+                                }else if(turn == 1){
+                                        client4.sendMessage("MYOUSHU");
+                                }else{
+					System.out.println("ERROR >> Turn unrecognized.");
+				}
+
+				// Count value to iterate through players turns each time next is called. Makes sure to iterate based on number of players.
+				if(turn >= players.size()-1){
+					turn = 0;
+				}else{
+					turn++;
+				}
 
 			}else if(msg.equalsIgnoreCase("help")){
 				System.out.println("	This is the Viewer for a multi-AI played Quoridor game. You can request next turn uring NEXT or quit using EXIT.");
