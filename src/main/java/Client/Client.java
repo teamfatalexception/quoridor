@@ -10,23 +10,22 @@ import java.util.regex.Pattern;
 
 public class Client  {
 
-	private ArrayList<Player> players = new ArrayList<Player>();
+	// Declared list of current players, 2 or 4 long until people start gettting kicked.
+	private static ArrayList<Player> players = new ArrayList<Player>();
+	private static Player currentPlayer;
 
 	// for I/O
 	private ObjectInputStream sInput;		// to read from the socket
 	private ObjectOutputStream sOutput;		// to write on the socket
 	private Socket socket;
-
 	// if I use a GUI or not
 	private ClientGUI cg;
-	
-	
 	// the server, the port and the username
 	private String server, username;
 	private int port;
 
 	/*
-	 *  
+	 *
 	 *  server: the server address
 	 *  port: the port number
 	 *  username: the username
@@ -63,7 +62,6 @@ public class Client  {
 		
 		String msg = "Connection accepted " + socket.getInetAddress() + ":" + socket.getPort();
 		display(msg);
-	
 		/* Creating both Data Stream */
 		try
 		{
@@ -199,21 +197,39 @@ public class Client  {
 			try {
 				serverAddress = words[0];
 				portNumber = Integer.parseInt(words[1]);
+				//
+                                players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
+
 				client = new Client(serverAddress, portNumber);
 				serverAddress = words[2];
 				portNumber = Integer.parseInt(words[3]);
+				//
+                                players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
+
 				client2 = new Client(serverAddress, portNumber);
 				serverAddress = words[4];
 				portNumber = Integer.parseInt(words[5]);
+				//
+                                players.add(new Player(3, serverAddress, portNumber, 5, 0, 0));
+
 				client3 = new Client(serverAddress, portNumber);
 				serverAddress = words[6];
 				portNumber = Integer.parseInt(words[7]);
+				//
+                                players.add(new Player(4, serverAddress, portNumber, 5, 0, 0));
+
 				client4 = new Client(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
 				clients.add(client3);
 				clients.add(client4);
-				
+
+				// Setup player objects time.
+				// Some of these values will change as they become useful, like starting positions for each player, etcc.
+				// public Player(int ID, String name, int port, int wallsLeft, int startingX, int startingY){
+				//players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
+				currentPlayer = players.get(0);
+
 				// test if we can start the connection to the Server
 				// if it failed nothing we can do
 				if(!client.start())
@@ -224,9 +240,7 @@ public class Client  {
 					return;
 				if(!client4.start())
 					return;
-				
 				}
-			
 				catch(Exception e) {
 					System.out.println("Invalid port number.");
 					System.out.println("Usage is: > java Client [username] [portNumber] [serverAddress]");
@@ -269,6 +283,7 @@ public class Client  {
 		
 		
 		
+
 		// wait for messages from user
 		Scanner scan = new Scanner(System.in);
 		// loop forever for message from the user
@@ -276,19 +291,33 @@ public class Client  {
 			System.out.print("> ");
 			// read message from user
 			String msg = scan.nextLine();
+
+			if(msg.equalsIgnoreCase("exit")){
+				System.exit(0);
+			}else if(msg.equalsIgnoreCase("next")){
+				// Ask for a move from the next player.
+				System.out.println("	>> Functionality not yet complete!\n" + "	Current player's name is: " + currentPlayer.getName());
+
+			}else if(msg.equalsIgnoreCase("help")){
+				System.out.println("	This is the Viewer for a multi-AI played Quoridor game. You can request next turn uring NEXT or quit using EXIT.");
+			}else{
+				continue;
+			}
+
+			/*
 				if(clients.size() == 4){
 				client.sendMessage(msg);
 				client2.sendMessage(msg);
 				client3.sendMessage(msg);
 				client4.sendMessage(msg);
 				}
-				
 				//If not four players at this point can only be two.  Echo between the two.
 				else{
 					client.sendMessage(msg);
 					client2.sendMessage(msg);
-				}	
-			}   
+				}
+			}   */
+		}
 	    
 	}
 
