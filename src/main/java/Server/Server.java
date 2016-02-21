@@ -46,17 +46,17 @@ public class Server {
 	public void start() {
 		keepGoing = true;
 		/* create socket server and wait for connection requests */
-		try 
-		{
+		try{
 			// the socket used by the server
 			ServerSocket serverSocket = new ServerSocket(port);
 
+
+// MAIN LOOP
 			// infinite loop to wait for connections
-			while(keepGoing) 
-			{
+			while(keepGoing) {
 				// format message saying we are waiting
 				display("Server waiting for Clients on port " + port + ".");
-				
+
 				Socket socket = serverSocket.accept();  	// accept connection
 				// if I was asked to stop
 				if(!keepGoing)
@@ -151,13 +151,13 @@ public class Server {
 			}
 		}
 	}
-	
+
 	/*
-	 *  To run as a console application just open a console window and: 
+	 *  To run as a console application just open a console window and:
 	 * > java Server
 	 * > java Server portNumber
 	 * If the port number is not specified 1500 is used
-	 */ 
+	 */
 	public static void main(String[] args) {
 		// start server on port 1500 unless a PortNumber is specified 
 		int portNumber = 1500;
@@ -225,11 +225,13 @@ public class Server {
 			// but I read a String
 			catch (ClassNotFoundException e) {
 			}
-            date = new Date().toString() + "\n";
+                    date = new Date().toString() + "\n";
 		}
 
 		//  will run forever
 		public void run() {
+
+//ANOTHER MAIN LOOP
 			// to loop until LOGOUT
 			boolean keepGoing = true;
 			while(keepGoing) {
@@ -239,7 +241,7 @@ public class Server {
 				}
 				catch (IOException e) {
 					display(username + " Exception reading Streams: " + e);
-					break;				
+					break;
 				}
 				catch(ClassNotFoundException e2) {
 					break;
@@ -247,8 +249,20 @@ public class Server {
 				// the message part of the ChatMessage
 				String message = cm;
 
+				if(message.equals("MYOUSHU")){ // I'm being requested for a move.
+
+					System.out.println("I will give you a move, give me a god damned second..");
+					writeMsg("TESUJI");
+				}else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
+
+				}else if(message.contains("GOTE")){ // Someones made and illegal move and is now gone.
+
+				}else if(message.contains("KIKASHI")){ // Game is over and someone won.
+
+				}
+
 				// Switch on the type of message receive
-				broadcast(message);
+				//broadcast(message);
 				/*(	switch(cm) {
 
 				case ChatMessage.MESSAGE:
@@ -264,7 +278,7 @@ public class Server {
 					for(int i = 0; i < al.size(); ++i) {
 						ClientThread ct = al.get(i);
 						writeMsg((i+1) + ") " + ct.username + " since " + ct.date);
-						
+
 					break;
 				}
 				}*/

@@ -112,6 +112,21 @@ public class Client  {
 		}
 	}
 
+	// Reads replies from server.
+        String retrieveMessage() {
+                try {
+			//sInput  = new ObjectInputStream(socket.getInputStream());
+                        return sInput.readUTF();
+                }
+                catch(IOException e) {
+                        display("Exception reading from server: " + e);
+                }
+		return "ERROR!";
+        }
+
+
+
+
 	/*
 	 * When something goes wrong
 	 * Close the Input/Output streams and disconnect not much to do in the catch clause
@@ -307,12 +322,20 @@ public class Client  {
 
 				// This functionality could easily go inside a wrapper method, but just gonna place move request inside here.
 				if(turn == 0){
+					// First we request a move from the server.
 					client.sendMessage("MYOUSHU");
+					// Then we listen on the socket for the reply. TESUJI <move string>
+
+					// Next we check it's legality. Will impliment after.
+
+					// Then if it fails we boot the player, if it passes we broadcast and update our board.
+
+					// Returns to viewer's control to wait for new command, usually next turn.
 				}else if(turn == 1){
 					client2.sendMessage("MYOUSHU");
-				}else if(turn == 1){
+				}else if(turn == 2){
                                         client3.sendMessage("MYOUSHU");
-                                }else if(turn == 1){
+                                }else if(turn == 3){
                                         client4.sendMessage("MYOUSHU");
                                 }else{
 					System.out.println("ERROR >> Turn unrecognized.");

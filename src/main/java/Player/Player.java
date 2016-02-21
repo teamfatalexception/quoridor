@@ -23,4 +23,31 @@ public class Player {
 		return name;
 	}
 
+	public int getID(){
+		return ID;
+	}
+
+	public int wallsLeft(){
+		return wallsLeft;
+	}
+
+	public int getX(){
+		return X;
+	}
+
+	public int getY(){
+		return Y;
+	}
+
+	public void decrementWalls(){
+		wallsLeft--;
+	}
+
+	public void setX(int v){
+		X = v;
+	}
+
+	public void setY(int v){
+		Y = v;
+	}
 }
