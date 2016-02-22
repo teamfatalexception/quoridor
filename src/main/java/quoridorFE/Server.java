@@ -1,3 +1,4 @@
+package quoridorFE;
 
 import java.io.*;
 import java.net.*;

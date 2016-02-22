@@ -1,3 +1,5 @@
+package quoridorFE;
+
 // PLayer object for storing and managing player information.
 public class Player {
 
