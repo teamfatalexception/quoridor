@@ -51,6 +51,88 @@ public class Maze {
     }
 
     public void placeWall(int col, int row, String direction){
+    	if(col == 0){
+    		if (direction.equalsIgnoreCase("v")){
+        		
+        		if(cell[row][col].down.toString() == "---"){
+        			if(cell[row][col].left.toString() == "|"){
+            			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+            		}
+            		else{
+            			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+            		}
+        			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertWall(), new HorWall());
+        		}
+        		
+        		else{
+        			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertWall(), new HorDownWall());
+        		}
+        		if(cell[row +1][col].down.toString() == "---"){
+        			cell[row +1][col] = new Cell(new VertWall(), new HorDownWall(), new VertWall(), new HorWall());
+        		}
+        		else{
+        			cell[row +1][col] = new Cell(new VertWall(), new HorDownWall(), new VertWall(), new HorDownWall());
+        		}
+        		//cell[row][col] = new Cell(new HorDownWall(), new VertDownWall(), new HorWall(), new VertWall());
+        		//cell[row +1][col] = new Cell(new HorDownWall(), new VertDownWall(), new HorWall(), new VertWall());
+        	}
+    		else if (direction.equalsIgnoreCase("h")){
+        		if(cell[row][col].right.toString() == "|"){
+        			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertWall(), new HorWall());
+        		}
+        		else{
+        			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+        		}
+        		if(cell[row][col+1].right.toString() == "|"){
+        			cell[row][col+1] = new Cell(new VertWall(), new HorDownWall(), new VertWall(), new HorWall());
+        		}
+        		else{
+        			cell[row][col +1] = new Cell(new VertWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+        		}
+        	}
+		}
+    	
+    	if(row == 0){
+    		if (direction.equalsIgnoreCase("v")){
+        		
+        		if(cell[row][col].down.toString() == "---"){
+        			if(cell[row][col].left.toString() == "|"){
+            			cell[row][col] = new Cell(new VertWall(), new HorWall(), new VertDownWall(), new HorWall());
+            		}
+            		else{
+            			cell[row][col] = new Cell(new VertWall(), new HorWall(), new VertDownWall(), new HorWall());
+            		}
+        			cell[row][col] = new Cell(new VertWall(), new HorWall(), new VertWall(), new HorWall());
+        		}
+        		
+        		else{
+        			cell[row][col] = new Cell(new VertWall(), new HorWall(), new VertWall(), new HorDownWall());
+        		}
+        		if(cell[row +1][col].down.toString() == "---"){
+        			cell[row +1][col] = new Cell(new VertWall(), new HorWall(), new VertWall(), new HorWall());
+        		}
+        		else{
+        			cell[row +1][col] = new Cell(new VertWall(), new HorWall(), new VertWall(), new HorDownWall());
+        		}
+        		//cell[row][col] = new Cell(new HorDownWall(), new VertDownWall(), new HorWall(), new VertWall());
+        		//cell[row +1][col] = new Cell(new HorDownWall(), new VertDownWall(), new HorWall(), new VertWall());
+        	}
+    		else if (direction.equalsIgnoreCase("h")){
+        		if(cell[row][col].right.toString() == "|"){
+        			cell[row][col] = new Cell(new VertWall(), new HorWall(), new VertWall(), new HorWall());
+        		}
+        		else{
+        			cell[row][col] = new Cell(new VertWall(), new HorWall(), new VertDownWall(), new HorWall());
+        		}
+        		if(cell[row][col+1].right.toString() == "|"){
+        			cell[row][col+1] = new Cell(new VertWall(), new HorWall(), new VertWall(), new HorWall());
+        		}
+        		else{
+        			cell[row][col +1] = new Cell(new VertWall(), new HorWall(), new VertDownWall(), new HorWall());
+        		}
+        	}
+		}
+    	
     	
     	if (row == 8){
     		System.out.println("Invalid Move");
@@ -58,21 +140,52 @@ public class Maze {
     	else if (col == 8){
     		System.out.println("Invalid Move");
     	}
-    	else if (direction.equalsIgnoreCase("v")){
-    		cell[row][col] = new Cell(new VertDownWall(),new HorDownWall(),new VertWall(),new HorDownWall());
-    		cell[row +1][col] = new Cell(new VertDownWall(),new HorDownWall(),new VertWall(),new HorDownWall());
+    	
+    	else if(col != 0){
+    	 if (direction.equalsIgnoreCase("v")){
+    		
+    		if(cell[row][col].down.toString() == "---"){
+    			if(cell[row][col].left.toString() == "|"){
+        			cell[row][col] = new Cell(new VertWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+        		}
+        		else{
+        			cell[row][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+    			cell[row][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertWall(), new HorWall());
+    		}
+    		}
+    		else{
+    			cell[row][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertWall(), new HorDownWall());
+    		}
+    		if(cell[row +1][col].down.toString() == "---"){
+    			cell[row +1][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertWall(), new HorWall());
+    		}
+    		else{
+    			cell[row +1][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertWall(), new HorDownWall());
+    		}
+    		//cell[row][col] = new Cell(new HorDownWall(), new VertDownWall(), new HorWall(), new VertWall());
+    		//cell[row +1][col] = new Cell(new HorDownWall(), new VertDownWall(), new HorWall(), new VertWall());
     	}
     	else if (direction.equalsIgnoreCase("h")){
-    		cell[row][col] = new Cell(new VertDownWall(),new HorDownWall(),new VertDownWall(),new HorWall());
-    		cell[row][col + 1] = new Cell(new VertDownWall(),new HorDownWall(),new VertDownWall(),new HorWall());
-    		System.out.println(new HorWall().toString());
+    		if(cell[row][col].right.toString() == "|"){
+    			cell[row][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertWall(), new HorWall());
+    		}
+    		else{
+    			cell[row][col] = new Cell(new VertDownWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+    		}
+    		if(cell[row][col+1].right.toString() == "|"){
+    			cell[row][col+1] = new Cell(new VertDownWall(), new HorDownWall(), new VertWall(), new HorWall());
+    		}
+    		else{
+    			cell[row][col +1] = new Cell(new VertDownWall(), new HorDownWall(), new VertDownWall(), new HorWall());
+    		}
     	}
+		
     	else{
     		System.out.println("Invalid Move");
     		
     	}
-    		
     	
+    	}
     	
     	 
     }
@@ -146,6 +259,21 @@ public class Maze {
     	this.up = up;
     	this.right = right;
     	this.down = down;
+        }
+        
+        public Cell(Wall wall, String dir){
+        	if(dir.equalsIgnoreCase("v")){
+        		this.right = wall;
+        		this.left = left;
+            	this.up = up;
+            	this.down = down;
+        	}
+        	else if(dir.equalsIgnoreCase("h")){
+        		this.down = wall;
+        		this.left = left;
+            	this.up = up;
+            	this.right = right;
+        	}
         }
 
     }   
