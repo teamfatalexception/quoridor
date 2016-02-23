@@ -1,4 +1,4 @@
-package Quoridor_Board;
+package Client_Server;
 
 import java.util.Scanner;
 
@@ -141,7 +141,7 @@ public class Maze {
     		System.out.println("Invalid Move");
     	}
     	
-    	else if(col != 0){
+    	else if(col != 0 && row!= 0){
     	 if (direction.equalsIgnoreCase("v")){
     		
     		if(cell[row][col].down.toString() == "---"){
