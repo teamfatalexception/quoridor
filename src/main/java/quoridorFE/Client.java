@@ -1,4 +1,4 @@
-package quoridorFE;
+package Client_Server;
 
 import java.net.*;
 import java.io.*;
@@ -16,12 +16,8 @@ public class Client  {
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	private static Player currentPlayer;
 
-	//Made client object a global variable for ease.
-        private static ArrayList<Client> clients =  new ArrayList<Client>();
-
-
 	// for I/O
-	private ObjectInputStream sInput;		// to read from the socket
+	private static ObjectInputStream sInput;		// to read from the socket
 	private ObjectOutputStream sOutput;		// to write on the socket
 	private Socket socket;
 	// if I use a GUI or not
@@ -29,7 +25,7 @@ public class Client  {
 	// the server, the port and the username
 	private String server, username;
 	private int port;
-
+	public static Maze maze;
 	/*
 	 *
 	 *  server: the server address
@@ -45,9 +41,10 @@ public class Client  {
 	 * Constructor call when used from a GUI
 	 * in console mode the ClientGUI parameter is null
 	 */
-	Client(String server, int port, ClientGUI cg) {
+	Client(String server, int port,ClientGUI cg) {
 		this.server = server;
 		this.port = port;
+		this.maze = maze;
 		// save if we are in GUI mode or not
 		this.cg = cg;
 	}
@@ -170,7 +167,10 @@ public class Client  {
 	 * In console mode, if an error occurs the program simply stops
 	 * when a GUI id used, the GUI is informed of the disconnection
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, IOException {
+		
+		//Board to use
+		Maze maze;
 		//Line to be used for regex
 		String line = "";
 		//Loop through commands and add them to line
@@ -196,7 +196,7 @@ public class Client  {
 		Client client4 = new Client(serverAddress, portNumber);
 		
 		//List for holding all clients
-		//ArrayList<Client> clients =  new ArrayList<Client>();
+		ArrayList<Client> clients =  new ArrayList<Client>();
 		
 		//Patter to use for checking if two players
 		String pattern = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
@@ -244,6 +244,8 @@ public class Client  {
 				clients.add(client2);
 				clients.add(client3);
 				clients.add(client4);
+				//Board to use
+				 maze = new Maze(9,9, 4);
 
 				// Setup player objects time.
 				// Some of these values will change as they become useful, like starting positions for each player, etcc.
@@ -284,6 +286,8 @@ public class Client  {
 				client2 = new Client(serverAddress, portNumber);
 				clients.add(client);
 				clients.add(client2);
+				//Board to use
+				maze = new Maze(9,9, 2);
 				
 				// test if we can start the connection to the Server
 				// if it failed nothing we can do
@@ -311,8 +315,10 @@ public class Client  {
 		int turn = 0;
 /*
 			Main Interaction Loop
-*/
+*/		
+		
 		while(true) {
+			System.out.println(maze);
 			System.out.print("> ");
 			// read message from user
 			String msg = scan.nextLine();
@@ -328,15 +334,15 @@ public class Client  {
 
 				// This functionality could easily go inside a wrapper method, but just gonna place move request inside here.
 				if(turn == 0){
-					nextTurn(client);
+					nextTurn(client, maze, clients.size());
 				}else if(turn == 1){
-					nextTurn(client2);
+					nextTurn(client2, maze, clients.size());
 					//client2.sendMessage("MYOUSHU");
 				}else if(turn == 2){
-					nextTurn(client3);
+					nextTurn(client3,maze,clients.size());
                                         //client3.sendMessage("MYOUSHU");
                                 }else if(turn == 3){
-					nextTurn(client4);
+					nextTurn(client4,maze,clients.size());
                                         //client4.sendMessage("MYOUSHU");
                                 }else{
 					System.out.println("ERROR >> Turn unrecognized.");
@@ -358,27 +364,21 @@ public class Client  {
 
 	}
 	
-	// Method controls everything to do with a single turn in the game. Takes a client whoes turn it currently is and goes through the play process.
-	public static void nextTurn(Client currentClient){
 
+	public static void nextTurn(Client currentClient,Maze maze2, int size) throws ClassNotFoundException, IOException{
                	// First we request a move from the server.
                	currentClient.sendMessage("MYOUSHU");
                	// Then we listen on the socket for the reply. TESUJI <move string>
-               	String message = currentClient.retrieveMessage();
+               	String message = (String) sInput.readObject();
+               	
                	// Next we check it's legality. Will impliment after.
                	String broadcast = "ATARI";
                	if(!isValidMove()){
-
                		broadcast = "GOTE" + currentClient;
                	}
                	// Then if it fails we boot the player, if it passes we broadcast and update our board.
-		for(int i=0; i<players.size()-1; i++){
-
-			System.out.println("Broadcasting to " + players.get(i).getName());
-			clients.get(i).sendMessage(broadcast);
-		}
+			
                	// Returns to viewer's control to wait for new command, usually next turn.
-		System.out.println("DONE");
 	}
 
 
@@ -394,19 +394,23 @@ public class Client  {
 	 * if we have a GUI or simply System.out.println() if in console mode
 	 */
 	class ListenFromServer extends Thread {
-
 		public void run() {
+			Maze maze = new Maze(9,9, 2);
+			
 			while(true) {
 				try {
 					String msg = (String) sInput.readObject();
 					// if console mode print the message and add back the prompt
-					if(cg == null) {
-						System.out.println(msg);
+					
+					//if(cg == null) {
+					String[] my_cord = msg.split(" ");
+	               	maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), "h");
+	               	System.out.println(maze);
 						System.out.print("> ");
-					}
-					else {
-						cg.append(msg);
-					}
+					//}
+					//else {
+						//cg.append(msg);
+					//}
 				}
 				catch(IOException e) {
 					display("Server has close the connection: " + e);
