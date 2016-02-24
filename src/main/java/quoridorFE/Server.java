@@ -1,4 +1,4 @@
-package quoridorFE;
+package Client_Server;
 
 import java.io.*;
 import java.net.*;
@@ -12,11 +12,9 @@ public class Server {
 	// a unique ID for each connection
 	private static int uniqueId;
 	// an ArrayList to keep the list of the Client
-	private ArrayList<ClientThread> al;
-	// if I am in a GUI
-	private ServerGUI sg;
+	private ArrayList<ClientThread> al = new ArrayList<ClientThread>();
 	// to display time
-	private SimpleDateFormat sdf;
+	private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 	// the port number to listen for connection
 	private int port;
 	// the boolean that will be turned of to stop the server
@@ -24,27 +22,13 @@ public class Server {
 	// the name of the machine to be used
 	private String machineName;
 
-	// Bool lets us know if this AI is a user of not.
-	private static boolean userInput = false;
-
 	/*
 	 *  server constructor that receive the port to listen to for connection as parameter
 	 *  in console
 	 */
-	public Server(String machine, int port) {
-		this(port, null);
+	public Server(String machine, int port1) {
+		port = port1;
 		machineName = machine;
-	}
-	
-	public Server(int port, ServerGUI sg) {
-		// GUI or not
-		this.sg = sg;
-		// the port
-		this.port = port;
-		// to display hh:mm:ss
-		sdf = new SimpleDateFormat("HH:mm:ss");
-		// ArrayList for the Client list
-		al = new ArrayList<ClientThread>();
 	}
 	
 	public void start() {
@@ -113,10 +97,7 @@ public class Server {
 	 */
 	private void display(String msg) {
 		String time = sdf.format(new Date()) + " " + msg;
-		if(sg == null)
 			System.out.println(time);
-		else
-			sg.appendEvent(time + "\n");
 	}
 	/*
 	 *  to broadcast a message to all Clients
@@ -126,10 +107,7 @@ public class Server {
 		String time = sdf.format(new Date());
 		String messageLf = time + " " + message + "\n";
 		// display message on console or GUI
-		if(sg == null)
 			System.out.print(messageLf);
-		else
-			sg.appendRoom(messageLf);     // append in the room window
 		
 		// we loop in reverse order in case we would have to remove a Client
 		// because it has disconnected
@@ -167,18 +145,6 @@ public class Server {
 		int portNumber = 1500;
 		String machineName = "localhost";
 		switch(args.length) {
-			case 3:
-				try{
-					machineName = args[0];
-					portNumber = Integer.parseInt(args[1]);
-					userInput = true;
-				}
-                                catch(Exception e) {
-                                        System.out.println("Invalid port number.");
-                                        System.out.println("Usage is: > java Server [portNumber]");
-                                        return;
-                                }
-
 			case 2:
 				try {
 					machineName = args[0];
@@ -192,7 +158,7 @@ public class Server {
 			case 0:
 				break;
 			default:
-				System.out.println("Usage is: > java Server [portNumber] <-U optional flag for user input.>");
+				System.out.println("Usage is: > java Server [portNumber]");
 				return;
 				
 		}
@@ -246,8 +212,7 @@ public class Server {
 
 		//  will run forever
 		public void run() {
-			Scanner input = new Scanner(System.in);
-			String typed = "";
+
 //ANOTHER MAIN LOOP
 			// to loop until LOGOUT
 			boolean keepGoing = true;
@@ -267,16 +232,12 @@ public class Server {
 				String message = cm;
 
 				if(message.equals("MYOUSHU")){ // I'm being requested for a move.
-
-					if(userInput){
-
-						System.out.println("The Viewer is asking for a move: <Syntax (8, 7)>:\n> ");
-						typed = input.nextLine();
-					}else{
-
-						typed = getMove();
-					}
-					writeMsg("TESUJI" + typed);
+					Random rand = new Random();
+					int randomNum = rand.nextInt((8) + 1);
+					System.out.println("I will give you a move, give me a god damned second..");
+					String answer = "TESUJI " + randomNum + " " + randomNum;
+					System.out.println(answer);
+					writeMsg(answer);
 				}else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
 
 					System.out.println("Recieved: " + message);
@@ -316,13 +277,7 @@ public class Server {
 			remove(id);
 			close();
 		}
-
-		// This is where the AI will function and make descisions.. desisions.. descicions.. you know!
-		private String getMove(){
-
-			return "(4,4)";
-		}
-
+		
 		// try to close everything
 		private void close() {
 			// try to close the connection
@@ -345,10 +300,10 @@ public class Server {
 		 */
 		private boolean writeMsg(String msg) {
 			// if Client is still connected send the message to it
-			if(!socket.isConnected()) {
-				close();
-				return false;
-			}
+			//if(!socket.isConnected()) {
+				//close();
+				//return false;
+			//}
 			// write the message to the stream
 			try {
 				sOutput.writeObject(msg);
