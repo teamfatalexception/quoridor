@@ -24,6 +24,9 @@ public class Server {
 	// the name of the machine to be used
 	private String machineName;
 
+	// Bool lets us know if this AI is a user of not.
+	private static boolean userInput = false;
+
 	/*
 	 *  server constructor that receive the port to listen to for connection as parameter
 	 *  in console
@@ -164,6 +167,18 @@ public class Server {
 		int portNumber = 1500;
 		String machineName = "localhost";
 		switch(args.length) {
+			case 3:
+				try{
+					machineName = args[0];
+					portNumber = Integer.parseInt(args[1]);
+					userInput = true;
+				}
+                                catch(Exception e) {
+                                        System.out.println("Invalid port number.");
+                                        System.out.println("Usage is: > java Server [portNumber]");
+                                        return;
+                                }
+
 			case 2:
 				try {
 					machineName = args[0];
@@ -177,7 +192,7 @@ public class Server {
 			case 0:
 				break;
 			default:
-				System.out.println("Usage is: > java Server [portNumber]");
+				System.out.println("Usage is: > java Server [portNumber] <-U optional flag for user input.>");
 				return;
 				
 		}
@@ -231,7 +246,8 @@ public class Server {
 
 		//  will run forever
 		public void run() {
-
+			Scanner input = new Scanner(System.in);
+			String typed = "";
 //ANOTHER MAIN LOOP
 			// to loop until LOGOUT
 			boolean keepGoing = true;
@@ -252,14 +268,25 @@ public class Server {
 
 				if(message.equals("MYOUSHU")){ // I'm being requested for a move.
 
-					System.out.println("I will give you a move, give me a god damned second..");
-					writeMsg("TESUJI");
+					if(userInput){
+
+						System.out.println("The Viewer is asking for a move: <Syntax (8, 7)>:\n> ");
+						typed = input.nextLine();
+					}else{
+
+						typed = getMove();
+					}
+					writeMsg("TESUJI" + typed);
 				}else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
 
+					System.out.println("Recieved: " + message);
 				}else if(message.contains("GOTE")){ // Someones made and illegal move and is now gone.
 
+					System.out.println("Recieved: " + message);
 				}else if(message.contains("KIKASHI")){ // Game is over and someone won.
 
+					System.out.println("Recieved: " + message);
+					keepGoing = false;
 				}
 
 				// Switch on the type of message receive
@@ -289,7 +316,13 @@ public class Server {
 			remove(id);
 			close();
 		}
-		
+
+		// This is where the AI will function and make descisions.. desisions.. descicions.. you know!
+		private String getMove(){
+
+			return "(4,4)";
+		}
+
 		// try to close everything
 		private void close() {
 			// try to close the connection

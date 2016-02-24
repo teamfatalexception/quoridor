@@ -16,6 +16,10 @@ public class Client  {
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	private static Player currentPlayer;
 
+	//Made client object a global variable for ease.
+        private static ArrayList<Client> clients =  new ArrayList<Client>();
+
+
 	// for I/O
 	private ObjectInputStream sInput;		// to read from the socket
 	private ObjectOutputStream sOutput;		// to write on the socket
@@ -192,7 +196,7 @@ public class Client  {
 		Client client4 = new Client(serverAddress, portNumber);
 		
 		//List for holding all clients
-		ArrayList<Client> clients =  new ArrayList<Client>();
+		//ArrayList<Client> clients =  new ArrayList<Client>();
 		
 		//Patter to use for checking if two players
 		String pattern = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
@@ -354,8 +358,9 @@ public class Client  {
 
 	}
 	
-
+	// Method controls everything to do with a single turn in the game. Takes a client whoes turn it currently is and goes through the play process.
 	public static void nextTurn(Client currentClient){
+
                	// First we request a move from the server.
                	currentClient.sendMessage("MYOUSHU");
                	// Then we listen on the socket for the reply. TESUJI <move string>
@@ -363,11 +368,17 @@ public class Client  {
                	// Next we check it's legality. Will impliment after.
                	String broadcast = "ATARI";
                	if(!isValidMove()){
+
                		broadcast = "GOTE" + currentClient;
                	}
                	// Then if it fails we boot the player, if it passes we broadcast and update our board.
-			
+		for(int i=0; i<players.size()-1; i++){
+
+			System.out.println("Broadcasting to " + players.get(i).getName());
+			clients.get(i).sendMessage(broadcast);
+		}
                	// Returns to viewer's control to wait for new command, usually next turn.
+		System.out.println("DONE");
 	}
 
 
