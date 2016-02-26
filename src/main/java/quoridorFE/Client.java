@@ -1,4 +1,4 @@
-package Client_Server;
+package quoridorFE;
 
 import java.net.*;
 import java.io.*;
@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class Client  {
 
+        
 	// Declared list of current players, 2 or 4 long until people start gettting kicked.
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	private static Player currentPlayer;
@@ -334,15 +335,15 @@ public class Client  {
 
 				// This functionality could easily go inside a wrapper method, but just gonna place move request inside here.
 				if(turn == 0){
-					nextTurn(client, maze, clients.size());
+					nextTurn(client,clients.size());
 				}else if(turn == 1){
-					nextTurn(client2, maze, clients.size());
+					nextTurn(client2,clients.size());
 					//client2.sendMessage("MYOUSHU");
 				}else if(turn == 2){
-					nextTurn(client3,maze,clients.size());
+					nextTurn(client3,clients.size());
                                         //client3.sendMessage("MYOUSHU");
                                 }else if(turn == 3){
-					nextTurn(client4,maze,clients.size());
+					nextTurn(client4,clients.size());
                                         //client4.sendMessage("MYOUSHU");
                                 }else{
 					System.out.println("ERROR >> Turn unrecognized.");
@@ -365,7 +366,7 @@ public class Client  {
 	}
 	
 
-	public static void nextTurn(Client currentClient,Maze maze2, int size) throws ClassNotFoundException, IOException{
+	public static void nextTurn(Client currentClient, int size) throws ClassNotFoundException, IOException{
                	// First we request a move from the server.
                	currentClient.sendMessage("MYOUSHU");
                	// Then we listen on the socket for the reply. TESUJI <move string>

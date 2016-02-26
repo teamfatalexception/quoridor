@@ -1,4 +1,4 @@
-package Client_Server;
+package quoridorFE;
 
 import java.io.*;
 import java.net.*;
