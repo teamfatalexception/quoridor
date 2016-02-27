@@ -1,28 +1,66 @@
 package quoridorFE;
 
 public class BoardNode {
-	public BoardNode north;
-	public BoardNode south;
-	public BoardNode left;
-	public BoardNode right;
-	
-	public int xPos;
-	public int yPos;
+	private Player player = null;
+	private int xPos;
+	private int yPos;
 	
 	public String pawn = "";
 	
-	public BoardNode(int xPos, int yPos){
-		this(xPos, yPos, "", null, null, null, null);
+	public BoardNode(){
+		this(-1, -1);
 	}
 	
-	public BoardNode(int xPos, int yPos, String pawn, BoardNode north, BoardNode south, BoardNode left, BoardNode right){
-		this.xPos = xPos;
-		this.yPos = yPos;
+	public BoardNode(int xPos, int yPos){
+		this(xPos, yPos, "");
+	}
+	
+	public BoardNode(int xPos, int yPos, String pawn){
+		this.setxPos(xPos);
+		this.setyPos(yPos);
 		this.pawn = pawn;
-		this.north = north;
-		this.south = south;
-		this.left = left;
-		this.right = right;
+	}
+	
+	public BoardNode newInstance(){
+		return new BoardNode();
+	}
+
+	/**
+	 * @return the player or null if there is no player here
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * @param player the player to set
+	 */
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public int getxPos() {
+		return xPos;
+	}
+
+	public void setxPos(int xPos) {
+		this.xPos = xPos;
+	}
+
+	/**
+	 * @return the yPos
+	 */
+	public int getyPos() {
+		return yPos;
+	}
+
+	public void setyPos(int yPos) {
+		this.yPos = yPos;
+	}
+	
+	
+	public String toString() {
+		return "x:" + this.getxPos() + " y:" + this.getyPos();
 	}
 	
 	
