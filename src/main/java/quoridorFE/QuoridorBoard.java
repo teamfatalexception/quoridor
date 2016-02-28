@@ -22,33 +22,9 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 public class QuoridorBoard {
+	
 	UndirectedGraph<BoardNode, edgeFE> board;
 	
-	
-	
-	
-	private class edgeFE extends DefaultEdge{
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public BoardNode getSource() {
-			return (BoardNode) super.getSource();
-		}
-		
-		@Override
-		public BoardNode getTarget() {
-			return (BoardNode) super.getTarget();
-		}
-		
-		@Override public String toString()
-	    {
-	        return "(" + this.getSource().toString() + " : " + this.getTarget().toString() + ")";
-	    }
-	}
 	
 	public QuoridorBoard(Player player1, Player player2) {
 		this(player1, player2, null, null);
@@ -106,7 +82,7 @@ public class QuoridorBoard {
 	
 	
 	public static void main(String[] args){
-		//BoardGraph testBoard = new BoardGraph();
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(1, "test1", 6666, 10, 4, 0));
 		
 	}
 
