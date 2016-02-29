@@ -82,7 +82,7 @@ public class QuoridorBoard {
 	
 	
 	public static void main(String[] args){
-		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(1, "test1", 6666, 10, 4, 0));
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(1, "test2", 6667, 10, 4, 8));
 		
 	}
 
