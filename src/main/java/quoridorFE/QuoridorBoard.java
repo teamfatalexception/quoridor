@@ -1,5 +1,8 @@
 /**
 * The QuoridorBoard class implements the Quoridor board and methods for interacting with it.
+* 
+* Player objects passed to the constructor are assumed to be unique and 
+* class methods may not behave as expected if there are duplicate players on the board.
 *
 * @author  Andrew Valancius
 * 
@@ -44,8 +47,6 @@ public class QuoridorBoard {
 		gridGen.generateGraph(board, vFactory, null);
 		// The empty graph is now constructed
 		
-		//Set<BoardNode> s = board.vertexSet();
-		
 		int xcount = 0;
 		int ycount = 0;
 		for (BoardNode n : board.vertexSet()){
@@ -60,9 +61,11 @@ public class QuoridorBoard {
 			//System.out.println("Node x: " + n.getxPos() + " y: " + n.getyPos());
 		}
 		// Every node of the graph now has a position
+		
+		
+		
 		this.getNodeByCoords(4, 0).setPlayer(player1);
 		this.getNodeByCoords(4, 8).setPlayer(player2);
-		
 		if (player3 != null && player4 != null) {
 			this.getNodeByCoords(0, 4).setPlayer(player3);
 			this.getNodeByCoords(8, 4).setPlayer(player4);
@@ -71,24 +74,25 @@ public class QuoridorBoard {
 		
 		
 		// debug info
+		/*
 		for (BoardNode n : board.vertexSet()){
 			System.out.println("Node x: " + n.getxPos() + " y: " + n.getyPos());
 			for (edgeFE e : board.edgesOf(n)){
 				System.out.println(e.toString());
 			}
 		}
+		*/
 	}
 
 	
 	
 	public static void main(String[] args){
-		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(1, "test2", 6667, 10, 4, 8));
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
 		
 	}
 
 	public BoardNode getNodeByCoords(int x, int y) {
-		Set<BoardNode> s = this.board.vertexSet();
-		for (BoardNode n : s) {
+		for (BoardNode n : this.board.vertexSet()) {
 			if (n.getxPos() == x && n.getyPos() == y) {
 				return n;
 			}
@@ -97,16 +101,19 @@ public class QuoridorBoard {
 	}
 
 	public BoardNode getPlayerPosition(int playerId) {
-		// TODO Auto-generated method stub
+		for (BoardNode n : this.board.vertexSet()) {
+			if (n.getPlayer() != null) {
+				if (playerId == n.getPlayer().getID()) {
+					return n;
+				}
+			}
+		}
 		return null;
 	}
 	
-	public BoardNode getPlayerPosition(Player player){
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	public boolean isValidMove(int player, int sourceX, int sourceY, int targetX, int targetY) {
+		// TODO change the method declaration/implementation by removing the sourceX/Y params.
 		BoardNode source = this.getNodeByCoords(sourceX, sourceY);
 		BoardNode target = this.getNodeByCoords(targetX, targetY);
 		
@@ -161,7 +168,7 @@ public class QuoridorBoard {
 		}
 	}
 	
-	public void movePawn(int player, int destY, int destX) {
+	public void movePawn(int player, int destX, int destY) {
 		// TODO implement this
 	}
 

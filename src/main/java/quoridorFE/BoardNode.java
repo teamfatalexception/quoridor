@@ -5,20 +5,14 @@ public class BoardNode {
 	private int xPos;
 	private int yPos;
 	
-	public String pawn = "";
 	
 	public BoardNode(){
 		this(-1, -1);
 	}
 	
 	public BoardNode(int xPos, int yPos){
-		this(xPos, yPos, "");
-	}
-	
-	public BoardNode(int xPos, int yPos, String pawn){
 		this.setxPos(xPos);
 		this.setyPos(yPos);
-		this.pawn = pawn;
 	}
 	
 	public BoardNode newInstance(){
