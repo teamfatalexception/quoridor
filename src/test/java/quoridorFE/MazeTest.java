@@ -8,6 +8,7 @@ package quoridorFE;
 import java.util.ArrayList;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 
 /**
@@ -15,10 +16,8 @@ import static org.junit.Assert.*;
  * @author Kyle
  */
 public class MazeTest {
-    
-    public MazeTest() {
-    }
-    
+        
+    @Ignore
     @BeforeClass
     public static void setUpClass() {
     }
@@ -26,6 +25,7 @@ public class MazeTest {
     /**
      * Test of placeWall method, of class Maze.
      */
+    @Ignore
     @Test
     public void testPlaceWall() {
         System.out.println("placeWall");
@@ -41,6 +41,7 @@ public class MazeTest {
     /**
      * Test of toString method, of class Maze.
      */
+    @Ignore
     @Test
     public void testToString() {
         System.out.println("toString");
@@ -55,6 +56,7 @@ public class MazeTest {
     /**
      * Test of placePlayer method, of class Maze.
      */
+    @Ignore
     @Test
     public void testPlacePlayer() {
         System.out.println("placePlayer");
@@ -68,6 +70,7 @@ public class MazeTest {
     /**
      * Test of main method, of class Maze.
      */
+    @Ignore
     @Test
     public void testMain() {
         System.out.println("main");
