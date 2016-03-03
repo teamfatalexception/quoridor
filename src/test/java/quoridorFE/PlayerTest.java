@@ -15,25 +15,22 @@ import static org.junit.Assert.*;
  */
 public class PlayerTest {
     
-    public PlayerTest() {
-    }
-    
-    @BeforeClass
+    Player thePlayer = new Player(1, "Jesse", 8080, 0, 4, 4);
+
+    /**
+     * Setup the player class before each one of the tests are called
+     */
+    /*@Before
     public static void setUpClass() {
-    }
+        Player thePlayer = new Player(1, "Jesse", 8080, 0, 4, 4);
+    } */
 
     /**
      * Test of getName method, of class Player.
      */
     @Test
     public void testGetName() {
-        System.out.println("getName");
-        Player instance = null;
-        String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(thePlayer.getName(), "Jesse");
     }
 
     /**
