@@ -13,14 +13,6 @@ public class PlayerTest {
     Player thePlayer = new Player(1, "Jesse", 8080, 1, 4, 4);
 
     /**
-     * Setup the player class before each one of the tests are called
-     */
-    /*@Before
-    public static void setUpClass() {
-        Player thePlayer = new Player(1, "Jesse", 8080, 0, 4, 4);
-    } */
-
-    /**
      * Test of getID method, of class Player.
      */
     @Test
