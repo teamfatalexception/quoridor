@@ -234,7 +234,7 @@ public class Server {
 				if(message.equals("MYOUSHU")){ // I'm being requested for a move.
 					Random rand = new Random();
 					int randomNum = rand.nextInt((8) + 1);
-					System.out.println("I will give you a move, give me a god damned second..");
+					//System.out.println("I will give you a move, give me a god damned second..");
 					String answer = "TESUJI " + randomNum + " " + randomNum;
 					System.out.println(answer);
 					writeMsg(answer);

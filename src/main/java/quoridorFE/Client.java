@@ -370,7 +370,7 @@ public class Client  {
                	// First we request a move from the server.
                	currentClient.sendMessage("MYOUSHU");
                	// Then we listen on the socket for the reply. TESUJI <move string>
-               	String message = (String) sInput.readObject();
+               	//String message = (String) sInput.readObject();
                	
                	// Next we check it's legality. Will impliment after.
                	String broadcast = "ATARI";
@@ -405,9 +405,9 @@ public class Client  {
 					
 					//if(cg == null) {
 					String[] my_cord = msg.split(" ");
-	               	maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), "h");
-	               	System.out.println(maze);
-						System.out.print("> ");
+	               			maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), "h");
+	               			//System.out.println(maze);
+					//System.out.print("> ");
 					//}
 					//else {
 						//cg.append(msg);
