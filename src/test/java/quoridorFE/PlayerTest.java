@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package quoridorFE;
 
 import org.junit.BeforeClass;
@@ -11,7 +6,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Kyle
+ * @author Kyle and Jesse
  */
 public class PlayerTest {
     
@@ -26,6 +21,14 @@ public class PlayerTest {
     } */
 
     /**
+     * Test of getID method, of class Player.
+     */
+    @Test
+    public void testGetID() {
+        assertEquals(thePlayer.getID(), 1);
+    }
+
+    /**
      * Test of getName method, of class Player.
      */
     @Test
@@ -34,31 +37,11 @@ public class PlayerTest {
     }
 
     /**
-     * Test of getID method, of class Player.
-     */
-    @Test
-    public void testGetID() {
-        System.out.println("getID");
-        Player instance = null;
-        int expResult = 0;
-        int result = instance.getID();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of wallsLeft method, of class Player.
      */
     @Test
     public void testWallsLeft() {
-        System.out.println("wallsLeft");
-        Player instance = null;
-        int expResult = 0;
-        int result = instance.wallsLeft();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(thePlayer.wallsLeft(), 0);
     }
 
     /**
