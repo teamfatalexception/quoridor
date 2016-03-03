@@ -49,13 +49,7 @@ public class PlayerTest {
      */
     @Test
     public void testGetX() {
-        System.out.println("getX");
-        Player instance = null;
-        int expResult = 0;
-        int result = instance.getX();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(thePlayer.getX(), 4);
     }
 
     /**
@@ -63,13 +57,7 @@ public class PlayerTest {
      */
     @Test
     public void testGetY() {
-        System.out.println("getY");
-        Player instance = null;
-        int expResult = 0;
-        int result = instance.getY();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(thePlayer.getY(), 4);
     }
 
     /**
