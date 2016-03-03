@@ -74,12 +74,8 @@ public class PlayerTest {
      */
     @Test
     public void testSetX() {
-        System.out.println("setX");
-        int v = 0;
-        Player instance = null;
-        instance.setX(v);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        thePlayer.setX(10);
+        assertEquals(thePlayer.getX(), 10);
     }
 
     /**
@@ -87,12 +83,7 @@ public class PlayerTest {
      */
     @Test
     public void testSetY() {
-        System.out.println("setY");
-        int v = 0;
-        Player instance = null;
-        instance.setY(v);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        thePlayer.setY(15);
+        assertEquals(thePlayer.getY(), 15);
     }
-    
 }
