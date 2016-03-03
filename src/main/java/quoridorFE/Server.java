@@ -1,4 +1,4 @@
-package Client_Server;
+package quoridorFE;
 
 import java.io.*;
 import java.net.*;
@@ -215,7 +215,7 @@ public class Server {
 
 //ANOTHER MAIN LOOP
 			// to loop until LOGOUT
-			boolean keepGoing = true;
+			//boolean keepGoing = true;
 			while(keepGoing) {
 				// read a String (which is an object)
 				try {
@@ -247,7 +247,8 @@ public class Server {
 				}else if(message.contains("KIKASHI")){ // Game is over and someone won.
 
 					System.out.println("Recieved: " + message);
-					keepGoing = false;
+					//keepGoing = false;
+					stop();
 				}
 
 				// Switch on the type of message receive
