@@ -18,15 +18,15 @@ public class Player {
 	        this.port = port;
 	        this.wallsLeft = wallsLeft;
 	       	this.X = startingX;
-		this.Y = startingY;
-	}
-
-	public String getName(){
-		return name;
+		 	this.Y = startingY;
 	}
 
 	public int getID(){
 		return ID;
+	}
+
+	public String getName(){
+		return name;
 	}
 
 	public int wallsLeft(){
