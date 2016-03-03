@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  */
 public class PlayerTest {
     
-    Player thePlayer = new Player(1, "Jesse", 8080, 0, 4, 4);
+    Player thePlayer = new Player(1, "Jesse", 8080, 1, 4, 4);
 
     /**
      * Setup the player class before each one of the tests are called
@@ -41,7 +41,7 @@ public class PlayerTest {
      */
     @Test
     public void testWallsLeft() {
-        assertEquals(thePlayer.wallsLeft(), 0);
+        assertEquals(thePlayer.wallsLeft(), 1);
     }
 
     /**
@@ -65,11 +65,8 @@ public class PlayerTest {
      */
     @Test
     public void testDecrementWalls() {
-        System.out.println("decrementWalls");
-        Player instance = null;
-        instance.decrementWalls();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        thePlayer.decrementWalls();
+        assertEquals(thePlayer.wallsLeft(), 0);
     }
 
     /**
