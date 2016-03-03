@@ -7,6 +7,7 @@ package quoridorFE;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 
 /**
@@ -15,9 +16,7 @@ import static org.junit.Assert.*;
  */
 public class ServerTest {
     
-    public ServerTest() {
-    }
-    
+    @Ignore    
     @BeforeClass
     public static void setUpClass() {
     }
@@ -25,6 +24,7 @@ public class ServerTest {
     /**
      * Test of start method, of class Server.
      */
+    @Ignore
     @Test
     public void testStart() {
         System.out.println("start");
@@ -37,6 +37,7 @@ public class ServerTest {
     /**
      * Test of stop method, of class Server.
      */
+    @Ignore  
     @Test
     public void testStop() {
         System.out.println("stop");
@@ -49,6 +50,7 @@ public class ServerTest {
     /**
      * Test of remove method, of class Server.
      */
+    @Ignore  
     @Test
     public void testRemove() {
         System.out.println("remove");
@@ -62,6 +64,7 @@ public class ServerTest {
     /**
      * Test of main method, of class Server.
      */
+    @Ignore  
     @Test
     public void testMain() {
         System.out.println("main");
