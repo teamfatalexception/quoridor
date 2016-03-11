@@ -441,10 +441,10 @@ public class Client  {
         System.out.println("This should trigger you to think about what you want and make a move.");
         System.out.println("Once you get this... send back \"TESUJI\" followed by your move.");
         System.out.println("Moves can either be a pawn move, or a wall placement.");
+        System.out.println("To send a move for your pawn use:   ");
         System.out.println("  Walls are specified by a starting square ABOVE or");
         System.out.println("  to the LEFT of the wall and an h or w for a ");
-        System.out.println("  horizontal or vertical wall.");                
-        System.out.println("To send a move for your pawn use:   ");
+        System.out.println("  horizontal or vertical wall.");
         System.out.println("The whole wall designation is enclosed in");
         System.out.println("square brackets:");
         System.out.println("For Example:");
