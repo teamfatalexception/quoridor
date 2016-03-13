@@ -96,8 +96,9 @@ public class Server {
 	 * Display an event (not a message) to the console or the GUI
 	 */
 	private void display(String msg) {
-		String time = sdf.format(new Date()) + " " + msg;
-			System.out.println(time);
+		//String time = sdf.format(new Date()) + " " + msg;
+			//System.out.println(time);
+		System.out.println(msg);
 	}
 	/*
 	 *  to broadcast a message to all Clients
