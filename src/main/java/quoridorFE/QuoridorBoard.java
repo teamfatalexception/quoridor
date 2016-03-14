@@ -21,12 +21,14 @@ import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.generate.GridGraphGenerator;
 import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 public class QuoridorBoard {
 	
 	UndirectedGraph<BoardNode, edgeFE> board;
+	
+	HashSet<Player> playerSet; // TODO decide if this part is even needed (prolly isn't)
+	HashSet<String> wallSet; // TODO talk to team about wall objects maybe?
 	
 	
 	public QuoridorBoard(Player player1, Player player2) {
@@ -87,6 +89,8 @@ public class QuoridorBoard {
 	
 	
 	public static void main(String[] args){
+		// This main() was just for my testing purposes.
+		// it should be deleted eventually
 		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
 		
 	}
@@ -100,10 +104,10 @@ public class QuoridorBoard {
 		return null;
 	}
 
-	public BoardNode getPlayerPosition(int playerId) {
+	public BoardNode getPlayerPosition(int player) {
 		for (BoardNode n : this.board.vertexSet()) {
 			if (n.getPlayer() != null) {
-				if (playerId == n.getPlayer().getID()) {
+				if (player == n.getPlayer().getID()) {
 					return n;
 				}
 			}
@@ -112,10 +116,10 @@ public class QuoridorBoard {
 	}
 	
 	
-	public boolean isValidMove(int player, int sourceX, int sourceY, int targetX, int targetY) {
-		// TODO change the method declaration/implementation by removing the sourceX/Y params.
-		BoardNode source = this.getNodeByCoords(sourceX, sourceY);
-		BoardNode target = this.getNodeByCoords(targetX, targetY);
+	public boolean isValidMove(int player, int x, int y) {
+		
+		BoardNode source = this.getPlayerPosition(player);
+		BoardNode target = this.getNodeByCoords(x, y);
 		
 		if (source.equals(target)) return false; 		// source and destination are the same
 		if (source.getPlayer() == null) return false; 	// there is no player at this location.
@@ -144,12 +148,15 @@ public class QuoridorBoard {
 		return true;
 	}
 	
-	public boolean isValidMove(int player, int destX, int destY, char orientation) {
+	public boolean isValidMove(int player, int x, int y, char orientation) {
 		// TODO implement this shit
 		return false;
 	}
 	
-	public void placeWall(int x, int y, char orientation) {
+	public void placeWall(int player, int x, int y, char orientation) {
+		
+		Player p = this.getPlayerPosition(player).getPlayer();
+		
 		if (orientation == 'v') {
 			BoardNode firstSource = this.getNodeByCoords(x, y);
 			BoardNode firstTarget = this.getNodeByCoords(x+1, y);
@@ -157,8 +164,7 @@ public class QuoridorBoard {
 			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
 			this.board.removeEdge(firstSource, firstTarget);
 			this.board.removeEdge(secondSource, secondTarget);
-		} else {
-			//             
+		} else {          
 			BoardNode firstSource = this.getNodeByCoords(x, y);
 			BoardNode firstTarget = this.getNodeByCoords(x, y+1);
 			BoardNode secondSource = this.getNodeByCoords(x+1, y);
@@ -166,10 +172,18 @@ public class QuoridorBoard {
 			this.board.removeEdge(firstSource, firstTarget);
 			this.board.removeEdge(secondSource, secondTarget);
 		}
+		p.decrementWalls();
+		//TODO deal with the collection of walls placed
+		//wallSet.add(x + " " + y + " " + orientation);
 	}
 	
-	public void movePawn(int player, int destX, int destY) {
-		// TODO implement this
+	public void movePawn(int player, int x, int y) {
+		BoardNode currentLocation = this.getPlayerPosition(player);
+		BoardNode targetLocation = this.getNodeByCoords(x, y);
+		Player p = currentLocation.getPlayer();
+		
+		targetLocation.setPlayer(p);
+		currentLocation.setPlayer(null);
 	}
 
 }
