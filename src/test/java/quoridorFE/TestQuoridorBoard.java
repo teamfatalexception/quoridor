@@ -69,13 +69,15 @@ public class TestQuoridorBoard {
 		fail("Not yet implemented"); // TODO
 	}
 
-	@Ignore
 	@Test
 	public void testPlaceWall() {
-		fail("Not yet implemented"); // TODO
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
+		testBoard.placeWall(1, 4, 0, 'h');
+		boolean julean = testBoard.isValidMove(1, 4, 1); // returns false if the wall was placed successfully
+		
+		assertFalse("Expected a wall to be in the way.", julean);
 	}
 
-	@Ignore
 	@Test
 	public void testMovePawn() {
 		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
