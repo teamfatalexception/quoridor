@@ -104,10 +104,10 @@ public class QuoridorBoard {
 		return null;
 	}
 
-	public BoardNode getPlayerPosition(int playerId) {
+	public BoardNode getPlayerPosition(int player) {
 		for (BoardNode n : this.board.vertexSet()) {
 			if (n.getPlayer() != null) {
-				if (playerId == n.getPlayer().getID()) {
+				if (player == n.getPlayer().getID()) {
 					return n;
 				}
 			}
@@ -116,10 +116,10 @@ public class QuoridorBoard {
 	}
 	
 	
-	public boolean isValidMove(int player, int targetX, int targetY) {
+	public boolean isValidMove(int player, int x, int y) {
 		
 		BoardNode source = this.getPlayerPosition(player);
-		BoardNode target = this.getNodeByCoords(targetX, targetY);
+		BoardNode target = this.getNodeByCoords(x, y);
 		
 		if (source.equals(target)) return false; 		// source and destination are the same
 		if (source.getPlayer() == null) return false; 	// there is no player at this location.
@@ -177,8 +177,13 @@ public class QuoridorBoard {
 		//wallSet.add(x + " " + y + " " + orientation);
 	}
 	
-	public void movePawn(int player, int destX, int destY) {
-		// TODO implement this
+	public void movePawn(int player, int x, int y) {
+		BoardNode currentLocation = this.getPlayerPosition(player);
+		BoardNode targetLocation = this.getNodeByCoords(x, y);
+		Player p = currentLocation.getPlayer();
+		
+		targetLocation.setPlayer(p);
+		currentLocation.setPlayer(null);
 	}
 
 }
