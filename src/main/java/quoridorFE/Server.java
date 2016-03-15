@@ -150,8 +150,7 @@ public class Server {
 				try {
 					machineName = args[0];
 					portNumber = Integer.parseInt(args[1]);
-				}
-				catch(Exception e) {
+				}catch(Exception e) {
 					System.out.println("Invalid port number.");
 					System.out.println("Usage is: > java Server [portNumber]");
 					return;

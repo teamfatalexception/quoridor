@@ -27,6 +27,9 @@ public class Client  {
 	private String server, username;
 	private int port;
 	public static Maze maze;
+	// Bools for our commandline parameter flags.
+	public static boolean automate = false;
+	public static boolean text_only = false;
 	/*
 	 *
 	 *  server: the server address
@@ -179,6 +182,17 @@ public class Client  {
 			line += args[n] + " ";
 		}
 		
+		// Gotta check and see if they sent us any little flags. ;)
+		if(line.contains("-a")){
+			automate = true;
+			System.out.println("	Automate is ON");
+		}
+                if(line.contains("--text")){
+			text_only = true;
+                        System.out.println("    Text Only is ON");
+                }
+
+
 		//Replace all colons in line with whitespace
 		String my_line = line.replaceAll(":", " ");
 		
@@ -309,7 +323,15 @@ public class Client  {
 		else {
 				System.out.println("Usage is: > java Client [username] [portNumber] {serverAddress]");
 			return;
-			}
+		}
+		// Make it so an unexpected exit will shut down everything nicely.
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+        		public void run() {
+            			System.out.println("	...cleaning up.");
+				System.exit(0);
+        		}
+    		}, "Shutdown-thread"));
+
 		// wait for messages from user
 		Scanner scan = new Scanner(System.in);
 		// loop forever for message from the user
@@ -321,55 +343,93 @@ public class Client  {
 */		
 		
 		while(true) {
-			System.out.println(maze);
-			System.out.print("> ");
-			// read message from user
-			String msg = scan.nextLine();
 
-			// String parsing users input, looking for next turn so next move can be requested.
-			if(msg.equalsIgnoreCase("exit")){
-
-				System.exit(0);
-			}else if(msg.equalsIgnoreCase("next")){
-
-				// Ask for a move from the next player.
-				System.out.println("	>> Functionality not yet complete!\n" + "	It is player " + turn + "'s turn.");
-
-				// This functionality could easily go inside a wrapper method, but just gonna place move request inside here.
-				if(turn == 0){
-					nextTurn(client,clients.size());
-				}else if(turn == 1){
-					nextTurn(client2,clients.size());
-					//client2.sendMessage("MYOUSHU");
-				}else if(turn == 2){
-					nextTurn(client3,clients.size());
-                                        //client3.sendMessage("MYOUSHU");
-                                }else if(turn == 3){
-					nextTurn(client4,clients.size());
-                                        //client4.sendMessage("MYOUSHU");
-                                }else{
-					System.out.println("ERROR >> Turn unrecognized.");
-				}
-
-				// Count value to iterate through players turns each time next is called. Makes sure to iterate based on number of players.
-				if(turn >= players.size()-1){
-					turn = 0;
-				}else{
-					turn++;
-				}
-
-			}else if(msg.equalsIgnoreCase("help")){
-//				System.out.println("	This is the Viewer for a multi-AI played Quoridor game. You can request next turn uring NEXT or quit using EXIT.");
-                usage();
+			// Test if text only flag has been called.
+			if(text_only){
+				System.out.println(maze);
 			}else{
-				continue;
+				// Temporary, please impliment the gui update here.
+				System.out.println("GUI!");
+			}
+			// Test if automated is run
+			if(!automate){
+				System.out.print("> ");
+				// read message from user
+				String msg = scan.nextLine();
+				// String parsing users input, looking for next turn so next move can be requested.
+				if(msg.equalsIgnoreCase("exit")){
+
+					System.exit(0);
+				}else if(msg.equalsIgnoreCase("next")){
+
+					// Ask for a move from the next player.
+					System.out.println("	>> Functionality not yet complete!\n" + "	It is player " + turn + "'s turn.");
+
+					// This functionality could easily go inside a wrapper method, but just gonna place move request inside here.
+					if(turn == 0){
+						nextTurn(client,clients.size());
+					}else if(turn == 1){
+						nextTurn(client2,clients.size());
+						//client2.sendMessage("MYOUSHU");
+					}else if(turn == 2){
+						nextTurn(client3,clients.size());
+	                	                //client3.sendMessage("MYOUSHU");
+	                	        }else if(turn == 3){
+						nextTurn(client4,clients.size());
+	                	                //client4.sendMessage("MYOUSHU");
+	                	        }else{
+						System.out.println("ERROR >> Turn unrecognized.");
+					}
+
+					// Count value to iterate through players turns each time next is called. Makes sure to iterate based on number of players.
+					if(turn >= players.size()-1){
+						turn = 0;
+					}else{
+						turn++;
+					}
+
+				}else if(msg.equalsIgnoreCase("help")){
+					//System.out.println("	This is the Viewer for a multi-AI played Quoridor game. You can request next turn uring NEXT or quit using EXIT.");
+                			usage();
+				}else{
+					continue;
+				}
+			}else{
+
+				//If automation is on we do . . .
+				System.out.println("Automating");
+
+                                if(turn == 0){
+                                       nextTurn(client,clients.size());
+                                }else if(turn == 1){
+                                       nextTurn(client2,clients.size());
+                                       //client2.sendMessage("MYOUSHU");
+                                }else if(turn == 2){
+                                       nextTurn(client3,clients.size());
+                                       //client3.sendMessage("MYOUSHU");
+                                }else if(turn == 3){
+                                       nextTurn(client4,clients.size());
+                                       //client4.sendMessage("MYOUSHU");
+                                }else{
+                                       System.out.println("ERROR >> Turn unrecognized.");
+                                }
+                                // Count value to iterate through players turns each time next is called. Makes sure to iterate based on number of players.
+                                if(turn >= players.size()-1){
+                                       turn = 0;
+                                }else{
+                                       turn++;
+                                }
+
+				// Make thread sleep for a momment before requesting teh next move.
+				try {
+				    Thread.sleep(400);
+				} catch(InterruptedException ex) {
+    				    Thread.currentThread().interrupt();
+				}
+				//System.exit(0);
 			}
 		}
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 	}
-	
 
 	public static void nextTurn(Client currentClient, int size) throws ClassNotFoundException, IOException{
                	// First we request a move from the server.

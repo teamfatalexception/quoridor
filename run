@@ -25,7 +25,7 @@ if [[ count -eq 2 ]]; then
         pid2=$!
 
 	echo Starting up viewer
-	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:9999 localhost:8888
+	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:9999 localhost:8888 -a --text
 
 	echo Happy Hacking~
 else
@@ -43,7 +43,7 @@ else
         pid4=$!
 
         echo Starting up viewer
-        java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:9999 localhost:8888 localhost:7777 localhost:6666
+        java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:9999 localhost:8888 localhost:7777 localhost:6666 -a --text
 
 	echo Happy Hacking~
 fi
