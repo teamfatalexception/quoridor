@@ -355,9 +355,9 @@ public class Client  {
 				System.out.println(maze);
 			// Test if gui only flag is called.
 			} else if(gui_only){
-				// Temporary, please impliment the gui update here.
-				// Launch to open a window!
-				System.out.println("GUI!");
+				System.out.println("GUI is launching!!");
+				// Launch to open Andrew's Viewer class
+				Viewer.launch(Viewer.class);
 			}
 			// Default to text if no flags are entered
 			else {
