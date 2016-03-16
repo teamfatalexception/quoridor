@@ -30,6 +30,7 @@ public class Client  {
 	// Bools for our commandline parameter flags.
 	public static boolean automate = false;
 	public static boolean text_only = false;
+	public static boolean gui_only = false;
 	/*
 	 *
 	 *  server: the server address
@@ -187,10 +188,15 @@ public class Client  {
 			automate = true;
 			System.out.println("	Automate is ON");
 		}
-                if(line.contains("--text")){
+        if(line.contains("--text")){
 			text_only = true;
-                        System.out.println("    Text Only is ON");
-                }
+            System.out.println("    Text Only is ON");
+        }
+        if(line.contains("--gui")){
+			gui_only = true;
+            System.out.println("    GUI Only is ON");
+        }
+
 
 
 		//Replace all colons in line with whitespace
@@ -347,9 +353,16 @@ public class Client  {
 			// Test if text only flag has been called.
 			if(text_only){
 				System.out.println(maze);
-			}else{
+			// Test if gui only flag is called.
+			} else if(gui_only){
 				// Temporary, please impliment the gui update here.
+				// Launch to open a window!
 				System.out.println("GUI!");
+			}
+			// Default to text if no flags are entered
+			else {
+				System.out.println("No flags for --text or --gui entered. Defaulting to --text.");
+				System.out.println(maze);
 			}
 			// Test if automated is run
 			if(!automate){
