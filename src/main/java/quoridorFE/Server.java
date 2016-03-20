@@ -9,353 +9,374 @@ import java.util.*;
  * The server that can be run both as a console application or a GUI
  */
 public class Server {
-	// a unique ID for each connection
-	private static int uniqueId;
-	// an ArrayList to keep the list of the Client
-	private ArrayList<ClientThread> al = new ArrayList<ClientThread>();
-	// to display time
-	private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-	// the port number to listen for connection
-	private int port;
-	// the boolean that will be turned of to stop the server
-	private boolean keepGoing;
-	// the name of the machine to be used
-	private String machineName;
 
-	/*
-	 *  server constructor that receive the port to listen to for connection as parameter
-	 *  in console
-	 */
-	public Server(String machine, int port1) {
-		port = port1;
-		machineName = machine;
-	}
-	
-	public void start() {
-		keepGoing = true;
-		/* create socket server and wait for connection requests */
-		try{
-			// the socket used by the server
-			ServerSocket serverSocket = new ServerSocket(port);
+        // a unique ID for each connection
+        private static int uniqueId;
+        // an ArrayList to keep the list of the Client
+        private ArrayList<ClientThread> al = new ArrayList<ClientThread>();
+        // to display time
+        private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        // the port number to listen for connection
+        private int port;
+        // the boolean that will be turned of to stop the server
+        private boolean keepGoing;
+        // the name of the machine to be used
+        private String machineName;
+
+        /*
+         *  server constructor that receive the port to listen to for connection as parameter
+         *  in console
+         */
+        public Server(String machine, int port1) {
+                port = port1;
+                machineName = machine;
+        }
+
+        public void start() {
+                keepGoing = true;
+                /* create socket server and wait for connection requests */
+                try{
+                        // the socket used by the server
+                        ServerSocket serverSocket = new ServerSocket(port);
 
 
-// MAIN LOOP
-			// infinite loop to wait for connections
-			while(keepGoing) {
-				// format message saying we are waiting
-				display("Server waiting for Clients on port " + port + ".");
+                        // MAIN LOOP
+                        // infinite loop to wait for connections
+                        while(keepGoing) {
+                                // format message saying we are waiting
+                                display("Server waiting for Clients on port " + port + ".");
 
-				Socket socket = serverSocket.accept();  	// accept connection
-				// if I was asked to stop
-				if(!keepGoing)
-					break;
-				ClientThread t = new ClientThread(socket);  // make a thread of it
-				al.add(t);									// save it in the ArrayList
-				t.start();
-			}
-			// I was asked to stop
-			try {
-				serverSocket.close();
-				for(int i = 0; i < al.size(); ++i) {
-					ClientThread tc = al.get(i);
-					try {
-					tc.sInput.close();
-					tc.sOutput.close();
-					tc.socket.close();
-					}
-					catch(IOException ioE) {
-						
-					}
-				}
-			}
-			catch(Exception e) {
-				display("Exception closing the server and clients: " + e);
-			}
-		}
-		// something went bad
-		catch (IOException e) {
-            String msg = sdf.format(new Date()) + " Exception on new ServerSocket: " + e + "\n";
-			display(msg);
-		}
-	}		
-    /*
-     * For the GUI to stop the server
-     */
-	protected void stop() {
-		keepGoing = false;
-		// connect to myself as Client to exit statement 
-		// Socket socket = serverSocket.accept();
-		try {
-			new Socket("localhost", port);
-		}
-		catch(Exception e) {
-		
-		}
-	}
-	/*
-	 * Display an event (not a message) to the console or the GUI
-	 */
-	private void display(String msg) {
-		//String time = sdf.format(new Date()) + " " + msg;
-			//System.out.println(time);
-		System.out.println(msg);
-	}
-	/*
-	 *  to broadcast a message to all Clients
-	 */
-	private synchronized void broadcast(String message) {
-		// add HH:mm:ss and \n to the message
-		String time = sdf.format(new Date());
-		String messageLf = time + " " + message + "\n";
-		// display message on console or GUI
-			System.out.print(messageLf);
-		
-		// we loop in reverse order in case we would have to remove a Client
-		// because it has disconnected
-		for(int i = al.size(); --i >= 0;) {
-			ClientThread ct = al.get(i);
-			// try to write to the Client if it fails remove it from the list
-			if(!ct.writeMsg(messageLf)) {
-				al.remove(i);
-				display("Disconnected Client " + ct.username + " removed from list.");
-			}
-		}
-	}
+                                Socket socket = serverSocket.accept();          // accept connection
+                                // if I was asked to stop
+                                if(!keepGoing)
+                                        break;
+                                ClientThread t = new ClientThread(socket);  // make a thread of it
+                                al.add(t);                                                                        // save it in the ArrayList
+                                t.start();
+                        }
+                        // I was asked to stop
+                        try {
+                                serverSocket.close();
+                                for(int i = 0; i < al.size(); ++i) {
+                                        ClientThread tc = al.get(i);
+                                        try {
+                                                tc.sInput.close();
+                                                tc.sOutput.close();
+                                                tc.socket.close();
+                                        }
+                                        catch(IOException ioE) {
 
-	// for a client who logoff using the LOGOUT message
-	synchronized void remove(int id) {
-		// scan the array list until we found the Id
-		for(int i = 0; i < al.size(); ++i) {
-			ClientThread ct = al.get(i);
-			// found it
-			if(ct.id == id) {
-				al.remove(i);
-				return;
-			}
-		}
-	}
+                                        }
+                                }
+                        }
+                        catch(Exception e) {
+                                display("Exception closing the server and clients: " + e);
+                        }
+                }
+                // something went bad
+                catch (IOException e) {
+                        String msg = sdf.format(new Date()) + " Exception on new ServerSocket: " + e + "\n";
+                        display(msg);
+                }
+        }                
+        /*
+         * For the GUI to stop the server
+         */
+        protected void stop() {
+                keepGoing = false;
+                // connect to myself as Client to exit statement 
+                // Socket socket = serverSocket.accept();
+                try {
+                        new Socket("localhost", port);
+                }
+                catch(Exception e) {
 
-	/*
-	 *  To run as a console application just open a console window and:
-	 * > java Server
-	 * > java Server portNumber
-	 * If the port number is not specified 1500 is used
-	 */
-	public static void main(String[] args) {
-		// start server on port 1500 unless a PortNumber is specified 
-		int portNumber = 1500;
-		String machineName = "localhost";
-		switch(args.length) {
-			case 2:
-				try {
-					machineName = args[0];
-					portNumber = Integer.parseInt(args[1]);
-				}catch(Exception e) {
-					System.out.println("Invalid port number.");
-					System.out.println("Usage is: > java Server [portNumber]");
-					return;
-				}
-			case 0:
-				break;
-			default:
-				System.out.println("Usage is: > java Server [portNumber]");
-				return;
-				
-		}
-		// create a server object and start it
-		Server server = new Server(machineName, portNumber);
-		server.start();
-	}
+                }
+        }
+        /*
+         * Display an event (not a message) to the console or the GUI
+         */
+        private void display(String msg) {
+                //String time = sdf.format(new Date()) + " " + msg;
+                //System.out.println(time);
+                System.out.println(msg);
+        }
+        /*
+         *  to broadcast a message to all Clients
+         */
+        private synchronized void broadcast(String message) {
+                // add HH:mm:ss and \n to the message
+                String time = sdf.format(new Date());
+                String messageLf = time + " " + message + "\n";
+                // display message on console or GUI
+                System.out.print(messageLf);
 
-	/** One instance of this thread will run for each client */
-	class ClientThread extends Thread {
-		// the socket where to listen/talk
-		Socket socket;
-		ObjectInputStream sInput;
-		ObjectOutputStream sOutput;
-		// my unique id (easier for deconnection)
-		int id;
-		// the Username of the Client
-		String username;
-		// the only type of message a will receive
-		String cm;
-		// the date I connect
-		String date;
-	        // The teams Name
-		String teamName = "TFE";
+                // we loop in reverse order in case we would have to remove a Client
+                // because it has disconnected
+                for(int i = al.size(); --i >= 0;) {
+                        ClientThread ct = al.get(i);
+                        // try to write to the Client if it fails remove it from the list
+                        if(!ct.writeMsg(messageLf)) {
+                                al.remove(i);
+                                display("Disconnected Client " + ct.username + " removed from list.");
+                        }
+                }
+        }
 
-		// Constructor
-		ClientThread(Socket socket) {
-			// a unique id
-			id = ++uniqueId;
-			System.out.println(id);
-			this.socket = socket;
-			/* Creating both Data Stream */
-			System.out.println("Thread trying to create Object Input/Output Streams");
-			try
-			{
-				// create output first
-				sOutput = new ObjectOutputStream(socket.getOutputStream());
-				sInput  = new ObjectInputStream(socket.getInputStream());
-				// read the username
-				username = (String) sInput.readObject();
-				display(username + " just connected.");
-			}
-			catch (IOException e) {
-				display("Exception creating new Input/output Streams: " + e);
-				return;
-			}
-			// have to catch ClassNotFoundException
-			// but I read a String
-			catch (ClassNotFoundException e) {
-			}
-                    date = new Date().toString() + "\n";
-		}
+        // for a client who logoff using the LOGOUT message
+        synchronized void remove(int id) {
+                // scan the array list until we found the Id
+                for(int i = 0; i < al.size(); ++i) {
+                        ClientThread ct = al.get(i);
+                        // found it
+                        if(ct.id == id) {
+                                al.remove(i);
+                                return;
+                        }
+                }
+        }
 
-		//  will run forever
-		public void run() {
+        /*
+         *  To run as a console application just open a console window and:
+         * > java Server
+         * > java Server portNumber
+         * If the port number is not specified 1500 is used
+         */
+        public static void main(String[] args) {
+                // start server on port 1500 unless a PortNumber is specified 
+                int portNumber = 1500;
+                String machineName = "localhost";
+                switch(args.length) {
+                case 2:
+                        try {
+                                machineName = args[0];
+                                portNumber = Integer.parseInt(args[1]);
+                        }catch(Exception e) {
+                                System.out.println("Invalid port number.");
+                                System.out.println("Usage is: > java Server [portNumber]");
+                                return;
+                        }
+                case 0:
+                        break;
+                default:
+                        System.out.println("Usage is: > java Server [portNumber]");
+                        return;
 
-//ANOTHER MAIN LOOP
-			// to loop until LOGOUT
-			//boolean keepGoing = true;
-			while(keepGoing) {
-				// read a String (which is an object)
-				try {
-					cm = (String) sInput.readObject();
-				}
-				catch (IOException e) {
-					display(username + " Exception reading Streams: " + e);
-					break;
-				}
-				catch(ClassNotFoundException e2) {
-					break;
-				}
-				// the message part of the ChatMessage
-				String message = cm;
+                }
+                // create a server object and start it
+                Server server = new Server(machineName, portNumber);
+                server.start();
+        }
 
-				//If message is HELLO send IAM TFE
-				if(message.equals("HELLO")){
-					String response = "IAM " + teamName;
-					writeMsg(response);
-					
-				} 
+        /** One instance of this thread will run for each client */
+        class ClientThread extends Thread {
+                // String constant to pose as playername in the IAM message
+                String PLAYERNAME = "fex:JONNYBOY";
+                // the socket where to listen/talk
+                Socket socket;
+                ObjectInputStream sInput;
+                ObjectOutputStream sOutput;
+                // my unique id (easier for deconnection)
+                int id;
+                // the Username of the Client
+                String username;
+                // the only type of message a will receive
+                String cm;
+                // the date I connect
+                String date;
 
-				if(message.equals("MYOUSHU")){ // I'm being requested for a move.
-					Random rand = new Random();
-					int randomNum = rand.nextInt((8) + 1);
-					//System.out.println("I will give you a move, give me a god damned second..");
-					String answer = "TESUJI " + randomNum + " " + randomNum;
-					System.out.println(answer);
-					writeMsg(answer);
-				}else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
+                // Constructor
+                ClientThread(Socket socket) {
+                        // a unique id
+                        id = ++uniqueId;
+                        System.out.println(id);
+                        this.socket = socket;
+                        /* Creating both Data Stream */
+                        System.out.println("Thread trying to create Object Input/Output Streams");
+                        try
+                        {
+                                // create output first
+                                sOutput = new ObjectOutputStream(socket.getOutputStream());
+                                sInput  = new ObjectInputStream(socket.getInputStream());
+                                // read the username
+                                username = (String) sInput.readObject();
+                                display(username + " just connected.");
+                        }
+                        catch (IOException e) {
+                                display("Exception creating new Input/output Streams: " + e);
+                                return;
+                        }
+                        // have to catch ClassNotFoundException
+                        // but I read a String
+                        catch (ClassNotFoundException e) {
+                        }
+                        date = new Date().toString() + "\n";
+                }
 
-					System.out.println("Recieved: " + message);
-				}else if(message.contains("GOTE")){ // Someones made and illegal move and is now gone.
+                //  will run forever
+                public void run() {
 
-					System.out.println("Recieved: " + message);
-				}else if(message.contains("KIKASHI")){ // Game is over and someone won.
+                        //ANOTHER MAIN LOOP
+                        // I want our program to spin until it see's "hello"
+                        // im going to add a boolean to toggle the spin
+                        boolean helloSpin = true;
+                        boolean gameSpin = true;
+                        // to loop until LOGOUT
+                        //boolean keepGoing = true;
+                        while(keepGoing) {
+                                // to keep everything simple i want to Read once and write once!
+                                // im gong to initialize the string to write above everything and 
+                                // writeMsg once at the bottom.
+                                String answer = "";
+                                // read a String (which is an
+                                try {
+                                        cm = (String) sInput.readObject();
+                                }
+                                catch (IOException e) {
+                                        display(username + " Exception reading Streams: " + e);
+                                        break;
+                                }
+                                catch(ClassNotFoundException e2) {
+                                        break;
+                                }
+                                // the message part of the ChatMessage
+                                String message = cm;
+                                if (helloSpin) {
+                                        if(message.equalsIgnoreCase("hello")) {
+                                                // Flip the hello toggle and build the IAM message
+                                                helloSpin = false;
+                                                answer = "IAM " + PLAYERNAME;
+                                                System.out.println("Sending to the client: " + answer);
+                                                writeMsg(answer);
+                                        }
+                                } else if (gameSpin) {
+                                        Scanner sc = new Scanner(message);
+                                        String thisShouldBeGame = sc.next();
+                                        if (thisShouldBeGame.equals("GAME")) {
+                                                gameSpin = false;
+                                                //TODO Store the information from the game message into some data structure!
+                                                int playerNumber = Integer.parseInt(sc.next());
+                                                //TODO implement a possible read for the next 2 players in a 4 player game. 
+                                                String playerOneOnBoard = sc.next();
+                                                String playerTwoOnBoard = sc.next();
+                                                //TODO find a data structure and fill it...
+                                        }
+                                } else if(message.equals("MYOUSHU")){ // I'm being requested for a move.
+                                        Random rand = new Random();
+                                        int randomNum = rand.nextInt((8) + 1);
+                                        //System.out.println("I will give you a move, give me a god damned second..");
+                                        answer = "TESUJI " + randomNum + " " + randomNum;
+                                        System.out.println("Sending to the client: " + answer);
+                                        writeMsg(answer);
+                                }else if(message.contains("ATARI")){ // Someone has just moved legally and it's
+				    //being broadcast.
+                                        System.out.println("Recieved: " + message);
+                                }else if(message.contains("GOTE")){ // Someones made and illegal move and is now
+				    //gone.
+                                        System.out.println("Recieved: " + message);
+                                }else if(message.contains("KIKASHI")){ // Game is over and someone won.
+                                        System.out.println("Recieved: " + message);
+                                        //keepGoing = false;
+                                        stop();
+                                }
 
-					System.out.println("Recieved: " + message);
-					//keepGoing = false;
-					stop();
-				}
+                                // Switch on the type of message receive
+                                //broadcast(message);
+                                /*(        switch(cm) {
 
-				// Switch on the type of message receive
-				//broadcast(message);
-				/*(	switch(cm) {
+                                case ChatMessage.MESSAGE:
+                                        broadcast(username + ": " + message);
+                                        break;
+                                case ChatMessage.LOGOUT:
+                                        display(username + " disconnected with a LOGOUT message.");
+                                        keepGoing = false;
+                                        break;
+                                case ChatMessage.WHOISIN:
+                                        writeMsg("List of the users connected at " + sdf.format(new Date()) + "\n");
+                                        // scan al the users connected
+                                        for(int i = 0; i < al.size(); ++i) {
+                                                ClientThread ct = al.get(i);
+                                                writeMsg((i+1) + ") " + ct.username + " since " + ct.date);
 
-				case ChatMessage.MESSAGE:
-					broadcast(username + ": " + message);
-					break;
-				case ChatMessage.LOGOUT:
-					display(username + " disconnected with a LOGOUT message.");
-					keepGoing = false;
-					break;
-				case ChatMessage.WHOISIN:
-					writeMsg("List of the users connected at " + sdf.format(new Date()) + "\n");
-					// scan al the users connected
-					for(int i = 0; i < al.size(); ++i) {
-						ClientThread ct = al.get(i);
-						writeMsg((i+1) + ") " + ct.username + " since " + ct.date);
+                                        break;
+                                }
+                                }*/
+                        }
+                        // remove myself from the arrayList containing the list of the
+                        // connected Clients
+                        remove(id);
+                        close();
+                }
 
-					break;
-				}
-				}*/
-			}
-			// remove myself from the arrayList containing the list of the
-			// connected Clients
-			remove(id);
-			close();
-		}
-		
-		// try to close everything
-		private void close() {
-			// try to close the connection
-			try {
-				if(sOutput != null) sOutput.close();
-			}
-			catch(Exception e) {}
-			try {
-				if(sInput != null) sInput.close();
-			}
-			catch(Exception e) {};
-			try {
-				if(socket != null) socket.close();
-			}
-			catch (Exception e) {}
-		}
+                // try to close everything
+                private void close() {
+                        // try to close the connection
+                        try {
+                                if(sOutput != null) sOutput.close();
+                        }
+                        catch(Exception e) {}
+                        try {
+                                if(sInput != null) sInput.close();
+                        }
+                        catch(Exception e) {};
+                        try {
+                                if(socket != null) socket.close();
+                        }
+                        catch (Exception e) {}
+                }
 
-		/*
-		 * Write a String to the Client output stream
-		 */
-		private boolean writeMsg(String msg) {
-			// if Client is still connected send the message to it
-			//if(!socket.isConnected()) {
-				//close();
-				//return false;
-			//}
-			// write the message to the stream
-			try {
-				sOutput.writeObject(msg);
-			}
-			// if an error occurs, do not abort just inform the user
-			catch(IOException e) {
-				display("Error sending message to " + username);
-				display(e.toString());
-			}
-			return true;
-		}
+                /*
+                 * Write a String to the Client output stream
+                 */
+                private boolean writeMsg(String msg) {
+                        // if Client is still connected send the message to it
+                        //if(!socket.isConnected()) {
+                        //close();
+                        //return false;
+                        //}
+                        // write the message to the stream
+                        try {
+                                sOutput.writeObject(msg);
+                        }
+                        // if an error occurs, do not abort just inform the user
+                        catch(IOException e) {
+                                display("Error sending message to " + username);
+                                display(e.toString());
+                        }
+                        return true;
+                }
 
-// this is a method to print out a "prompt" for the game, it tells you how to send moves and such.
-    public void usage() {
-        System.out.println("Welcome to the game of Quorridor!");
-        System.out.println("Pay attention or you could get BANNED!");
-        System.out.println("The Client will request a move by sending you \"MYOUSHU\"");
-        System.out.println("This should trigger you to think about what you want and make a move.");
-        System.out.println("Once you get this... send back \"TESUJI\" followed by your move.");
-        System.out.println("Moves can either be a pawn move, or a wall placement.");
-        System.out.println("  Walls are specified by a starting square ABOVE or");
-        System.out.println("  to the LEFT of the wall and an h or w for a ");
-        System.out.println("  horizontal or vertical wall.");
-        System.out.println("To send a move for your pawn use:   ");
-        System.out.println("The whole wall designation is enclosed in");
-        System.out.println("square brackets:");
-        System.out.println("For Example:");
-        System.out.println("A pawn move is a cordinate pair");
-        System.out.println("<TESUJI> <(x,y)>");
-//yes im sure that the parenthesis are nessisary
-        System.out.println("A valid wall declaration would be");
-        System.out.println("<[(1, 0), v]> or <[(1, 0), h]>");
-        System.out.println("Make valid moves or you will be BANNED");
-        System.out.println("Good Luck!");
+                // this is a method to print out a "prompt" for the game, it tells you how to send
+	    //moves and such.
+                public void usage() {
+                        System.out.println("Welcome to the game of Quorridor!");
+                        System.out.println("Pay attention or you could get BANNED!");
+                        System.out.println("The Client will request a move by sending you \"MYOUSHU\"");
+                        System.out.println("This should trigger you to think about what you want and make a move.");
+                        System.out.println("Once you get this... send back \"TESUJI\" followed by your move.");
+                        System.out.println("Moves can either be a pawn move, or a wall placement.");
+                        System.out.println("  Walls are specified by a starting square ABOVE or");
+                        System.out.println("  to the LEFT of the wall and an h or w for a ");
+                        System.out.println("  horizontal or vertical wall.");
+                        System.out.println("To send a move for your pawn use:   ");
+                        System.out.println("The whole wall designation is enclosed in");
+                        System.out.println("square brackets:");
+                        System.out.println("For Example:");
+                        System.out.println("A pawn move is a cordinate pair");
+                        System.out.println("<TESUJI> <(x,y)>");
+                        //yes im sure that the parenthesis are nessisary
+                        System.out.println("A valid wall declaration would be");
+                        System.out.println("<[(1, 0), v]> or <[(1, 0), h]>");
+                        System.out.println("Make valid moves or you will be BANNED");
+                        System.out.println("Good Luck!");
 
-    }
-	}
+                }
+        }
 }
 
 /** Protocol
 
-** Initial Contacted
+ ** Initial Contacted
 HELLO
 
     Client - Initial contact. Sent to elicit the IAM message.
@@ -379,7 +400,7 @@ GAME <p> <name1> <name2> [<name3> <name4>]
     first in the pair. The order of play is clockwise around the board
     from player 1.
 
-** During Play
+ ** During Play
 
 MYOUSHU
 
@@ -411,7 +432,7 @@ KIKASHI <p>
     cannot send any additional messages to any move-server after
     sending this message.
 
-* Coordinates
+ * Coordinates
 
     The board is viewed canonically with player 1 moving from the top to
     the bottom and player 3 moving from left to right. Columns and rows
@@ -433,4 +454,4 @@ KIKASHI <p>
     Note that there are wall coordinates that are not actually valid: Any
     horizontal wall with 8 as its row, or any vertical wall with 8 as its
     column is not permitted.
-*/
+ */
