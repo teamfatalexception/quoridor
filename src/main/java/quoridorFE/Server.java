@@ -181,6 +181,8 @@ public class Server {
 		String cm;
 		// the date I connect
 		String date;
+	        // The teams Name
+		String teamName = "TFE";
 
 		// Constructor
 		ClientThread(Socket socket) {
@@ -230,6 +232,13 @@ public class Server {
 				}
 				// the message part of the ChatMessage
 				String message = cm;
+
+				//If message is HELLO send IAM TFE
+				if(message.equals("HELLO")){
+					String response = "IAM " + teamName;
+					writeMsg(response);
+					
+				} 
 
 				if(message.equals("MYOUSHU")){ // I'm being requested for a move.
 					Random rand = new Random();

@@ -478,6 +478,8 @@ public class Client  {
 	class ListenFromServer extends Thread {
 		public void run() {
 			Maze maze = new Maze(9,9, 2);
+			ArrayList<String> teamNames = new ArrayList<String>();
+			Boolean game = true;
 			
 			while(true) {
 				try {
@@ -486,7 +488,33 @@ public class Client  {
 					
 					//if(cg == null) {
 					String[] my_cord = msg.split(" ");
-	               			maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), "h");
+
+					String pattern = "(IAM)(\\s*)(.*)";
+					String pattern2 = "[((\\d)(,)(\\d)())(,)(.*)]"; //[(1, 0), v]
+					
+					Pattern p1 = Pattern.compile(pattern);
+					Pattern p2 = Pattern.compile(pattern2);
+					
+					Matcher m = p1.matcher(msg);
+					Matcher m2 = p2.matcher(msg);
+					
+					if(m.find()){
+						teamNames.add(my_cord[1]);
+						System.out.println(my_cord[0] + " " + my_cord[1]);
+					}
+					
+					if(game){
+						System.out.print("GAME " + teamNames.size());
+						for(int i = 0; i < teamNames.size(); i++){
+							System.out.println(teamNames.get(i));
+						}
+						game = false;	
+					}
+					
+					if(m2.find()){
+						maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
+						System.out.println(maze);						
+					}
 	               			//System.out.println(maze);
 					//System.out.print("> ");
 					//}
