@@ -150,6 +150,7 @@ public class Viewer extends Application {
 	public VBox drawLeft() {
 
 	    //TODO: Delete this area eventually if not needed
+	    //OR TODO: List of all of our names or other relevant information
 
 		VBox left = new VBox();
 
@@ -176,12 +177,11 @@ public class Viewer extends Application {
 	  */ 
 	public Pane drawCenter () {
 
-		//TODO: Comment all the lines for the pane
-	    //TODO: OnClick, change the tile color
-
+	    // TODO: OnClick, change the tile color itself
 	    // TODO: Create a 9x9 grid (or 17x17?)
 	    // TODO: Create the walls between the grid squares
 	    // TODO: Place players on the board
+	    // TODO: Give each player a unique color and number overlayed on top of them
 	    // TODO: Place walls on the board
 	    // TODO: Place valid walls on the board
 	    // TODO: Move players
@@ -196,12 +196,14 @@ public class Viewer extends Application {
 	    		
 	    		Tile tile = new Tile();
 	    		
+	    		// The smaller the number of these, the closer the rectangles are together
 	    		tile.setTranslateX(j*50);
 	    		tile.setTranslateY(i*50);
 
 	    		thePane.getChildren().add(tile);
 	    	}
 	    }
+
 	    return thePane;
 	}
     
@@ -220,19 +222,20 @@ public class Viewer extends Application {
 	    FlowPane flowRoot = new FlowPane();
 	    
 	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
-	    BorderPane BPane = new BorderPane();
+	    BorderPane theBorderPane = new BorderPane();
 
 	    // Call functions to draw each area of the GUI
-	    BPane.setTop(drawTop());
+	    theBorderPane.setTop(drawTop());
 	    //TODO: Add multiple parameters to setBottom(drawButtomLeft, drawBottomCenter, drawBottomRight)
-	    BPane.setBottom(drawBottom());
-	    BPane.setRight(drawRight());
-	    BPane.setLeft(drawLeft());
-	    BPane.setCenter(drawCenter());
+	    theBorderPane.setBottom(drawBottom());
+	    theBorderPane.setRight(drawRight());
+	    theBorderPane.setLeft(drawLeft());
+	    theBorderPane.setCenter(drawCenter());
+
 
 	    // Set fixed size window (resizing maintains element positions)
-	    BPane.setPrefSize(700, 600);
-	    flowRoot.getChildren().addAll(BPane);
+	    theBorderPane.setPrefSize(700, 600);
+	    flowRoot.getChildren().addAll(theBorderPane);
 
 	    Scene scene = new Scene(flowRoot, 700, 600);	// change back to BPane instead of root for dyanamic (but overlapping) sizing
 	    theStage.setScene(scene);
