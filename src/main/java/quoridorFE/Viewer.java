@@ -188,21 +188,41 @@ public class Viewer extends Application {
 	    // TODO: onClick of player, hover the valid moves that can be made on the board (see mock)
 
 
+		// May be easier to do a gridPane
 	    Pane thePane = new Pane();
 	    thePane.setPrefSize(100,100);
 
-	    for (int i = 0; i < 9; i++) {
-	    	for (int j = 0; j < 9; j++) {
-	    		
-	    		Tile tile = new Tile();
-	    		
-	    		// The smaller the number of these, the closer the rectangles are together
-	    		tile.setTranslateX(j*50);
-	    		tile.setTranslateY(i*50);
+	    // TODO: Create outer for 17x17 for the walls
+	    // TODO: Create inner for 9x9 for tiles
 
-	    		thePane.getChildren().add(tile);
+	    for (int r = 0; r < 17; r++) {
+	    	for (int s = 0; s < 17; s++) {
+	    		for (int i = 0; i < 9; i++) {
+	    			for (int j = 0; j < 9; j++) {
+	    		
+	    				Tile tile = new Tile();
+	    				Wall wall = new Wall();
+	    		
+	    				// The smaller the number of these, the closer the rectangles are together
+	    				tile.setTranslateX(j*50);
+	    				tile.setTranslateY(i*50);
+
+	    				wall.setTranslateX(s*20);
+	    				wall.setTranslateY(r*20);
+
+	    				// TODO: Translate the walls properly
+
+	    				thePane.getChildren().addAll(tile, wall);
+
+	    				//PSUEDO FOR ADDING
+	    				// for (Node node: elements)
+	    				// objectname.getChildren().add(node);
+	    			}
+	    		}
 	    	}
 	    }
+
+
 
 	    return thePane;
 	}
@@ -232,12 +252,13 @@ public class Viewer extends Application {
 	    theBorderPane.setLeft(drawLeft());
 	    theBorderPane.setCenter(drawCenter());
 
+	    // We probably don't even need the FlowPane if we are setting the window to not be resizable, let's discuss that.
 
 	    // Set fixed size window (resizing maintains element positions)
 	    theBorderPane.setPrefSize(700, 600);
 	    flowRoot.getChildren().addAll(theBorderPane);
 
-	    Scene scene = new Scene(flowRoot, 700, 600);	// change back to BPane instead of root for dyanamic (but overlapping) sizing
+	    Scene scene = new Scene(flowRoot, 700, 600);	// change back to theBorderPane instead of root for dyanamic (but overlapping) sizing
 	    theStage.setScene(scene);
 	    
 	    //TODO: One function to handle the stage. 
@@ -293,6 +314,22 @@ public class Viewer extends Application {
 			circle.setCenterX(100.0f);
 			circle.setCenterY(100.0f);
 			circle.setRadius(5.0f);
+		}
+	}
+
+	private class Wall extends StackPane {
+		
+		public Wall() {
+
+			Rectangle theWall = new Rectangle (5,5);
+			
+			theWall.setFill(Color.RED);
+
+			theWall.setStroke(Color.RED);
+
+			getChildren().addAll(theWall);
+
+			// TODO: Listener to draw the walls on click
 		}
 	}
 
