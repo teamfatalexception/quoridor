@@ -192,31 +192,45 @@ public class Viewer extends Application {
 	    Pane thePane = new Pane();
 	    thePane.setPrefSize(100,100);
 
-	    // TODO: Create outer for 17x17 for the walls
-	    // TODO: Create inner for 9x9 for tiles
+	    // The outer 17 by 17 loop handles drawing the walls
+	    // The inner 9x9 loop handles drawing the tiles (this works the way it should)
+	    // They are currently overlayed on one another, not sure if we should split them up or use lambda expressions
 
-	    for (int r = 0; r < 17; r++) {
-	    	for (int s = 0; s < 17; s++) {
+
+	    // !? EXPLORE GRIDPANE OR TILEPANE FOR THIS !?
+	    for (int r = 0; r < 8; r++) {
+	    	for (int s = 0; s < 8; s++) {
 	    		for (int i = 0; i < 9; i++) {
 	    			for (int j = 0; j < 9; j++) {
 	    		
+	    				// Create a tile and wall object
 	    				Tile tile = new Tile();
 	    				Wall wall = new Wall();
+
+	    				// PSUEDO - this probably goes within the wall class
+	    				// If (the wall coord ends in h) 
+	    					// Draw the wall horizontally
+	    				// ELSE IF (the wall coord ends in v) 
+	    					// Draw the wall vertically
 	    		
 	    				// The smaller the number of these, the closer the rectangles are together
+
+	    				// Translates the X and Y, drawing another tile
 	    				tile.setTranslateX(j*50);
 	    				tile.setTranslateY(i*50);
 
-	    				wall.setTranslateX(s*20);
-	    				wall.setTranslateY(r*20);
+	    				// !! TODO: Offset the wall so it starts between the tiles
+	    				wall.setTranslateX(s*25));
+	    				wall.setTranslateY(r*25));
 
-	    				// TODO: Translate the walls properly
+	    				// TODO: Translate the walls on the board properly
 
 	    				thePane.getChildren().addAll(tile, wall);
 
-	    				//PSUEDO FOR ADDING
+	    				// Pesudo: Adding multiple children in a list into pane
 	    				// for (Node node: elements)
 	    				// objectname.getChildren().add(node);
+
 	    			}
 	    		}
 	    	}
@@ -278,7 +292,6 @@ public class Viewer extends Application {
 		private Text text = new Text();
 		private Circle circle = new Circle();
 
-
 		public Tile() {
 
 			// Create a new rectangle for the grid
@@ -321,13 +334,18 @@ public class Viewer extends Application {
 		
 		public Wall() {
 
-			Rectangle theWall = new Rectangle (5,5);
-			
-			theWall.setFill(Color.RED);
+			Rectangle theVerticalWall = new Rectangle (5,5);
+			//Rectangle theHorizontalWall = new Rectangle(5,5);
 
-			theWall.setStroke(Color.RED);
+			// Set properties for the vertical walls
+			theVerticalWall.setFill(Color.RED);
+			theVerticalWall.setStroke(Color.RED);
 
-			getChildren().addAll(theWall);
+			// Set properties for the horizontal walls
+			//theHorizontalWall.setFill(Color.RED);
+			//theHorizontalWall.setStroke(Color.RED);	
+
+			getChildren().addAll(theVerticalWall);
 
 			// TODO: Listener to draw the walls on click
 		}
