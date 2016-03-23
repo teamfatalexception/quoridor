@@ -60,6 +60,9 @@ public class Viewer extends Application {
 		
 		HBox top = new HBox(1);
 
+		// If you want to nest a VBox within and HBox
+		// VBox bottom = new VBox(1);
+
 	    // Set properties for the HBox
 	    top.setStyle("-fx-background-color: #00FFFF;");
 
@@ -69,6 +72,9 @@ public class Viewer extends Application {
 	    textTop.setFont(Font.font("Times New Roman", 18));
 	    
 	    //TODO: Center the title text
+
+	    // Nesting other elements within top?
+	    // bottom.getChildren().add(top);
 
 	    // Add all elements to the HBox
 	    top.getChildren().addAll(textTop);
@@ -140,6 +146,12 @@ public class Viewer extends Application {
 	    // Add all elements to the VBox
 	    right.getChildren().addAll(p1Text,p2Text,p3Text,p4Text);
 		
+		return right;
+	}
+
+	public VBox drawUpperRight () {
+		VBox right = new VBox();
+
 		return right;
 	}
 
@@ -220,8 +232,8 @@ public class Viewer extends Application {
 	    				tile.setTranslateY(i*50);
 
 	    				// !! TODO: Offset the wall so it starts between the tiles
-	    				wall.setTranslateX(s*25));
-	    				wall.setTranslateY(r*25));
+	    				wall.setTranslateX(s*25);
+	    				wall.setTranslateY(r*25);
 
 	    				// TODO: Translate the walls on the board properly
 
@@ -259,23 +271,24 @@ public class Viewer extends Application {
 	    BorderPane theBorderPane = new BorderPane();
 
 	    // Call functions to draw each area of the GUI
+	    // These can only take one function (that functions will return the node)
 	    theBorderPane.setTop(drawTop());
-	    //TODO: Add multiple parameters to setBottom(drawButtomLeft, drawBottomCenter, drawBottomRight)
 	    theBorderPane.setBottom(drawBottom());
 	    theBorderPane.setRight(drawRight());
 	    theBorderPane.setLeft(drawLeft());
 	    theBorderPane.setCenter(drawCenter());
 
-	    // We probably don't even need the FlowPane if we are setting the window to not be resizable, let's discuss that.
+	    // This is the master control for the window size 
+	    theBorderPane.setPrefSize(723, 660);	// Width X Height
 
-	    // Set fixed size window (resizing maintains element positions)
-	    theBorderPane.setPrefSize(700, 600);
-	    flowRoot.getChildren().addAll(theBorderPane);
+	    // The code on this line sets a FlowPane so that when you resize the window, the elements all stay in place
+	    // Without this, resizing the window causes overlapping of the elements (but does not matter because resize is set to false)
+	    // flowRoot.getChildren().addAll(theBorderPane);
 
-	    Scene scene = new Scene(flowRoot, 700, 600);	// change back to theBorderPane instead of root for dyanamic (but overlapping) sizing
-	    theStage.setScene(scene);
+	    Scene scene = new Scene(theBorderPane);	// change back to (flowRoot, size x size) so that it does not overlap
 	    
-	    //TODO: One function to handle the stage. 
+	    // Set the scene for the stage
+	    theStage.setScene(scene);
 		
 		// Do not allow the player to resize the main window
 		theStage.setResizable(false);
@@ -295,7 +308,7 @@ public class Viewer extends Application {
 		public Tile() {
 
 			// Create a new rectangle for the grid
-			Rectangle border = new Rectangle (20,20);
+			Rectangle border = new Rectangle (100,100);
 			
 			// Make the tile transparent (white)
 			border.setFill(null);
