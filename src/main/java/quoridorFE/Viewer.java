@@ -56,7 +56,7 @@ public class Viewer extends Application {
 	 * Top area - HBox
 	 * HBox will lay out children in a single horizontal row
 	 */
-    public HBox drawTop() {
+    private HBox drawTop() {
 		
 		HBox top = new HBox(1);
 
@@ -67,18 +67,19 @@ public class Viewer extends Application {
 	    top.setStyle("-fx-background-color: #00FFFF;");
 
 	    // Create text to be displayed at the top panel
-	    Text textTop = new Text("Quoridor - Software Engineering");
+	    Text textTop = new Text("Quoridor - Death Match");
 	    textTop.setFill(Color.BLUE);
-	    textTop.setFont(Font.font("Times New Roman", 18));
-	    
+	    textTop.setFont(Font.font("Times New Roman", 22));
 	    //TODO: Center the title text
-
+		textTop.setTextAlignment(TextAlignment.CENTER);
+//        textTop.setTextOrigin(VPos.CENTER);
 	    // Nesting other elements within top?
 	    // bottom.getChildren().add(top);
 
 	    // Add all elements to the HBox
 	    top.getChildren().addAll(textTop);
-
+        // Center the top box alignment
+        top.setAlignment(Pos.CENTER);
 	    return top;
 	}
 
@@ -86,21 +87,16 @@ public class Viewer extends Application {
 	 * Bottom Area - Vbox
 	 * Vbox will lay out children in a single vertical row 
 	 */ 
-	public VBox drawBottom() {
+	private VBox drawBottom() {
 
-	    VBox bottom = new VBox(10);	// new VBox(num) will determine spacing between buttons
+	    VBox bottom = new VBox();	// new VBox(num) will determine spacing between buttons
 
 	    // Set properties for the VBox
 	   	bottom.setStyle("-fx-background-color: #7FFFD4;");
 
-	   	// Create buttons for movement 
-	    Button moveUp = new Button("UP");
-	    Button moveDown = new Button("DOWN");
-	    Button moveLeft = new Button("LEFT");
-	    Button moveRight = new Button("RIGHT");
-	    
+	   	
 	    // Add all elements to the Vbox
-	    bottom.getChildren().addAll(moveUp, moveDown, moveLeft, moveRight);
+	    bottom.getChildren().addAll();
 
 	    //TODO: Create multiple VBoxes within the BottomPane
 	    //TODO: Create a Vbox and a column for Exit Game, Kick Player
@@ -116,10 +112,10 @@ public class Viewer extends Application {
 	 */ 
 	public VBox drawRight () {
 
-		VBox right = new VBox();
+		VBox right = new VBox(50);
 
 		// Set properties for the VBox
-	    right.setStyle("-fx-background-color: #6495ED;");
+	    right.setStyle("-fx-background-color: #6695ED;");
 	    right.setSpacing(10);
 
 	    // Create text for the player count of walls
@@ -139,21 +135,26 @@ public class Viewer extends Application {
 	    p4Text.setFill(Color.RED); 
 	    p4Text.setFont(Font.font("Times New Roman", 18));
 
+        // Create buttons for movement 
+	    Button moveUp = new Button("UP");
+	    Button moveDown = new Button("DOWN");
+	    Button moveLeft = new Button("LEFT");
+	    Button moveRight = new Button("RIGHT");
+	    
 	    //TODO: Create a box to hold the number of walls next to the text
-	    //TODO: Listener to get the number of players for each player
+
+	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1Text,p2Text,p3Text,p4Text);
-		
+	    right.getChildren().addAll(p1Text,p2Text,p3Text,p4Text,moveUp, moveDown, moveLeft, moveRight);
+        // center the right pane
+		right.setAlignment(Pos.CENTER);
+	    
 		return right;
 	}
 
-	public VBox drawUpperRight () {
-		VBox right = new VBox();
-
-		return right;
-	}
+	
 
 	/**
 	 * Left Area - Vbox
@@ -191,6 +192,7 @@ public class Viewer extends Application {
 
 	    // TODO: OnClick, change the tile color itself
 	    // TODO: Create a 9x9 grid (or 17x17?)
+// DO A 9X9 GRID NOT A 17X17 PLEASE!
 	    // TODO: Create the walls between the grid squares
 	    // TODO: Place players on the board
 	    // TODO: Give each player a unique color and number overlayed on top of them
@@ -198,8 +200,10 @@ public class Viewer extends Application {
 	    // TODO: Place valid walls on the board
 	    // TODO: Move players
 	    // TODO: onClick of player, hover the valid moves that can be made on the board (see mock)
-
-
+        // TODO: import jpeg/png files to pimp out board
+//Image imagetest = new Image(getClass().getResourceAsStream("image.png"));
+//ImageView disp = new ImageView(imagetest);
+//Set as backround!
 		// May be easier to do a gridPane
 	    Pane thePane = new Pane();
 	    thePane.setPrefSize(100,100);
@@ -208,10 +212,15 @@ public class Viewer extends Application {
 	    // The inner 9x9 loop handles drawing the tiles (this works the way it should)
 	    // They are currently overlayed on one another, not sure if we should split them up or use lambda expressions
 
+// GOOD
+// GOD
+// THAT
+// LOOP
+// ZOMG!
 
 	    // !? EXPLORE GRIDPANE OR TILEPANE FOR THIS !?
-	    for (int r = 0; r < 8; r++) {
-	    	for (int s = 0; s < 8; s++) {
+	    for (int r = 0; r < 10; r++) {
+	    	for (int s = 0; s < 10; s++) {
 	    		for (int i = 0; i < 9; i++) {
 	    			for (int j = 0; j < 9; j++) {
 	    		
@@ -228,12 +237,12 @@ public class Viewer extends Application {
 	    				// The smaller the number of these, the closer the rectangles are together
 
 	    				// Translates the X and Y, drawing another tile
-	    				tile.setTranslateX(j*50);
-	    				tile.setTranslateY(i*50);
+	    				tile.setTranslateX(j*100);
+	    				tile.setTranslateY(i*100);
 
 	    				// !! TODO: Offset the wall so it starts between the tiles
-	    				wall.setTranslateX(s*25);
-	    				wall.setTranslateY(r*25);
+	    				wall.setTranslateX(s*100);
+	    				wall.setTranslateY(r*100);
 
 	    				// TODO: Translate the walls on the board properly
 
@@ -249,7 +258,7 @@ public class Viewer extends Application {
 	    }
 
 
-
+	    
 	    return thePane;
 	}
     
@@ -279,7 +288,7 @@ public class Viewer extends Application {
 	    theBorderPane.setCenter(drawCenter());
 
 	    // This is the master control for the window size 
-	    theBorderPane.setPrefSize(723, 660);	// Width X Height
+	    theBorderPane.setPrefSize(1200, 1000);	// Width X Height
 
 	    // The code on this line sets a FlowPane so that when you resize the window, the elements all stay in place
 	    // Without this, resizing the window causes overlapping of the elements (but does not matter because resize is set to false)
@@ -302,7 +311,6 @@ public class Viewer extends Application {
 	 */
 	private class Tile extends StackPane {
 		
-		private Text text = new Text();
 		private Circle circle = new Circle();
 
 		public Tile() {
@@ -319,49 +327,66 @@ public class Viewer extends Application {
 			// Align elements within the tile to be centered
 			setAlignment(Pos.CENTER);
 
-			getChildren().addAll(border, text, circle);
+			getChildren().addAll(border, circle);
 
 			// On mouse click, draw an X on the tile
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawCircle();
 				}
-				else if(event.getButton() == MouseButton.SECONDARY) {
-					drawX();
-				}
+				
 			});
 		}
 
-		private void drawX() {
-			text.setText("X");
-		}
 
 		private void drawCircle() {
-			circle.setCenterX(100.0f);
-			circle.setCenterY(100.0f);
+			circle.setCenterX(50.0f);
+			circle.setCenterY(50.0f);
 			circle.setRadius(5.0f);
 		}
 	}
 
 	private class Wall extends StackPane {
-		
+		private Rectangle vWall = new Rectangle();
+		private Rectangle hWall = new Rectangle();
 		public Wall() {
 
-			Rectangle theVerticalWall = new Rectangle (5,5);
-			//Rectangle theHorizontalWall = new Rectangle(5,5);
+			Rectangle theVerticalWall = new Rectangle (10,10);
+			Rectangle theHorizontalWall = new Rectangle(10,10);
 
 			// Set properties for the vertical walls
-			theVerticalWall.setFill(Color.RED);
-			theVerticalWall.setStroke(Color.RED);
+			theVerticalWall.setFill(Color.BLUE);
+			theVerticalWall.setStroke(Color.BLUE);
 
 			// Set properties for the horizontal walls
-			//theHorizontalWall.setFill(Color.RED);
-			//theHorizontalWall.setStroke(Color.RED);	
+			theHorizontalWall.setFill(Color.BLUE);
+			theHorizontalWall.setStroke(Color.BLUE);	
 
-			getChildren().addAll(theVerticalWall);
+            // Align elements within the tile to be centered
+			setAlignment(Pos.CENTER);
+
+            // Add all the nodes to the object
+			getChildren().addAll(theVerticalWall, theHorizontalWall, hWall, vWall);
 
 			// TODO: Listener to draw the walls on click
-		}
+	        // On mouse click, draw a wall
+			setOnMouseClicked(event -> {
+				if(event.getButton() == MouseButton.PRIMARY) {
+					drawVWall();
+				}
+				else if(event.getButton() == MouseButton.SECONDARY) {
+					drawHWall();
+				}
+		     });
+        }
+        private void drawHWall() {
+            hWall.setWidth(100);
+            hWall.setHeight(10);
+        }
+        private void drawVWall() {
+            vWall.setWidth(10);
+            vWall.setHeight(100);
+        }
 	}
 
 }
