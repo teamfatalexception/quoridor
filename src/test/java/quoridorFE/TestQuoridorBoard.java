@@ -2,8 +2,13 @@ package quoridorFE;
 
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jgrapht.alg.DijkstraShortestPath;
 import org.junit.Test;
-import org.junit.Ignore;
+//import org.junit.Ignore;
 
 public class TestQuoridorBoard {
 
@@ -50,23 +55,64 @@ public class TestQuoridorBoard {
 	@Test
 	public void testGetPlayerPositionInt() {
 		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
-		BoardNode node2 = testBoard.getPlayerPosition(2);
+		BoardNode node2 = testBoard.getNodeByPlayerNumber(2);
 		
 		assertEquals("X value was not as expected.", 4, node2.getxPos());
 		assertEquals("Y value was not as expected.", 8, node2.getyPos());
 	}
 
-	
-	@Ignore
 	@Test
-	public void testIsValidMoveIntIntIntIntInt() {
-		fail("Not yet implemented"); // TODO
+	public void testIsValidMovePawn() {
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
+		assertTrue("Expected isValidMove() to return true.", testBoard.isValidMove(1, 3, 0));
+		assertTrue("Expected isValidMove() to return true.", testBoard.isValidMove(1, 4, 1));
+		assertTrue("Expected isValidMove() to return true.", testBoard.isValidMove(1, 5, 0));
+		
+		testBoard.placeWall(1, 4, 0, 'h'); // Put a wall in the way then try to move over it.
+		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(1, 4, 1));
+		
+		testBoard.placeWall(1, 4, 7, 'h'); // Put a wall in the way then try to move over it.
+		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(2, 4, 7));
+		
+		// Trying a bunch of invalid moves.
+		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(1, 4, 4));
+		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(1, 6, 0));
+		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(2, 4, 4));
+		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(2, 8, 6));
+		
 	}
 
-	@Ignore
 	@Test
-	public void testIsValidMoveIntIntIntChar() {
-		fail("Not yet implemented"); // TODO
+	public void testIsValidMoveWall() {
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 5, 4, 0), new Player(2, "test2", 6667, 5, 4, 8),
+													new Player(3, "test3", 6668, 5, 0, 4), new Player(4, "test4", 6669, 5, 8, 4));
+		
+		// test good placement case
+		assertTrue("isValidMove() should return true for a good move. 2", testBoard.isValidMove(1, 3, 0, 'v'));
+		
+		// test blocking in player 1
+		testBoard.placeWall(2, 3, 0, 'v');
+		testBoard.placeWall(2, 4, 0, 'v');
+		assertFalse("isValidMove() should return false when blocking all paths to victory.", testBoard.isValidMove(2, 4, 1, 'h'));
+		
+		// test blocking in player 3
+		testBoard.placeWall(1, 0, 3, 'h');
+		testBoard.placeWall(1, 0, 4, 'h');
+		testBoard.placeWall(1, 0, 5, 'h');
+		assertFalse("isValidMove() should return false when blocking all paths to victory.", testBoard.isValidMove(4, 1, 4, 'v'));
+		
+		// test using up all the wall placements
+		testBoard.placeWall(1, 0, 1, 'h');
+		testBoard.placeWall(1, 0, 7, 'h');
+		//testBoard.placeWall(1, 6, 5, 'h'); // fifth used wall, next attempt by player 1 to place wall should end badly
+		assertFalse("isValid() should return false when a player tries to place an 5th wall.", testBoard.isValidMove(1, 3, 4, 'v'));
+		
+		// test out of bounds wall placements
+		assertFalse("isValid() should return false for any out of bounds wall placement.", testBoard.isValidMove(2, 0, 10, 'h'));
+		
+		
+		// test another good move
+		assertTrue("isValidMove() should return true for a good move. 2", testBoard.isValidMove(3, 6, 7, 'v'));
 	}
 
 	@Test
@@ -74,8 +120,8 @@ public class TestQuoridorBoard {
 		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
 		testBoard.placeWall(1, 4, 0, 'h');
 		boolean julean = testBoard.isValidMove(1, 4, 1); // returns false if the wall was placed successfully
-		
 		assertFalse("Expected a wall to be in the way.", julean);
+		
 	}
 
 	@Test
@@ -85,8 +131,10 @@ public class TestQuoridorBoard {
 		int newY = 1;
 		testBoard.movePawn(1, newX, newY);
 		
-		assertEquals("X value was not as expected.", newX, testBoard.getPlayerPosition(1).getxPos());
-		assertEquals("Y value was not as expected.", newY, testBoard.getPlayerPosition(1).getyPos());
+		assertEquals("X value was not as expected.", newX, testBoard.getNodeByPlayerNumber(1).getxPos());
+		assertEquals("Y value was not as expected.", newY, testBoard.getNodeByPlayerNumber(1).getyPos());
 	}
-
+	
+	// TODO make sure the HashSet PlayerSet works
+	
 }
