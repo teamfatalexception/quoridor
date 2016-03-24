@@ -20,16 +20,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Button;
+
+// Import Panes
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import javafx.scene.shape.*;
-import javafx.scene.text.*;
-
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+
+
+import javafx.stage.Stage;
+import javafx.scene.shape.*;
+import javafx.scene.text.*;
 
 //Imports for mouse events
 import javafx.event.EventHandler;
@@ -202,7 +206,6 @@ public class Viewer extends Application {
 
 	    // TODO: OnClick, change the tile color itself
 	    // TODO: Create a 9x9 grid (or 17x17?)
-		// DO A 9X9 GRID NOT A 17X17 PLEASE!
 	    // TODO: Create the walls between the grid squares
 	    // TODO: Place players on the board
 	    // TODO: Give each player a unique color and number overlayed on top of them
@@ -210,58 +213,85 @@ public class Viewer extends Application {
 	    // TODO: Place valid walls on the board
 	    // TODO: Move players
 	    // TODO: onClick of player, hover the valid moves that can be made on the board (see mock)
-        // TODO: import jpeg/png files to pimp out board
+        // TODO: import jpeg/png files
+
 		// Image imagetest = new Image(getClass().getResourceAsStream("image.png"));
 		// ImageView disp = new ImageView(imagetest);
 		// Set as backround!
 
-		// May be easier to do a gridPane
-	    Pane thePane = new Pane();
-	    thePane.setPrefSize(100,100);
+		// Create a GridPane
+	    GridPane thePane = new GridPane();
 
-	    // The outer 17 by 17 loop handles drawing the walls
-	    // The inner 9x9 loop handles drawing the tiles (this works the way it should)
-	    // They are currently overlayed on one another, not sure if we should split them up or use lambda expressions
+	    // Draw the initial grid
+		for (int i = 0; i < 17; i++) {
+			for (int j = 0; j < 17; j++) {
+			
+				// Create a tile for the 17 x 17 board
+				Tile tile = new Tile();
 
-	    // !? EXPLORE GRIDPANE OR TILEPANE FOR THIS !?
-	    for (int r = 0; r < 10; r++) {
-	    	for (int s = 0; s < 10; s++) {
-	    		for (int i = 0; i < 9; i++) {
-	    			for (int j = 0; j < 9; j++) {
-	    		
-	    				// Create a tile and wall object
-	    				Tile tile = new Tile();
-	    				Wall wall = new Wall();
+				// Add the tiles to the board
+				thePane.add(tile, i, j);
+			
+				// thePane.getChildren().add(tile);
 
-	    				// PSUEDO - this probably goes within the wall class
-	    				// If (the wall coord ends in h) 
-	    					// Draw the wall horizontally
-	    				// ELSE IF (the wall coord ends in v) 
-	    					// Draw the wall vertically
-	    		
-	    				// The smaller the number of these, the closer the rectangles are together
+				// Old way of drawing the tiles
+				// Translate the X and Y, drawing another tile
+				// tile.setTranslateX(j*50); // The smaller the number of these, the closer the rectangles are together
+				// tile.setTranslateY(i*50);
 
-	    				// Translates the X and Y, drawing another tile
-	    				tile.setTranslateX(j*50);
-	    				tile.setTranslateY(i*50);
+				// Old way to draw the walls (doesn't work because of the offset)
+				// wall.setTranslateX(s*25);
+				// wall.setTranslateY(r*25);
 
-	    				// !! TODO: Offset the wall so it starts between the tiles
-	    				wall.setTranslateX(s*25);
-	    				wall.setTranslateY(r*25);
+				// Removed this line for adding children, goes it in one line with thePane.add()
+				// thePane.getChildren().add(tile);
 
-	    				// TODO: Translate the walls on the board properly
+				// Pesudo: Adding multiple children in a list into pane
+				// for (Node node: elements)
+				// objectname.getChildren().add(node);
 
-	    				thePane.getChildren().addAll(tile, wall);
+			}
+		}
 
-	    				// Pesudo: Adding multiple children in a list into pane
-	    				// for (Node node: elements)
-	    				// objectname.getChildren().add(node);
+		// Draw the player tiles on the board
+		for (int k = 0; k < 17; k+=2) {		  	// column
+			for (int l = 0; l < 17; l+=2) {     // row
+				
+				// Create the player tiles (9x9)
+				PlayerTile pTile = new PlayerTile();
 
-	    			}
-	    		}
-	    	}
-	    }
+				// Add the player tiles to the board (red tiles)
+				thePane.add(pTile, k, l);	
+			}
+		}
 
+		// Draw the walls on the board
+		// May just handle this in the Tile class 
+		// This does not work because creating wall overlaps things incorrectly
+		for (int a = 0; a < 17; a++) {		  // column
+			for (int b = 0; b < 17; b++) {     // row
+
+				String theOrientation;
+				
+				// TODO: regexp to match the ((x,y),orientation)
+				// TODO: Capture x, y, orientation in capture groups
+
+				theOrientation = "h";
+
+				if (theOrientation.equals("v")) {
+
+					//Wall wall = new Wall(25,75);
+					//thePane.add(wall, 0, 0);
+				}
+					
+				else if (theOrientation.equals("h")) {
+					// Wall wall = new Wall(75,25);
+					// thePane.add(wall, 2, 1);
+				}
+			}
+		}
+
+	    	
 	    return thePane;
 	}
     
@@ -316,6 +346,11 @@ public class Viewer extends Application {
 		
 		private Circle circle = new Circle();
 
+		// I was trying to handle the wall within the tile class so that I would not
+		// need the Wall class, and instead it could handle it here.
+		// I'm still not sure the best way to do it because it can be done through both
+		private Rectangle wall = new Rectangle();
+
 		public Tile() {
 
 			// Create a new rectangle for the grid
@@ -328,17 +363,22 @@ public class Viewer extends Application {
 			border.setStroke(Color.BLACK);
 
 			// Align elements within the tile to be centered
-			setAlignment(Pos.CENTER);
+			//setAlignment(Pos.CENTER);
 
-			getChildren().addAll(border, circle);
+			getChildren().addAll(border, circle, wall);
 
 			// On mouse click, draw an X on the tile
-			setOnMouseClicked(event -> {
+			/*setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawCircle();
 				}
-				
-			});
+			}); */
+
+			/*setOnMouseClicked(event -> {
+				if(event.getButton() == MouseButton.PRIMARY) {
+					drawWall();
+				}
+			}); */
 		}
 
 		private void drawCircle() {
@@ -346,43 +386,67 @@ public class Viewer extends Application {
 			circle.setCenterY(50.0f);
 			circle.setRadius(5.0f);
 		}
+
+		private void drawWall() {
+			// Set alignment of walls to be right aligned?
+			wall.setFill(Color.BLUE);
+			wall.setStroke(Color.BLUE);
+			wall.setWidth(75);
+			wall.setHeight(25);
+		}
+	}
+
+	private class PlayerTile extends StackPane {
+		
+		public PlayerTile() {
+
+			Rectangle border = new Rectangle(25,25);
+
+			// Make the tile transparent (white)
+			border.setFill(Color.RED);
+
+			// Set the line color of the tiles to black
+			border.setStroke(Color.RED);
+
+			// Align elements within the tile to be centered
+			setAlignment(Pos.CENTER);
+
+			getChildren().addAll(border);
+
+		}
 	}
 
 	private class Wall extends StackPane {
 
-		private Rectangle vWall = new Rectangle();
-		private Rectangle hWall = new Rectangle();
+		// private Rectangle vWall = new Rectangle();
+		/// private Rectangle hWall = new Rectangle();
 
-		public Wall() {
+		public Wall(int wallLength, int wallHeight) {
 
-			Rectangle theVerticalWall = new Rectangle(10,10);
-			Rectangle theHorizontalWall = new Rectangle(10,10);
+			Rectangle theWall = new Rectangle(wallLength, wallHeight);
 
 			// Set properties for the vertical walls
-			theVerticalWall.setFill(Color.BLUE);
-			theVerticalWall.setStroke(Color.BLUE);
-
-			// Set properties for the horizontal walls
-			theHorizontalWall.setFill(Color.BLUE);
-			theHorizontalWall.setStroke(Color.BLUE);	
+			theWall.setFill(Color.BLUE);
+			theWall.setStroke(Color.BLUE);	
 
             // Align elements within the tile to be centered
 			setAlignment(Pos.CENTER);
 
             // Add all the nodes to the object
-			getChildren().addAll(theVerticalWall, theHorizontalWall, hWall, vWall);
+			getChildren().addAll(theWall);
 
 	        // On mouse click, draw a wall
-			setOnMouseClicked(event -> {
+			/*setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawVWall();
 				}
 				else if(event.getButton() == MouseButton.SECONDARY) {
 					drawHWall();
 				}
-		     });
+		     }); */
         }
 
+        /*
         private void drawHWall() {
             hWall.setWidth(100);
             hWall.setHeight(10);
@@ -391,7 +455,7 @@ public class Viewer extends Application {
         private void drawVWall() {
             vWall.setWidth(10);
             vWall.setHeight(100);
-        }
+        } */
 	}
 
 }
