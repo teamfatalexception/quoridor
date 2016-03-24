@@ -45,8 +45,8 @@ import javafx.scene.input.*;
 
 public class Viewer extends Application {
 	
-	// This will be commented out eventually because it should be launched from Client.java once, 
-	// then updated as needed.
+	// This will be commented out eventually because it should be launched 
+	// from Client.java once, then updated as needed.
     public static void main(String[] args) {
         Application.launch(args);
         // TODO: See how John handles the old GUI and launch this that way
@@ -82,8 +82,10 @@ public class Viewer extends Application {
 
 	    // Add all elements to the HBox
 	    top.getChildren().addAll(textTop);
+        
         // Center the top box alignment
         top.setAlignment(Pos.CENTER);
+
 	    return top;
 	}
 
@@ -98,8 +100,13 @@ public class Viewer extends Application {
 	    // Set properties for the VBox
 	   	bottom.setStyle("-fx-background-color: #7FFFD4;");
 
+	   	Text textBottom = new Text("The console will go here");
+	   	Text moreText = new Text("It will be placed");
+	   	Text evenMoreText = new Text("Within a scroll pane");
+	   	Text theMostText = new Text("Delete these when done!");
+
 	    // Add all elements to the Vbox
-	    bottom.getChildren().addAll();
+	    bottom.getChildren().addAll(textBottom, moreText, evenMoreText, theMostText);
 
 	    //TODO: Create multiple VBoxes within the BottomPane
 	    //TODO: Create a Vbox and a column for Exit Game, Kick Player
@@ -235,12 +242,12 @@ public class Viewer extends Application {
 	    				// The smaller the number of these, the closer the rectangles are together
 
 	    				// Translates the X and Y, drawing another tile
-	    				tile.setTranslateX(j*100);
-	    				tile.setTranslateY(i*100);
+	    				tile.setTranslateX(j*50);
+	    				tile.setTranslateY(i*50);
 
 	    				// !! TODO: Offset the wall so it starts between the tiles
-	    				wall.setTranslateX(s*100);
-	    				wall.setTranslateY(r*100);
+	    				wall.setTranslateX(s*25);
+	    				wall.setTranslateY(r*25);
 
 	    				// TODO: Translate the walls on the board properly
 
@@ -284,7 +291,7 @@ public class Viewer extends Application {
 	    theBorderPane.setCenter(drawCenter());
 
 	    // This is the master control for the window size 
-	    theBorderPane.setPrefSize(1200, 1000);	// Width X Height
+	    theBorderPane.setPrefSize(1000, 1000);	// Width X Height
 
 	    // The code on this line sets a FlowPane so that when you resize the window, the elements all stay in place
 	    // Without this, resizing the window causes overlapping of the elements (but does not matter because resize is set to false)
@@ -312,7 +319,7 @@ public class Viewer extends Application {
 		public Tile() {
 
 			// Create a new rectangle for the grid
-			Rectangle border = new Rectangle (100,100);
+			Rectangle border = new Rectangle (25,25);
 			
 			// Make the tile transparent (white)
 			border.setFill(null);
@@ -380,7 +387,7 @@ public class Viewer extends Application {
             hWall.setWidth(100);
             hWall.setHeight(10);
         }
-        
+
         private void drawVWall() {
             vWall.setWidth(10);
             vWall.setHeight(100);
