@@ -222,6 +222,8 @@ public class Viewer extends Application {
 		// Create a GridPane
 	    GridPane thePane = new GridPane();
 
+	    // TODO: Create multiple GridPanes to nest on top of each other
+
 	    // Draw the initial grid
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 17; j++) {
@@ -294,12 +296,11 @@ public class Viewer extends Application {
 
 				// Old way of drawing the tiles
 				// Translate the X and Y, drawing another tile
-				tile.setTranslateX(j*50);
-				tile.setTranslateY(i*50);
+				tile.setTranslateX(j * 50);
+				tile.setTranslateY(i * 50);
 
 				thePane.getChildren().add(tile);
 
-				// Old way to draw the walls (doesn't work because of the offset)
 				// wall.setTranslateX(s*25);
 				// wall.setTranslateY(r*25);
 
@@ -309,8 +310,46 @@ public class Viewer extends Application {
 			}
 		}
 
+
+		// Draw Vertical Walls
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 16; j+=2) {		// Making this +=2 sets the proper row for the vertical
+
+				Wall wall;
+
+				wall = new Wall(25, 75);	
+
+				wall.setTranslateX(25 + (j * 25));
+				wall.setTranslateY(i * 25);
+
+				// TODO: Listener for drawing these walls to draw on click
+
+				thePane.getChildren().add(wall);
+			}
+		}
+		
+		// Draw horiztonal walls
+		for (int i = 0; i < 16; i+=2) {
+			for (int j = 0; j < 15; j++) {		// Making this +=2 sets the proper row for the vertical
+
+				Wall wall;
+
+				// Length, Height
+				wall = new Wall(75, 25);
+
+				wall.setTranslateX(j * 25);
+				wall.setTranslateY(25 + (i * 25));
+
+				thePane.getChildren().add(wall);
+			}
+		}
+	
 		return thePane;
 	}
+
+		
+
+	
     
 	/**
 	 * Launch the stage of the application.
@@ -385,17 +424,17 @@ public class Viewer extends Application {
 			getChildren().addAll(border, circle, wall);
 
 			// On mouse click, draw an X on the tile
-			/*setOnMouseClicked(event -> {
+			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawCircle();
 				}
-			}); */
+			});
 
-			setOnMouseClicked(event -> {
+			/*setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawWall();
 				}
-			}); 
+			});  */
 		}
 
 		private void drawCircle() {
@@ -447,20 +486,22 @@ public class Viewer extends Application {
 			theWall.setStroke(Color.BLUE);	
 
             // Align elements within the tile to be centered
-			setAlignment(Pos.CENTER);
+			// setAlignment(Pos.CENTER);
 
             // Add all the nodes to the object
 			getChildren().addAll(theWall);
 
 	        // On mouse click, draw a wall
-			/*setOnMouseClicked(event -> {
+	        /*
+			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawVWall();
 				}
 				else if(event.getButton() == MouseButton.SECONDARY) {
 					drawHWall();
 				}
-		     }); */
+		     }); 
+		     */
         }
 
         /*
