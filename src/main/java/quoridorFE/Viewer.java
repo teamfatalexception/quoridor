@@ -39,6 +39,8 @@ import javafx.scene.text.*;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.*;
+import javafx.event.ActionEvent;
+
 
 /**
 * BEFORE YOU START
@@ -132,45 +134,111 @@ public class Viewer extends Application {
 	    right.setStyle("-fx-background-color: #6695ED;");
 	    right.setSpacing(10);
 
-	    // Create text for the player count of walls
+	    // HBox to display p1's walls
+	    HBox p1 = new HBox(15);
 	    Text p1Text = new Text("Player 1's Walls:");
 	    p1Text.setFill(Color.RED); 
 	    p1Text.setFont(Font.font("Times New Roman", 18));
 	    Label p1Walls = new Label("0");
+	    p1.getChildren().addAll(p1Text, p1Walls);
 
-	    Text p2Text = new Text("Player 1's Walls:");
+	    // Displaying p2's walls
+	    HBox p2 = new HBox(15);
+	    Text p2Text = new Text("Player 2's Walls:");
 	    p2Text.setFill(Color.RED); 
 	    p2Text.setFont(Font.font("Times New Roman", 18));
 	    Label p2Walls = new Label("0");
+	    p2.getChildren().addAll(p2Text, p2Walls);
 
-	    Text p3Text = new Text("Player 1's Walls:");
+	    // Displaying p3's walls
+	    HBox p3 = new HBox(15);
+	    Text p3Text = new Text("Player 3's Walls:");
 	    p3Text.setFill(Color.RED); 
 	    p3Text.setFont(Font.font("Times New Roman", 18));
-	    Label p3Walls = new Label("0");
+	    Label p3Walls = new Label("0");		
+	    p3.getChildren().addAll(p3Text, p3Walls);
 	    
-
-	    Text p4Text = new Text("Player 1's Walls:");
+	    // Displaying p4's walls
+	    HBox p4 = new HBox(15);
+	    Text p4Text = new Text("Player 4's Walls:");
 	    p4Text.setFill(Color.RED); 
 	    p4Text.setFont(Font.font("Times New Roman", 18));
 	    Label p4Walls = new Label("0");
-
-        // Create buttons for movement 
+	    p4.getChildren().addAll(p4Text, p4Walls);
+    
+	    // Vbox buttons holds all of the buttons
+	    VBox buttons = new VBox(50);
+	    buttons.setSpacing(10);
+	    // Create buttons for movement 
 	    Button moveUp = new Button("UP");
 	    Button moveDown = new Button("DOWN");
 	    Button moveLeft = new Button("LEFT");
 	    Button moveRight = new Button("RIGHT");
+	    Button kickPlayer = new Button("KICK PLAYER");
+	    Button endGame = new Button("END GAME");
 	    
+	    moveUp.setMaxWidth(Double.MAX_VALUE);
+	    moveDown.setMaxWidth(Double.MAX_VALUE);
+	    moveLeft.setMaxWidth(Double.MAX_VALUE);
+	    moveRight.setMaxWidth(Double.MAX_VALUE);
+	    kickPlayer.setMaxWidth(Double.MAX_VALUE);
+	    endGame.setMaxWidth(Double.MAX_VALUE);
+	    
+	    // setting up event that happens when up is pressed
+	    moveUp.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		// currently, it prints up to the console. eventually, the line below will be
+		// used to talk to other parts of our project, informing them that up has been pressed
+		System.out.println("up");
+		}
+	     });
+	     
+	      // setting up event that happens when down is pressed
+	    moveDown.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("down");
+		}
+	     });
+
+	      // setting up event that happens when left is pressed
+	    moveLeft.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("left");
+		}
+	     });
+	     
+	      // setting up event that happens when right is pressed
+	    moveRight.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("right");
+		}
+	     });	
+	     // setting up event that happens when kickPlayer is pressed
+	    kickPlayer.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("kick player");
+		}
+	     });
+	     	      // setting up event that happens when endGame is pressed
+	    endGame.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("end game");
+		}
+	     });
+	     
+	     buttons.getChildren().addAll(moveUp, moveDown, moveLeft, moveRight, kickPlayer, endGame);
+	     
 	    //TODO: Create a box to hold the number of walls next to the text
 	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
+	    
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1Text, p1Walls,  p2Text, p2Walls, 
-					p3Text, p3Walls, p4Text, p4Walls, 
-					moveUp, moveDown, moveLeft, moveRight);		
+	    right.getChildren().addAll(p1, p2, p3, p4, buttons);
+	   
         
         // Center the right pane
-		right.setAlignment(Pos.CENTER);
+		//right.setAlignment(Pos.CENTER);
 	    
 		return right;
 	}
