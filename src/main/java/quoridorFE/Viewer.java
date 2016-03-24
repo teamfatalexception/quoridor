@@ -62,19 +62,23 @@ public class Viewer extends Application {
 
 		// If you want to nest a VBox within and HBox
 		// VBox bottom = new VBox(1);
+		// Then nest with 
+	    // bottom.getChildren().add(top);
 
 	    // Set properties for the HBox
 	    top.setStyle("-fx-background-color: #00FFFF;");
 
 	    // Create text to be displayed at the top panel
 	    Text textTop = new Text("Quoridor - Death Match");
+
+	    // Set text to be blue
 	    textTop.setFill(Color.BLUE);
+
+	    // Set the font type and size of the top text
 	    textTop.setFont(Font.font("Times New Roman", 22));
-	    //TODO: Center the title text
+
+	    // Center the text 
 		textTop.setTextAlignment(TextAlignment.CENTER);
-//        textTop.setTextOrigin(VPos.CENTER);
-	    // Nesting other elements within top?
-	    // bottom.getChildren().add(top);
 
 	    // Add all elements to the HBox
 	    top.getChildren().addAll(textTop);
@@ -94,7 +98,6 @@ public class Viewer extends Application {
 	    // Set properties for the VBox
 	   	bottom.setStyle("-fx-background-color: #7FFFD4;");
 
-	   	
 	    // Add all elements to the Vbox
 	    bottom.getChildren().addAll();
 
@@ -142,13 +145,13 @@ public class Viewer extends Application {
 	    Button moveRight = new Button("RIGHT");
 	    
 	    //TODO: Create a box to hold the number of walls next to the text
-
 	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1Text,p2Text,p3Text,p4Text,moveUp, moveDown, moveLeft, moveRight);
-        // center the right pane
+	    right.getChildren().addAll(p1Text, p2Text, p3Text, p4Text, moveUp, moveDown, moveLeft, moveRight);
+        
+        // Center the right pane
 		right.setAlignment(Pos.CENTER);
 	    
 		return right;
@@ -192,7 +195,7 @@ public class Viewer extends Application {
 
 	    // TODO: OnClick, change the tile color itself
 	    // TODO: Create a 9x9 grid (or 17x17?)
-// DO A 9X9 GRID NOT A 17X17 PLEASE!
+		// DO A 9X9 GRID NOT A 17X17 PLEASE!
 	    // TODO: Create the walls between the grid squares
 	    // TODO: Place players on the board
 	    // TODO: Give each player a unique color and number overlayed on top of them
@@ -201,9 +204,10 @@ public class Viewer extends Application {
 	    // TODO: Move players
 	    // TODO: onClick of player, hover the valid moves that can be made on the board (see mock)
         // TODO: import jpeg/png files to pimp out board
-//Image imagetest = new Image(getClass().getResourceAsStream("image.png"));
-//ImageView disp = new ImageView(imagetest);
-//Set as backround!
+		// Image imagetest = new Image(getClass().getResourceAsStream("image.png"));
+		// ImageView disp = new ImageView(imagetest);
+		// Set as backround!
+
 		// May be easier to do a gridPane
 	    Pane thePane = new Pane();
 	    thePane.setPrefSize(100,100);
@@ -211,12 +215,6 @@ public class Viewer extends Application {
 	    // The outer 17 by 17 loop handles drawing the walls
 	    // The inner 9x9 loop handles drawing the tiles (this works the way it should)
 	    // They are currently overlayed on one another, not sure if we should split them up or use lambda expressions
-
-// GOOD
-// GOD
-// THAT
-// LOOP
-// ZOMG!
 
 	    // !? EXPLORE GRIDPANE OR TILEPANE FOR THIS !?
 	    for (int r = 0; r < 10; r++) {
@@ -257,8 +255,6 @@ public class Viewer extends Application {
 	    	}
 	    }
 
-
-	    
 	    return thePane;
 	}
     
@@ -338,7 +334,6 @@ public class Viewer extends Application {
 			});
 		}
 
-
 		private void drawCircle() {
 			circle.setCenterX(50.0f);
 			circle.setCenterY(50.0f);
@@ -347,11 +342,13 @@ public class Viewer extends Application {
 	}
 
 	private class Wall extends StackPane {
+
 		private Rectangle vWall = new Rectangle();
 		private Rectangle hWall = new Rectangle();
+
 		public Wall() {
 
-			Rectangle theVerticalWall = new Rectangle (10,10);
+			Rectangle theVerticalWall = new Rectangle(10,10);
 			Rectangle theHorizontalWall = new Rectangle(10,10);
 
 			// Set properties for the vertical walls
@@ -368,7 +365,6 @@ public class Viewer extends Application {
             // Add all the nodes to the object
 			getChildren().addAll(theVerticalWall, theHorizontalWall, hWall, vWall);
 
-			// TODO: Listener to draw the walls on click
 	        // On mouse click, draw a wall
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
@@ -379,10 +375,12 @@ public class Viewer extends Application {
 				}
 		     });
         }
+
         private void drawHWall() {
             hWall.setWidth(100);
             hWall.setHeight(10);
         }
+        
         private void drawVWall() {
             vWall.setWidth(10);
             vWall.setHeight(100);
