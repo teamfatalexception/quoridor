@@ -41,6 +41,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.*;
 import javafx.event.ActionEvent;
 
+
 /**
 * BEFORE YOU START
 * The GUI should replicate the following google drawing found here:
@@ -164,12 +165,24 @@ public class Viewer extends Application {
 	    p4Text.setFont(Font.font("Times New Roman", 18));
 	    Label p4Walls = new Label("0");
 	    p4.getChildren().addAll(p4Text, p4Walls);
-
+    
+	    // Vbox buttons holds all of the buttons
+	    VBox buttons = new VBox(50);
+	    buttons.setSpacing(10);
 	    // Create buttons for movement 
 	    Button moveUp = new Button("UP");
 	    Button moveDown = new Button("DOWN");
 	    Button moveLeft = new Button("LEFT");
 	    Button moveRight = new Button("RIGHT");
+	    Button kickPlayer = new Button("KICK PLAYER");
+	    Button endGame = new Button("END GAME");
+	    
+	    moveUp.setMaxWidth(Double.MAX_VALUE);
+	    moveDown.setMaxWidth(Double.MAX_VALUE);
+	    moveLeft.setMaxWidth(Double.MAX_VALUE);
+	    moveRight.setMaxWidth(Double.MAX_VALUE);
+	    kickPlayer.setMaxWidth(Double.MAX_VALUE);
+	    endGame.setMaxWidth(Double.MAX_VALUE);
 	    
 	    // setting up event that happens when up is pressed
 	    moveUp.setOnAction(new EventHandler<ActionEvent>() {
@@ -183,7 +196,6 @@ public class Viewer extends Application {
 	      // setting up event that happens when down is pressed
 	    moveDown.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-
 		System.out.println("down");
 		}
 	     });
@@ -191,7 +203,6 @@ public class Viewer extends Application {
 	      // setting up event that happens when left is pressed
 	    moveLeft.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-
 		System.out.println("left");
 		}
 	     });
@@ -199,21 +210,35 @@ public class Viewer extends Application {
 	      // setting up event that happens when right is pressed
 	    moveRight.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-
 		System.out.println("right");
 		}
 	     });	
+	     // setting up event that happens when kickPlayer is pressed
+	    kickPlayer.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("kick player");
+		}
+	     });
+	     	      // setting up event that happens when endGame is pressed
+	    endGame.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		System.out.println("end game");
+		}
+	     });
+	     
+	     buttons.getChildren().addAll(moveUp, moveDown, moveLeft, moveRight, kickPlayer, endGame);
 	     
 	    //TODO: Create a box to hold the number of walls next to the text
 	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
+	    
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1, p2, p3, p4, 
-					moveUp, moveDown, moveLeft, moveRight);		
+	    right.getChildren().addAll(p1, p2, p3, p4, buttons);
+	   
         
         // Center the right pane
-		right.setAlignment(Pos.CENTER);
+		//right.setAlignment(Pos.CENTER);
 	    
 		return right;
 	}
