@@ -147,8 +147,8 @@ public class QuoridorBoard implements Cloneable{
 
 	/**
 	 * Retrieves the BoardNode corresponding to the space that the given player is occupying.
-	 * @param player 
-	 * @return
+	 * @param player Number of the player whos location you're looking for.
+	 * @return BoardNode representing the location of the given player.
 	 */
 	public BoardNode getNodeByPlayerNumber(int player) {
 		for (BoardNode n : this.board.vertexSet()) {
