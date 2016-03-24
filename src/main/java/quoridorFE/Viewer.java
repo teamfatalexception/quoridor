@@ -132,29 +132,39 @@ public class Viewer extends Application {
 	    right.setStyle("-fx-background-color: #6695ED;");
 	    right.setSpacing(10);
 
-	    // Create text for the player count of walls
+	    // HBox to display p1's walls
+	    HBox p1 = new HBox(15);
 	    Text p1Text = new Text("Player 1's Walls:");
 	    p1Text.setFill(Color.RED); 
 	    p1Text.setFont(Font.font("Times New Roman", 18));
 	    Label p1Walls = new Label("0");
+	    p1.getChildren().addAll(p1Text, p1Walls);
 
-	    Text p2Text = new Text("Player 1's Walls:");
+	    // Displaying p2's walls
+	    HBox p2 = new HBox(15);
+	    Text p2Text = new Text("Player 2's Walls:");
 	    p2Text.setFill(Color.RED); 
 	    p2Text.setFont(Font.font("Times New Roman", 18));
 	    Label p2Walls = new Label("0");
+	    p2.getChildren().addAll(p2Text, p2Walls);
 
-	    Text p3Text = new Text("Player 1's Walls:");
+	    // Displaying p3's walls
+	    HBox p3 = new HBox(15);
+	    Text p3Text = new Text("Player 3's Walls:");
 	    p3Text.setFill(Color.RED); 
 	    p3Text.setFont(Font.font("Times New Roman", 18));
-	    Label p3Walls = new Label("0");
+	    Label p3Walls = new Label("0");		
+	    p3.getChildren().addAll(p3Text, p3Walls);
 	    
-
-	    Text p4Text = new Text("Player 1's Walls:");
+	    // Displaying p4's walls
+	    HBox p4 = new HBox(15);
+	    Text p4Text = new Text("Player 4's Walls:");
 	    p4Text.setFill(Color.RED); 
 	    p4Text.setFont(Font.font("Times New Roman", 18));
 	    Label p4Walls = new Label("0");
+	    p4.getChildren().addAll(p4Text, p4Walls);
 
-        // Create buttons for movement 
+	    // Create buttons for movement 
 	    Button moveUp = new Button("UP");
 	    Button moveDown = new Button("DOWN");
 	    Button moveLeft = new Button("LEFT");
@@ -165,8 +175,7 @@ public class Viewer extends Application {
 	    //TODO: Update player walls on each turn for all players
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1Text, p1Walls,  p2Text, p2Walls, 
-					p3Text, p3Walls, p4Text, p4Walls, 
+	    right.getChildren().addAll(p1, p2, p3, p4, 
 					moveUp, moveDown, moveLeft, moveRight);		
         
         // Center the right pane
