@@ -110,6 +110,8 @@ public class TestQuoridorBoard {
 		// test out of bounds wall placements
 		assertFalse("isValid() should return false for any out of bounds wall placement.", testBoard.isValidMove(2, 0, 10, 'h'));
 		
+		// test invalid orientations
+		assertFalse("isValid() should return false if orientation isn't 'h' or 'v' ", testBoard.isValidMove(3, 6, 7, 'g'));
 		
 		// test another good move
 		assertTrue("isValidMove() should return true for a good move. 2", testBoard.isValidMove(3, 6, 7, 'v'));
