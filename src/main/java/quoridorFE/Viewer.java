@@ -39,6 +39,7 @@ import javafx.scene.text.*;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.*;
+import javafx.event.ActionEvent;
 
 /**
 * BEFORE YOU START
@@ -170,6 +171,39 @@ public class Viewer extends Application {
 	    Button moveLeft = new Button("LEFT");
 	    Button moveRight = new Button("RIGHT");
 	    
+	    // setting up event that happens when up is pressed
+	    moveUp.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+		// currently, it prints up to the console. eventually, the line below will be
+		// used to talk to other parts of our project, informing them that up has been pressed
+		System.out.println("up");
+		}
+	     });
+	     
+	      // setting up event that happens when down is pressed
+	    moveDown.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+
+		System.out.println("down");
+		}
+	     });
+
+	      // setting up event that happens when left is pressed
+	    moveLeft.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+
+		System.out.println("left");
+		}
+	     });
+	     
+	      // setting up event that happens when right is pressed
+	    moveRight.setOnAction(new EventHandler<ActionEvent>() {
+		@Override public void handle(ActionEvent e) {
+
+		System.out.println("right");
+		}
+	     });	
+	     
 	    //TODO: Create a box to hold the number of walls next to the text
 	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
