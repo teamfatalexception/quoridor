@@ -135,19 +135,24 @@ public class Viewer extends Application {
 	    // Create text for the player count of walls
 	    Text p1Text = new Text("Player 1's Walls:");
 	    p1Text.setFill(Color.RED); 
-	    p1Text.setFont(Font.font("Times New Roman", 18));	
+	    p1Text.setFont(Font.font("Times New Roman", 18));
+	    Label p1Walls = new Label("0");
 
 	    Text p2Text = new Text("Player 1's Walls:");
 	    p2Text.setFill(Color.RED); 
 	    p2Text.setFont(Font.font("Times New Roman", 18));
+	    Label p2Walls = new Label("0");
 
 	    Text p3Text = new Text("Player 1's Walls:");
 	    p3Text.setFill(Color.RED); 
 	    p3Text.setFont(Font.font("Times New Roman", 18));
+	    Label p3Walls = new Label("0");
+	    
 
 	    Text p4Text = new Text("Player 1's Walls:");
 	    p4Text.setFill(Color.RED); 
 	    p4Text.setFont(Font.font("Times New Roman", 18));
+	    Label p4Walls = new Label("0");
 
         // Create buttons for movement 
 	    Button moveUp = new Button("UP");
@@ -160,7 +165,9 @@ public class Viewer extends Application {
 	    //TODO: Update player walls on each turn for all players
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1Text, p2Text, p3Text, p4Text, moveUp, moveDown, moveLeft, moveRight);
+	    right.getChildren().addAll(p1Text, p1Walls,  p2Text, p2Walls, 
+					p3Text, p3Walls, p4Text, p4Walls, 
+					moveUp, moveDown, moveLeft, moveRight);		
         
         // Center the right pane
 		right.setAlignment(Pos.CENTER);

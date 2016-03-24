@@ -1,8 +1,7 @@
 /**
 * The QuoridorBoard class implements the Quoridor board and methods for interacting with it.
 * 
-* Player objects passed to the constructor are assumed to be unique and 
-* class methods may not behave as expected if there are duplicate players on the board.
+* 
 *
 * @author  Andrew Valancius
 * 
@@ -20,23 +19,50 @@ import org.jgrapht.UndirectedGraph;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.generate.GridGraphGenerator;
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.ClassBasedVertexFactory;
 import org.jgrapht.graph.SimpleGraph;
 
-public class QuoridorBoard {
+public class QuoridorBoard implements Cloneable{
 	
 	UndirectedGraph<BoardNode, edgeFE> board;
 	
-	HashSet<Player> playerSet; // TODO decide if this part is even needed (prolly isn't)
-	HashSet<String> wallSet; // TODO talk to team about wall objects maybe?
+	HashSet<Player> playerSet;
 	
+	private int numPlayers;
 	
+	private HashSet<Wall> wallSet;
+	private HashSet<Wall> invalidWallSet;
+	
+	/**
+	 * Constructor for initializing a 2 player quoridor board.
+	 * 
+	 * Note: Player objects passed to the constructor are assumed to be unique and 
+	 * 		 class methods may not behave as expected if there are player objects with duplicate IDs on the board.
+	 * 
+	 * @param player1 Player object representing player 1.
+	 * @param player2 Player object representing player 2.
+	 */
 	public QuoridorBoard(Player player1, Player player2) {
 		this(player1, player2, null, null);
 	}
 	
-	
+	/**
+	 * Constructor for initializing a 4 player quoridor board.
+	 * 
+	 * Note: Player objects passed to the constructor are assumed to be unique and 
+	 * 		 class methods may not behave as expected if there are player objects with duplicate IDs on the board.
+	 * 
+	 * @param player1 Player object representing player 1.
+	 * @param player2 Player object representing player 2.
+	 * @param player3 Player object representing player 3.
+	 * @param player4 Player object representing player 4.
+	 */
 	public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) {
+		playerSet = new HashSet<Player>();
+		wallSet = new HashSet<Wall>();
+		invalidWallSet = new HashSet<Wall>();
+		
 		// Gotta populate the board
 		board = new SimpleGraph<BoardNode, edgeFE>(edgeFE.class);
 		
@@ -68,9 +94,16 @@ public class QuoridorBoard {
 		
 		this.getNodeByCoords(4, 0).setPlayer(player1);
 		this.getNodeByCoords(4, 8).setPlayer(player2);
+		playerSet.add(player1);
+		playerSet.add(player2);
 		if (player3 != null && player4 != null) {
+			numPlayers = 4;
 			this.getNodeByCoords(0, 4).setPlayer(player3);
 			this.getNodeByCoords(8, 4).setPlayer(player4);
+			playerSet.add(player3);
+			playerSet.add(player4);
+		} else {
+			numPlayers = 2;
 		}
 		// Now the players have been placed on the board.
 		
@@ -86,15 +119,14 @@ public class QuoridorBoard {
 		*/
 	}
 
-	
-	
-	public static void main(String[] args){
-		// This main() was just for my testing purposes.
-		// it should be deleted eventually
-		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "test1", 6666, 10, 4, 0), new Player(2, "test2", 6667, 10, 4, 8));
-		
-	}
-
+	/**
+	 * Retrieves the BoardNode that corresponds to the given position on the board.
+	 * @param x The x value of the position on the board
+	 * @param y The y value of the position on the board
+	 * @return BoardNode representing the given position on the board.
+	 * 
+	 * @see BoardNode
+	 */
 	public BoardNode getNodeByCoords(int x, int y) {
 		for (BoardNode n : this.board.vertexSet()) {
 			if (n.getxPos() == x && n.getyPos() == y) {
@@ -103,8 +135,22 @@ public class QuoridorBoard {
 		}
 		return null;
 	}
+	
+	private BoardNode getNodeByCoords(int x, int y, SimpleGraph<BoardNode, edgeFE> board) {
+		for (BoardNode n : board.vertexSet()) {
+			if (n.getxPos() == x && n.getyPos() == y) {
+				return n;
+			}
+		}
+		return null;
+	}
 
-	public BoardNode getPlayerPosition(int player) {
+	/**
+	 * Retrieves the BoardNode corresponding to the space that the given player is occupying.
+	 * @param player Number of the player whos location you're looking for.
+	 * @return BoardNode representing the location of the given player.
+	 */
+	public BoardNode getNodeByPlayerNumber(int player) {
 		for (BoardNode n : this.board.vertexSet()) {
 			if (n.getPlayer() != null) {
 				if (player == n.getPlayer().getID()) {
@@ -115,10 +161,40 @@ public class QuoridorBoard {
 		return null;
 	}
 	
+	private BoardNode getNodeByPlayerNumber(int player, SimpleGraph<BoardNode, edgeFE> board) {
+		for (BoardNode n : board.vertexSet()) {
+			if (n.getPlayer() != null) {
+				if (player == n.getPlayer().getID()) {
+					return n;
+				}
+			}
+		}
+		return null;
+	}
 	
+	/**
+	 * Allows access to the set of walls that have been placed so far.
+	 * 
+	 * @return A HashSet containing all the walls that have been placed on the board.
+	 * @see Wall
+	 */
+	public HashSet<Wall> getWallSet() {
+		return wallSet;
+	}
+
+	/**
+	 * Checks to see if the proposed pawn move is a valid move.
+	 * 
+	 * @param player Number of the player attempting the move.
+	 * @param x The destination x position.
+	 * @param y The destination y position.
+	 * @return False for an invalid move, True for a valid one.
+	 */
 	public boolean isValidMove(int player, int x, int y) {
 		
-		BoardNode source = this.getPlayerPosition(player);
+		if (x > 8 || y > 8) return false; // Move is out of bounds.
+		
+		BoardNode source = this.getNodeByPlayerNumber(player);
 		BoardNode target = this.getNodeByCoords(x, y);
 		
 		if (source.equals(target)) return false; 		// source and destination are the same
@@ -148,14 +224,96 @@ public class QuoridorBoard {
 		return true;
 	}
 	
+	/**
+	 * Checks to see if the proposed wall placement is a valid move.
+	 * 
+	 * @param player Number of the player attempting the move.
+	 * @param x The x position of the wall
+	 * @param y The y position of the wall
+	 * @param orientation The orientation of the wall. 
+	 * @return False for an invalid move, True for a valid one.
+	 */
 	public boolean isValidMove(int player, int x, int y, char orientation) {
-		// TODO implement this shit
-		return false;
+		// check for out of bounds
+		if (x > 7 || y > 7) return false;
+		
+		// check for invalid orientations
+		if (orientation != 'v' && orientation != 'h') return false;
+		
+		// check number of walls left
+		if (this.getNodeByPlayerNumber(player).getPlayer().wallsLeft() == 0) return false;
+		
+		// check wall against list of invalid walls
+		if (invalidWallSet.contains(new Wall(x, y, orientation))) return false;
+		
+		// check for path to win condition
+		SimpleGraph<BoardNode, edgeFE> boardCopy = new SimpleGraph<BoardNode, edgeFE>(edgeFE.class);
+		Graphs.addGraph(boardCopy, this.board);
+		
+		if (orientation == 'v') {
+			BoardNode firstSource = this.getNodeByCoords(x, y, boardCopy);
+			BoardNode firstTarget = this.getNodeByCoords(x+1, y, boardCopy);
+			BoardNode secondSource = this.getNodeByCoords(x, y+1, boardCopy);
+			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1, boardCopy);
+			boardCopy.removeEdge(firstSource, firstTarget);
+			boardCopy.removeEdge(secondSource, secondTarget);
+		} else {
+			BoardNode firstSource = this.getNodeByCoords(x, y, boardCopy);
+			BoardNode firstTarget = this.getNodeByCoords(x, y+1, boardCopy);
+			BoardNode secondSource = this.getNodeByCoords(x+1, y, boardCopy);
+			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1, boardCopy);
+			boardCopy.removeEdge(firstSource, firstTarget);
+			boardCopy.removeEdge(secondSource, secondTarget);
+		}
+		
+		for(Player p : this.playerSet) {
+			boolean pathExists = false;
+			for (int i = 0; i < 9; i++) {
+				if (p.getID() == 1) {	
+					if (DijkstraShortestPath.findPathBetween(boardCopy, this.getNodeByPlayerNumber(p.getID(), boardCopy), this.getNodeByCoords(i, 8, boardCopy)) != null) {
+						// if there is no path, check next node
+						pathExists = true;
+						break;
+					}
+				} else if (p.getID() == 2) {
+					if (DijkstraShortestPath.findPathBetween(boardCopy, this.getNodeByPlayerNumber(p.getID(), boardCopy), this.getNodeByCoords(i, 0, boardCopy)) != null) {
+						// if there is no path, check next node
+						pathExists = true;
+						break;
+					}
+				} else if (p.getID() == 3) {
+					if (DijkstraShortestPath.findPathBetween(boardCopy, this.getNodeByPlayerNumber(p.getID(), boardCopy), this.getNodeByCoords(8, i, boardCopy)) != null) {
+						// if there is no path, check next node
+						pathExists = true;
+						break;
+					}
+				} else if (p.getID() == 4) {
+					if (DijkstraShortestPath.findPathBetween(boardCopy, this.getNodeByPlayerNumber(p.getID(), boardCopy), this.getNodeByCoords(0, i, boardCopy)) != null) {
+						// if there is no path, check next node
+						pathExists = true;
+						break;
+					}
+				}
+			}
+			
+			if (!pathExists) return false;
+		}
+		// if you made it here, then it must be a valid move
+		return true;
 	}
 	
+	/**
+	 * Place a wall on the board
+	 * 
+	 * @param player Number of the player making the move.
+	 * @param x The x position of the wall
+	 * @param y The y position of the wall
+	 * @param orientation The orientation of the wall. 
+	 */
 	public void placeWall(int player, int x, int y, char orientation) {
+		if (this.isValidMove(player, x, y, orientation) == false) throw new IllegalMoveException("You fucked up, scrub.");
 		
-		Player p = this.getPlayerPosition(player).getPlayer();
+		Player p = this.getNodeByPlayerNumber(player).getPlayer();
 		
 		if (orientation == 'v') {
 			BoardNode firstSource = this.getNodeByCoords(x, y);
@@ -164,7 +322,7 @@ public class QuoridorBoard {
 			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
 			this.board.removeEdge(firstSource, firstTarget);
 			this.board.removeEdge(secondSource, secondTarget);
-		} else {          
+		} else {
 			BoardNode firstSource = this.getNodeByCoords(x, y);
 			BoardNode firstTarget = this.getNodeByCoords(x, y+1);
 			BoardNode secondSource = this.getNodeByCoords(x+1, y);
@@ -173,17 +331,72 @@ public class QuoridorBoard {
 			this.board.removeEdge(secondSource, secondTarget);
 		}
 		p.decrementWalls();
-		//TODO deal with the collection of walls placed
-		//wallSet.add(x + " " + y + " " + orientation);
+		
+		Wall placedWall = new Wall(x, y, orientation);
+		wallSet.add(placedWall);
+		generateInvalidWalls(placedWall);
 	}
 	
+	private void placeWallUnchecked(int player, int x, int y, char orientation) {
+		Player p = this.getNodeByPlayerNumber(player).getPlayer();
+		
+		if (orientation == 'v') {
+			BoardNode firstSource = this.getNodeByCoords(x, y);
+			BoardNode firstTarget = this.getNodeByCoords(x+1, y);
+			BoardNode secondSource = this.getNodeByCoords(x, y+1);
+			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+			this.board.removeEdge(firstSource, firstTarget);
+			this.board.removeEdge(secondSource, secondTarget);
+		} else {
+			BoardNode firstSource = this.getNodeByCoords(x, y);
+			BoardNode firstTarget = this.getNodeByCoords(x, y+1);
+			BoardNode secondSource = this.getNodeByCoords(x+1, y);
+			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+			this.board.removeEdge(firstSource, firstTarget);
+			this.board.removeEdge(secondSource, secondTarget);
+		}
+		p.decrementWalls();
+		
+		Wall placedWall = new Wall(x, y, orientation);
+		wallSet.add(placedWall);
+		generateInvalidWalls(placedWall);
+	}
+	
+	/**
+	 * Generates all the wall placements invalidated by a given wall placement and 
+	 * adds them to a set of invalid walls.
+	 * 
+	 * @param placedWall
+	 */
+	private void generateInvalidWalls(Wall placedWall) {
+		if (placedWall.orientation == 'h') {
+			invalidWallSet.add(new Wall(placedWall.x, placedWall.y, 'v')); 
+			if (placedWall.x > 0) invalidWallSet.add(new Wall(placedWall.x - 1, placedWall.y, 'h'));
+			if (placedWall.x < 7) invalidWallSet.add(new Wall(placedWall.x + 1, placedWall.y, 'h'));
+		} else {
+			invalidWallSet.add(new Wall(placedWall.x, placedWall.y, 'h'));
+			if (placedWall.y > 0) invalidWallSet.add(new Wall(placedWall.x, placedWall.y - 1, 'v'));
+			if (placedWall.y < 7) invalidWallSet.add(new Wall(placedWall.x, placedWall.y + 1, 'v'));
+		}
+	}
+	
+	/**
+	 * Moves the specified players pawn to the given position on the board.
+	 * 
+	 * @param player Number of the player making the move.
+	 * @param x The x position destination of the pawn.  
+	 * @param y The y position of the wall
+	 */
 	public void movePawn(int player, int x, int y) {
-		BoardNode currentLocation = this.getPlayerPosition(player);
+		if (this.isValidMove(player, x, y) == false) throw new IllegalMoveException("You fucked up, scrub.");
+		
+		BoardNode currentLocation = this.getNodeByPlayerNumber(player);
 		BoardNode targetLocation = this.getNodeByCoords(x, y);
 		Player p = currentLocation.getPlayer();
 		
 		targetLocation.setPlayer(p);
 		currentLocation.setPlayer(null);
 	}
+
 
 }
