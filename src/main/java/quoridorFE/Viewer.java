@@ -202,7 +202,7 @@ public class Viewer extends Application {
 	 /**
 	  * Center Area
 	  */ 
-	public Pane drawCenter () {
+	public GridPane drawCenterwithGridPane () {
 
 	    // TODO: OnClick, change the tile color itself
 	    // TODO: Create a 9x9 grid (or 17x17?)
@@ -231,24 +231,9 @@ public class Viewer extends Application {
 
 				// Add the tiles to the board
 				thePane.add(tile, i, j);
-			
-				// thePane.getChildren().add(tile);
-
-				// Old way of drawing the tiles
-				// Translate the X and Y, drawing another tile
-				// tile.setTranslateX(j*50); // The smaller the number of these, the closer the rectangles are together
-				// tile.setTranslateY(i*50);
-
-				// Old way to draw the walls (doesn't work because of the offset)
-				// wall.setTranslateX(s*25);
-				// wall.setTranslateY(r*25);
 
 				// Removed this line for adding children, goes it in one line with thePane.add()
 				// thePane.getChildren().add(tile);
-
-				// Pesudo: Adding multiple children in a list into pane
-				// for (Node node: elements)
-				// objectname.getChildren().add(node);
 
 			}
 		}
@@ -268,7 +253,7 @@ public class Viewer extends Application {
 		// Draw the walls on the board
 		// May just handle this in the Tile class 
 		// This does not work because creating wall overlaps things incorrectly
-		for (int a = 0; a < 17; a++) {		  // column
+		for (int a = 0; a < 17; a++) {		   // column
 			for (int b = 0; b < 17; b++) {     // row
 
 				String theOrientation;
@@ -285,14 +270,46 @@ public class Viewer extends Application {
 				}
 					
 				else if (theOrientation.equals("h")) {
-					// Wall wall = new Wall(75,25);
-					// thePane.add(wall, 2, 1);
+					//Wall wall = new Wall(75,25);
+					//thePane.add(wall, 0, 0);
+				
 				}
 			}
 		}
-
 	    	
 	    return thePane;
+	}
+
+	/** 
+	 * Alernative way to draw the center
+	 */
+	public Pane drawCenterWithPane () {
+
+		Pane thePane = new Pane();
+
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+
+				Tile tile = new Tile();
+
+				// Old way of drawing the tiles
+				// Translate the X and Y, drawing another tile
+				tile.setTranslateX(j*50);
+				tile.setTranslateY(i*50);
+
+				thePane.getChildren().add(tile);
+
+				// Old way to draw the walls (doesn't work because of the offset)
+				// wall.setTranslateX(s*25);
+				// wall.setTranslateY(r*25);
+
+				// Pesudo: Adding multiple children in a list into pane
+				// for (Node node: elements)
+				// objectname.getChildren().add(node);
+			}
+		}
+
+		return thePane;
 	}
     
 	/**
@@ -318,7 +335,7 @@ public class Viewer extends Application {
 	    theBorderPane.setBottom(drawBottom());
 	    theBorderPane.setRight(drawRight());
 	    theBorderPane.setLeft(drawLeft());
-	    theBorderPane.setCenter(drawCenter());
+	    theBorderPane.setCenter(drawCenterWithPane());
 
 	    // This is the master control for the window size 
 	    theBorderPane.setPrefSize(1000, 1000);	// Width X Height
@@ -374,11 +391,11 @@ public class Viewer extends Application {
 				}
 			}); */
 
-			/*setOnMouseClicked(event -> {
+			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawWall();
 				}
-			}); */
+			}); 
 		}
 
 		private void drawCircle() {
@@ -388,7 +405,7 @@ public class Viewer extends Application {
 		}
 
 		private void drawWall() {
-			// Set alignment of walls to be right aligned?
+			// Set alignment of walls to be right aligned? This should fix the overlapping
 			wall.setFill(Color.BLUE);
 			wall.setStroke(Color.BLUE);
 			wall.setWidth(75);
