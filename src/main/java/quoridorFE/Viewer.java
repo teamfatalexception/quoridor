@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 
 // Import Panes
 import javafx.scene.layout.BorderPane;
@@ -104,15 +105,27 @@ public class Viewer extends Application {
 	    VBox bottom = new VBox();	// new VBox(num) will determine spacing between buttons
 
 	    // Set properties for the VBox
-	   	bottom.setStyle("-fx-background-color: #7FFFD4;");
+            bottom.setStyle("-fx-background-color: #7FFFD4;");
 
-	   	Text textBottom = new Text("The console will go here");
-	   	Text moreText = new Text("It will be placed");
-	   	Text evenMoreText = new Text("Within a scroll pane");
-	   	Text theMostText = new Text("Delete these when done!");
+	    Text textBottom = new Text("Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit, \nsed do eiusmod tempor incididunt ut labore et \ndolore magna aliqua. Ut enim ad \nminim veniam, quis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \nDuis aute irure dolor in reprehenderit in voluptate velit \nesse cillum dolore eu fugiat nulla pariatur. \nExcepteur sint occaecat cupidatat non proident, \nsunt in culpa qui officia deserunt mollit anim id est laborum.");
+
+
+	    Text moreText = new Text("It will be placed");
+	    Text evenMoreText = new Text("Within a scroll pane");
+	    Text theMostText = new Text("Delete these when done!");
+
+
+	    // Init the scrollpane.
+	    ScrollPane sp = new ScrollPane();
+	    //sp.setContent();
+	    // Set scroll bar to right only!
+            //sp.setHbarPolicy(ScrollBarPolicy.NEVER);
+            //sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+	    sp.setPrefSize(180, 50);
+	    sp.setContent(textBottom);
 
 	    // Add all elements to the Vbox
-	    bottom.getChildren().addAll(textBottom, moreText, evenMoreText, theMostText);
+	    bottom.getChildren().addAll(sp, moreText, evenMoreText, theMostText);
 
 	    //TODO: Create multiple VBoxes within the BottomPane
 	    //TODO: Create a Vbox and a column for Exit Game, Kick Player
