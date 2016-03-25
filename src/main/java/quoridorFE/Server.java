@@ -80,20 +80,6 @@ public class Server {
                 }
         }                
         /*
-         * For the GUI to stop the server
-         */
-        protected void stop() {
-                keepGoing = false;
-                // connect to myself as Client to exit statement 
-                // Socket socket = serverSocket.accept();
-                try {
-                        new Socket("localhost", port);
-                }
-                catch(Exception e) {
-
-                }
-        }
-        /*
          * Display an event (not a message) to the console or the GUI
          */
         private void display(String msg) {
@@ -101,6 +87,12 @@ public class Server {
                 //System.out.println(time);
                 System.out.println(msg);
         }
+
+	public void stop(){
+		keepGoing = false;
+	}
+
+
         /*
          *  to broadcast a message to all Clients
          */
@@ -277,7 +269,7 @@ public class Server {
                                 }else if(message.contains("KIKASHI")){ // Game is over and someone won.
                                         System.out.println("Recieved: " + message);
                                         //keepGoing = false;
-                                        stop();
+                                        //stop(sInput, sOutput, socket);
                                 }
 
                                 // Switch on the type of message receive

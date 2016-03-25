@@ -16,37 +16,41 @@ function clean_up {
 	fi
 }
 
+port1=$[ 1 + $[ RANDOM % 10000 ]]
+port2=$[ 1 + $[ RANDOM % 10000 ]]
+port3=$[ 1 + $[ RANDOM % 10000 ]]
+port4=$[ 1 + $[ RANDOM % 10000 ]]
+
 
 if [[ count -eq 2 ]]; then
-        echo Starting up two Servers
-	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port 9999 &
+        echo Starting up two Servers on $port1 and $port2
+	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1 &
 	pid1=$!
-	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port 8888 &
+	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2 &
         pid2=$!
 
 	echo Starting up viewer
-	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:9999 localhost:8888 -a --text
+	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --text
 
 	echo Happy Hacking~
 else
-        echo Starting up four Servers
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port 9999 &
+        echo Starting up four Servers on ports $port1, $port2, $port3 and $port4
+        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1 &
         pid1=$!
 
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port 8888 &
+        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2 &
         pid2=$!
 
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port 7777 &
+        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port3 &
         pid3=$!
 
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port 6666 &
+        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port4 &
         pid4=$!
 
         echo Starting up viewer
-        java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:9999 localhost:8888 localhost:7777 localhost:6666 -a --text
+        java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 localhost:$port3 localhost:$port4 --text
 
 	echo Happy Hacking~
 fi
 
-clean_up
 exit 0

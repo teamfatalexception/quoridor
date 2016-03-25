@@ -85,7 +85,7 @@ public class Viewer extends Application {
 	    textTop.setFont(Font.font("Times New Roman", 22));
 
 	    // Center the text 
-		textTop.setTextAlignment(TextAlignment.CENTER);
+	    textTop.setTextAlignment(TextAlignment.CENTER);
 
 	    // Add all elements to the HBox
 	    top.getChildren().addAll(textTop);
@@ -109,23 +109,24 @@ public class Viewer extends Application {
 
 	    Text textBottom = new Text("Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit, \nsed do eiusmod tempor incididunt ut labore et \ndolore magna aliqua. Ut enim ad \nminim veniam, quis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \nDuis aute irure dolor in reprehenderit in voluptate velit \nesse cillum dolore eu fugiat nulla pariatur. \nExcepteur sint occaecat cupidatat non proident, \nsunt in culpa qui officia deserunt mollit anim id est laborum.");
 
-
-	    Text moreText = new Text("It will be placed");
-	    Text evenMoreText = new Text("Within a scroll pane");
-	    Text theMostText = new Text("Delete these when done!");
-
-
 	    // Init the scrollpane.
 	    ScrollPane sp = new ScrollPane();
-	    //sp.setContent();
-	    // Set scroll bar to right only!
-            //sp.setHbarPolicy(ScrollBarPolicy.NEVER);
-            //sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-	    sp.setPrefSize(180, 50);
+	    sp.setPrefSize(480, 110);
 	    sp.setContent(textBottom);
 
+	    // Init the fire HBox for bottom.
+	    HBox console = new HBox(30);
+	    console.getChildren().addAll(sp);
+
+	    // Default text for players turn
+            Text turn_text = new Text("It is no ones turn.");
+            turn_text.setFont(Font.font("Times New Roman", 50));
+	    //HBox players_turn = new HBox(30);
+            console.getChildren().addAll(turn_text);
+	    //players_turn.getChildren().addAll(turn_text);
+
 	    // Add all elements to the Vbox
-	    bottom.getChildren().addAll(sp, moreText, evenMoreText, theMostText);
+	    bottom.getChildren().addAll(console);
 
 	    //TODO: Create multiple VBoxes within the BottomPane
 	    //TODO: Create a Vbox and a column for Exit Game, Kick Player

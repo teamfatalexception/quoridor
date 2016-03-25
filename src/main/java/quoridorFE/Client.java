@@ -339,13 +339,13 @@ socket.getPort();
                         System.out.println("Usage is: > java Client [username] [portNumber] {serverAddress]");
                         return;
                 }
-                // Make it so an unexpected exit will shut down everything nicely.
+                /* Make it so an unexpected exit will shut down everything nicely.
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                         public void run() {
                                 System.out.println("        ...cleaning up.");
                                 System.exit(0);
                         }
-                }, "Shutdown-thread"));
+                }, "Shutdown-thread"));*/
 
                 // wait for messages from user
                 Scanner scan = new Scanner(System.in);
@@ -387,6 +387,12 @@ socket.getPort();
                                 //System.out.println("Recieved this from a server: " + msg);
                                 // String parsing users input, looking for next turn so next move can be requested.
                                 if(msg.equalsIgnoreCase("exit")){
+                                        for (Client c : clients) {
+                                                c.disconnect();
+                                        }
+					//disconnect();
+					//cleanUp(client);
+					//cleanUp(client2);
                                         System.exit(0);
                                 }else if(msg.equalsIgnoreCase("hello")) {
                     // print out hello to each clinet we have
@@ -404,14 +410,14 @@ socket.getPort();
                                             String IAMFromServer = c.retrieveMessage();
 					    System.out.println(IAMFromServer);
                                         }
-					
-                       
+
+
                                 }else if(msg.contains("GAME")) {
-                    int temp = 0;
+		                    int temp = 0;
                                     for (Client c : clients) {
                                             c.sendMessage("GAME" + temp + "");
-                        temp++;
-                    }
+                		            temp++;
+                    		    }
                                 }
                                 else if(msg.equalsIgnoreCase("next")){
                                         // first thing is send hello to all the servers...
@@ -487,6 +493,25 @@ socket.getPort();
                         }
                 }
         }
+
+
+
+        // Basically a simple method that shuts down all the servers.
+        public static void cleanUp(Client c){
+                System.out.println("  Cleaning up!");
+                //for(int i=0; i<clients.size(); i++){
+                        try{
+                                System.out.println("    Asking player " + c.port + " to shutdown.");
+                                c.sendMessage("KIKASHI " + currentPlayer.getID());
+                        }catch(Exception e){
+                                System.out.print(e);
+                                System.out.println("    Sending to: " + c.port);
+                        }
+                //}
+        }
+
+
+
         ///////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////
         public static void nextTurn(Client currentClient, int size) throws
