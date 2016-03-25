@@ -311,6 +311,11 @@ public class Viewer extends Application {
 		// Create a GridPane
 	    GridPane thePane = new GridPane();
 
+	    // TODO: Create multiple GridPanes to nest on top of each other?
+	    // One GridPane for the Tiles
+	    // One GridPane for the vertical walls
+	    // One GridPane for the horizontal walls
+
 	    // Draw the initial grid
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 17; j++) {
@@ -374,6 +379,9 @@ public class Viewer extends Application {
 	 */
 	public Pane drawCenterWithPane () {
 
+		// TODO: Display the coordinates of the tile on click
+		// TODO: Display the coordinates of the wall on click
+
 		Pane thePane = new Pane();
 
 		for (int i = 0; i < 9; i++) {
@@ -383,12 +391,11 @@ public class Viewer extends Application {
 
 				// Old way of drawing the tiles
 				// Translate the X and Y, drawing another tile
-				tile.setTranslateX(j*50);
-				tile.setTranslateY(i*50);
+				tile.setTranslateX(j * 50);
+				tile.setTranslateY(i * 50);
 
 				thePane.getChildren().add(tile);
 
-				// Old way to draw the walls (doesn't work because of the offset)
 				// wall.setTranslateX(s*25);
 				// wall.setTranslateY(r*25);
 
@@ -397,7 +404,41 @@ public class Viewer extends Application {
 				// objectname.getChildren().add(node);
 			}
 		}
+		
+		// Draw Vertical Walls
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 16; j+=2) {		// Making this +=2 sets the proper row for the vertical
+				
+				Wall wall;
+		
+				wall = new Wall(25, 75);	
 
+				wall.setTranslateX(25 + (j * 25));
+				wall.setTranslateY(i * 25);
+
+				thePane.getChildren().add(wall);											
+
+			} // END FOR
+		} // END FOR 
+		
+		
+		// Draw horiztonal walls
+		for (int i = 0; i < 16; i+=2) {
+			for (int j = 0; j < 15; j++) {		// Making this +=2 sets the proper row for the vertical
+
+				Wall wall;
+
+				// Length, Height
+				wall = new Wall(75, 25);
+
+				wall.setTranslateX(j * 25);
+				wall.setTranslateY(25 + (i * 25));
+
+				thePane.getChildren().add(wall);
+
+			} // END FOR
+		} // END FOR 
+		
 		return thePane;
 	}
     
@@ -463,7 +504,7 @@ public class Viewer extends Application {
 			Rectangle border = new Rectangle (25,25);
 			
 			// Make the tile transparent (white)
-			border.setFill(null);
+			border.setFill(Color.GREEN);
 
 			// Set the line color of the tiles to black
 			border.setStroke(Color.BLACK);
@@ -474,17 +515,21 @@ public class Viewer extends Application {
 			getChildren().addAll(border, circle, wall);
 
 			// On mouse click, draw an X on the tile
-			/*setOnMouseClicked(event -> {
+			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawCircle();
+					System.out.println("Clicked a tile at coordinate X, Y!");
+					// TODO: Display the tile coords in terminal
 				}
-			}); */
+			});
 
+			/*
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawWall();
 				}
-			}); 
+			});  
+			*/
 		}
 
 		private void drawCircle() {
@@ -494,7 +539,6 @@ public class Viewer extends Application {
 		}
 
 		private void drawWall() {
-			// Set alignment of walls to be right aligned? This should fix the overlapping
 			wall.setFill(Color.BLUE);
 			wall.setStroke(Color.BLUE);
 			wall.setWidth(75);
@@ -525,31 +569,37 @@ public class Viewer extends Application {
 	private class Wall extends StackPane {
 
 		// private Rectangle vWall = new Rectangle();
-		/// private Rectangle hWall = new Rectangle();
+		// private Rectangle hWall = new Rectangle();
 
 		public Wall(int wallLength, int wallHeight) {
 
 			Rectangle theWall = new Rectangle(wallLength, wallHeight);
 
-			// Set properties for the vertical walls
-			theWall.setFill(Color.BLUE);
-			theWall.setStroke(Color.BLUE);	
+			// Set properties for the walls
+			theWall.setFill(null);
+			theWall.setStroke(Color.BLACK);	
 
-            // Align elements within the tile to be centered
-			setAlignment(Pos.CENTER);
-
-            // Add all the nodes to the object
+			// Add all the nodes to the object
 			getChildren().addAll(theWall);
 
-	        // On mouse click, draw a wall
-			/*setOnMouseClicked(event -> {
+	        // On mouse click, update the color
+			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
-					drawVWall();
+					
+					System.out.println("Clicked a wall!");
+
+					// IF (the wall color is red) theWall.getFill()
+						// wall placed here!
+
+					theWall.setFill(Color.RED);
+    				theWall.setStroke(Color.RED);
+					
+        			//theWall.isEmpty == false
+
+        			System.out.println("Clicked a wall!");
+        			// TODO: Display the wall coords in terminal
 				}
-				else if(event.getButton() == MouseButton.SECONDARY) {
-					drawHWall();
-				}
-		     }); */
+		    });
         }
 
         /*
