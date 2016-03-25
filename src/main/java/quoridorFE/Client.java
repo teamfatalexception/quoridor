@@ -229,8 +229,7 @@ socket.getPort();
 
                 //Pattern to use for checking if four players
                 //to check against command line parameters
-                String pattern2 =
-"(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
+                String pattern2 = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
 
                 //Compile both patterns
                 Pattern r = Pattern.compile(pattern);
@@ -246,25 +245,21 @@ socket.getPort();
                         try {
                                 serverAddress = wordsOfCommandLineParameters[0];
                                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
-                                //
                                 players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
 
                                 client = new Client(serverAddress, portNumber);
                                 serverAddress = wordsOfCommandLineParameters[2];
                                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
-                                //
                                 players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
 
                                 client2 = new Client(serverAddress, portNumber);
                                 serverAddress = wordsOfCommandLineParameters[4];
                                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[5]);
-                                //
                                 players.add(new Player(3, serverAddress, portNumber, 5, 0, 0));
 
                                 client3 = new Client(serverAddress, portNumber);
                                 serverAddress = wordsOfCommandLineParameters[6];
                                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[7]);
-                                //
                                 players.add(new Player(4, serverAddress, portNumber, 5, 0, 0));
 
                                 client4 = new Client(serverAddress, portNumber);
@@ -347,6 +342,7 @@ socket.getPort();
                         }
                 }, "Shutdown-thread"));*/
 
+
                 // wait for messages from user
                 Scanner scan = new Scanner(System.in);
                 // loop forever for message from the user
@@ -362,7 +358,9 @@ socket.getPort();
                         // Test if text only flag has been called.
                         if(text_only){
                                 System.out.println(maze);
-                        }
+                        }else{
+				Viewer.update();
+			}
                         // Test if gui only flag is called.                        
                         if(gui_only){
                                 //We only want to launch the viewer once
@@ -387,11 +385,11 @@ socket.getPort();
                                 //System.out.println("Recieved this from a server: " + msg);
                                 // String parsing users input, looking for next turn so next move can be requested.
                                 if(msg.equalsIgnoreCase("exit")){
-                                        for (Client c : clients) {
-                                                c.disconnect();
-                                        }
+                                        //for (Client c : clients) {
+                                                //c.disconnect();
+                                        //}
 					//disconnect();
-					//cleanUp(client);
+					cleanUp(clients);
 					//cleanUp(client2);
                                         System.exit(0);
                                 }else if(msg.equalsIgnoreCase("hello")) {
@@ -497,17 +495,18 @@ socket.getPort();
 
 
         // Basically a simple method that shuts down all the servers.
-        public static void cleanUp(Client c){
+        public static void cleanUp(ArrayList<Client> clients){
                 System.out.println("  Cleaning up!");
-                //for(int i=0; i<clients.size(); i++){
+                for(int i=0; i<clients.size(); i++){
                         try{
-                                System.out.println("    Asking player " + c.port + " to shutdown.");
-                                c.sendMessage("KIKASHI " + currentPlayer.getID());
+                                System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
+                                clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
+				clients.get(i).disconnect();
                         }catch(Exception e){
                                 System.out.print(e);
-                                System.out.println("    Sending to: " + c.port);
+                                System.out.println("    Sending to: " + clients.get(i).port);
                         }
-                //}
+                }
         }
 
 
@@ -525,7 +524,7 @@ ClassNotFoundException, IOException{
                 String broadcast = "ATARI";
                 // This check is going to ban players who make bad moves!
                 if(!isValidMove()){
-                        // GOTE is protocol for BAN THAT FUCKER        
+                        // GOTE is protocol for BAN THAT FUCKER
                         broadcast = "GOTE" + currentClient;
                 }
                 // Then if it fails we boot the player, if it passes we broadcast and update our

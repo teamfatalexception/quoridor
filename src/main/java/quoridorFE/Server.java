@@ -268,6 +268,7 @@ public class Server {
                                         System.out.println("Recieved: " + message);
                                 }else if(message.contains("KIKASHI")){ // Game is over and someone won.
                                         System.out.println("Recieved: " + message);
+					break;
                                         //keepGoing = false;
                                         //stop(sInput, sOutput, socket);
                                 }

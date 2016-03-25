@@ -449,13 +449,10 @@ public class Viewer extends Application {
 	 */
 	@Override
 	public void start(Stage theStage) {
-		
-		// Set the title of the stage
-		theStage.setTitle("Quoridor");
-		
+	    // Set the title of the stage
+   	    theStage.setTitle("Quoridor");
 	    // FlowPane allows for static sizing when the window expands/shrinks
 	    FlowPane flowRoot = new FlowPane();
-	    
 	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
 	    BorderPane theBorderPane = new BorderPane();
 
@@ -601,6 +598,7 @@ public class Viewer extends Application {
 				}
 		    });
         }
+
 
         /*
         private void drawHWall() {
