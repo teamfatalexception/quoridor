@@ -490,7 +490,7 @@ public class Viewer extends Application {
 			Rectangle border = new Rectangle (25,25);
 			
 			// Make the tile transparent (white)
-			border.setFill(null);
+			border.setFill(Color.GREEN);
 
 			// Set the line color of the tiles to black
 			border.setStroke(Color.BLACK);
@@ -561,9 +561,9 @@ public class Viewer extends Application {
 
 			Rectangle theWall = new Rectangle(wallLength, wallHeight);
 
-			// Set properties for the vertical walls
-			theWall.setFill(Color.BLUE);
-			theWall.setStroke(Color.BLUE);	
+			// Set properties for the walls
+			theWall.setFill(null);
+			theWall.setStroke(Color.BLACK);	
 
 			// Add all the nodes to the object
 			getChildren().addAll(theWall);
@@ -572,8 +572,15 @@ public class Viewer extends Application {
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					
+					System.out.println("Clicked a wall!");
+
+					// IF (the wall color is red) theWall.getFill()
+						// wall placed here!
+
 					theWall.setFill(Color.RED);
-        			theWall.setStroke(Color.RED);
+    				theWall.setStroke(Color.RED);
+					
+        			//theWall.isEmpty == false
 
         			System.out.println("Clicked a wall!");
         			// TODO: Display the wall coords in terminal
