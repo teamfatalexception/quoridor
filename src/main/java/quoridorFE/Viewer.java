@@ -381,6 +381,9 @@ public class Viewer extends Application {
 
 		// TODO: Display the coordinates of the tile on click
 		// TODO: Display the coordinates of the wall on click
+		// TODO: Update the sizes of the tiles to be 100 x 100 -- update coords of 25x25 to 100x100 and update translations
+		// TODO: Make the columns and rows smaller
+		// TODO: Remove code that is not being used (pTile, commented out code)
 
 		Pane thePane = new Pane();
 
@@ -449,10 +452,13 @@ public class Viewer extends Application {
 	 */
 	@Override
 	public void start(Stage theStage) {
+	    
 	    // Set the title of the stage
    	    theStage.setTitle("Quoridor");
+	    
 	    // FlowPane allows for static sizing when the window expands/shrinks
 	    FlowPane flowRoot = new FlowPane();
+	   
 	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
 	    BorderPane theBorderPane = new BorderPane();
 
@@ -592,9 +598,6 @@ public class Viewer extends Application {
     				theWall.setStroke(Color.RED);
 					
         			//theWall.isEmpty == false
-
-        			System.out.println("Clicked a wall!");
-        			// TODO: Display the wall coords in terminal
 				}
 		    });
         }

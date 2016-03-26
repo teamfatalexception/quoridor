@@ -359,7 +359,7 @@ socket.getPort();
                         if(text_only){
                                 System.out.println(maze);
                         }else{
-				Viewer.update();
+				// Viewer.update();
 			}
                         // Test if gui only flag is called.                        
                         if(gui_only){
