@@ -203,40 +203,40 @@ public class Viewer extends Application {
 		@Override public void handle(ActionEvent e) {
 		// currently, it prints up to the console. eventually, the line below will be
 		// used to talk to other parts of our project, informing them that up has been pressed
-		System.out.println("up");
+		System.out.println("WHAT LIES CAN I TELL YOU TODAY?");
 		}
 	     });
 	     
 	      // setting up event that happens when down is pressed
 	    moveDown.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-		System.out.println("down");
+		System.out.println("VOTE TRUMP");
 		}
 	     });
 
 	      // setting up event that happens when left is pressed
 	    moveLeft.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-		System.out.println("left");
+		System.out.println("SOAP IN A SOCK LEAVES NO BRUISES");
 		}
 	     });
 	     
 	      // setting up event that happens when right is pressed
 	    moveRight.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-		System.out.println("right");
+		System.out.println("THE NSA KNOWS WHAT PORN I WATCH");
 		}
 	     });	
 	     // setting up event that happens when kickPlayer is pressed
 	    kickPlayer.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-		System.out.println("kick player");
+		System.out.println("THE PUMPING LEMMA");
 		}
 	     });
 	     	      // setting up event that happens when endGame is pressed
 	    endGame.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-		System.out.println("end game");
+		System.out.println("GO, AND HAVE A WONDERFUL DAY");
 		}
 	     });
 	     
