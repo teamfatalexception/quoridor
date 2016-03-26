@@ -66,6 +66,7 @@ public class Viewer extends Application {
     private HBox drawTop() {
 		
 		HBox top = new HBox(1);
+		top.setId("top");
 
 		// If you want to nest a VBox within and HBox
 		// VBox bottom = new VBox(1);
@@ -73,10 +74,10 @@ public class Viewer extends Application {
 	    // bottom.getChildren().add(top);
 
 	    // Set properties for the HBox
-	    top.setStyle("-fx-background-color: #00FFFF;");
 
 	    // Create text to be displayed at the top panel
 	    Text textTop = new Text("Quoridor - Death Match");
+	    top.setStyle("-fx-background-color: #7FFFD4;");
 
 	    // Set text to be blue
 	    textTop.setFill(Color.BLUE);
@@ -103,7 +104,8 @@ public class Viewer extends Application {
 	private VBox drawBottom() {
 
 	    VBox bottom = new VBox();	// new VBox(num) will determine spacing between buttons
-
+	    bottom.setId("bottom");
+	    
 	    // Set properties for the VBox
             bottom.setStyle("-fx-background-color: #7FFFD4;");
 
@@ -143,42 +145,36 @@ public class Viewer extends Application {
 	public VBox drawRight () {
 
 		VBox right = new VBox(50);
+		right.setId("right");
 
 		// Set properties for the VBox
-	    right.setStyle("-fx-background-color: #6695ED;");
-	    right.setSpacing(10);
+	    right.setStyle("-fx-background-color: #000088;");
+	    
+	    right.setSpacing(15);
 
 	    // HBox to display p1's walls
 	    HBox p1 = new HBox(15);
-	    Text p1Text = new Text("Player 1's Walls:");
-	    p1Text.setFill(Color.RED); 
-	    p1Text.setFont(Font.font("Times New Roman", 18));
-	    Label p1Walls = new Label("0");
-	    p1.getChildren().addAll(p1Text, p1Walls);
+	    Text p1Text = new Text("PLAYER 1'S WALLS: 0");
+	    p1Text.setId("WallCount");
+	    p1.getChildren().addAll(p1Text);
 
 	    // Displaying p2's walls
 	    HBox p2 = new HBox(15);
-	    Text p2Text = new Text("Player 2's Walls:");
-	    p2Text.setFill(Color.RED); 
-	    p2Text.setFont(Font.font("Times New Roman", 18));
-	    Label p2Walls = new Label("0");
-	    p2.getChildren().addAll(p2Text, p2Walls);
+	    Text p2Text = new Text("PLAYER 2'S WALLS: 0");
+	    p2Text.setId("WallCount");
+	    p2.getChildren().addAll(p2Text);
 
 	    // Displaying p3's walls
 	    HBox p3 = new HBox(15);
-	    Text p3Text = new Text("Player 3's Walls:");
-	    p3Text.setFill(Color.RED); 
-	    p3Text.setFont(Font.font("Times New Roman", 18));
-	    Label p3Walls = new Label("0");		
-	    p3.getChildren().addAll(p3Text, p3Walls);
+	    Text p3Text = new Text("PLAYER 3'S WALLS: 0");
+	    p3Text.setId("WallCount");
+	    p3.getChildren().addAll(p3Text);
 	    
 	    // Displaying p4's walls
 	    HBox p4 = new HBox(15);
-	    Text p4Text = new Text("Player 4's Walls:");
-	    p4Text.setFill(Color.RED); 
-	    p4Text.setFont(Font.font("Times New Roman", 18));
-	    Label p4Walls = new Label("0");
-	    p4.getChildren().addAll(p4Text, p4Walls);
+	    Text p4Text = new Text("PLAYER 4'S WALLS: 0");
+	    p4Text.setId("WallCount");
+	    p4.getChildren().addAll(p4Text);
     
 	    // Vbox buttons holds all of the buttons
 	    VBox buttons = new VBox(50);
@@ -210,7 +206,7 @@ public class Viewer extends Application {
 	      // setting up event that happens when down is pressed
 	    moveDown.setOnAction(new EventHandler<ActionEvent>() {
 		@Override public void handle(ActionEvent e) {
-		System.out.println("VOTE TRUMP");
+		System.out.println("DON'T VOTE TRUMP, I'LL THINK YOU'RE STUPID");
 		}
 	     });
 
@@ -242,7 +238,6 @@ public class Viewer extends Application {
 	     
 	     buttons.getChildren().addAll(moveUp, moveDown, moveLeft, moveRight, kickPlayer, endGame);
 	     
-	    //TODO: Create a box to hold the number of walls next to the text
 	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
 	    
@@ -268,14 +263,14 @@ public class Viewer extends Application {
 	    //TODO: Delete this area eventually if not needed
 	    //OR TODO: List of all of our names or other relevant information
 
-		VBox left = new VBox();
+		VBox left = new VBox(50);
+		left.setId("left");
 
 	    // Set properties for the VBox
-	    left.setStyle("-fx-background-color: #DC143C;");
 	    left.setSpacing(10);
 
 	    // Create shapes
-	    Rectangle rect4 = new Rectangle(5,5,100,100);
+	   Rectangle rect4 = new Rectangle(5,5,100,100);
 	    rect4.setFill(Color.SKYBLUE);
 	    Rectangle rect5 = new Rectangle(5,5,100,100);
 	    rect5.setFill(Color.BURLYWOOD);
@@ -478,6 +473,7 @@ public class Viewer extends Application {
 	    // flowRoot.getChildren().addAll(theBorderPane);
 
 	    Scene scene = new Scene(theBorderPane);	// change back to (flowRoot, size x size) so that it does not overlap
+	    scene.getStylesheets().add("application/ViewerStyle.css");
 	    
 	    // Set the scene for the stage
 	    theStage.setScene(scene);
