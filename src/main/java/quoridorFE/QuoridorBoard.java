@@ -1,7 +1,4 @@
 /**
-* The QuoridorBoard class implements the Quoridor board and methods for interacting with it.
-* 
-* 
 *
 * @author  Andrew Valancius
 * 
@@ -23,6 +20,13 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.ClassBasedVertexFactory;
 import org.jgrapht.graph.SimpleGraph;
 
+
+/**
+* The QuoridorBoard class implements the Quoridor board and the methods needed for interacting with it.
+* 
+* <img src="quoridorFEdiagram.png">
+* 
+*/
 public class QuoridorBoard implements Cloneable{
 	
 	UndirectedGraph<BoardNode, edgeFE> board;
