@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 /*
  * The Client that can be run both as a console or a GUI
  */
@@ -174,6 +174,8 @@ socket.getPort();
          * In console mode, if an error occurs the program simply stops
          * when a GUI id used, the GUI is informed of the disconnection
          */
+
+      private static final CopyOnWriteArrayList<String> nameList = new CopyOnWriteArrayList<>();
         public static void main(String[] args) throws ClassNotFoundException, IOException {
 
                 //Board to use
@@ -400,22 +402,11 @@ socket.getPort();
                                                 System.out.println("Writing HELLO to player" + temp);
                                                 temp++;
                                         }
-                                        // get the IAM messages from the servers.
-				
-                                        for (Client c : clients) {
-                                                //for each client get its IAM message...
-					    
-                                            String IAMFromServer = c.retrieveMessage();
-					    System.out.println(IAMFromServer);
-                                        }
-
-
                                 }else if(msg.contains("GAME")) {
-		                    int temp = 0;
-                                    for (Client c : clients) {
-                                            c.sendMessage("GAME" + temp + "");
-                		            temp++;
-                    		    }
+		                    System.out.print("GAME ");
+				    for(int i = 0 ; i < nameList.size(); i++){
+					System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+				    }
                                 }
                                 else if(msg.equalsIgnoreCase("next")){
                                         // first thing is send hello to all the servers...
@@ -551,20 +542,35 @@ ClassNotFoundException, IOException{
                 public void run() {
                         Maze maze = new Maze(9,9, 2);
 
-                        while(true) {
+                                               while(true) {
                                 try {
-                                        String msg = (String) sInput.readObject();
+				    String msg = (String) sInput.readObject();
                                         // if console mode print the message and add back the prompt
 
                                         //if(cg == null) {
                                         String[] my_cord = msg.split(" ");
-                                        maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), "h");
-                                        //System.out.println(maze);
-                                        //System.out.print("> ");
-                                        //}
-                                        //else {
-                                        //cg.append(msg);
-                                        //}
+                                       
+
+					String pattern = "IAM(\\s+)(.*)"; 
+					String pattern2 = "[((\\d)(,)(\\d)())(,)(.*)]"; //[(1, 0), v]
+					
+					Pattern p1 = Pattern.compile(pattern);
+					Pattern p2 = Pattern.compile(pattern2);
+					
+					Matcher m1 = p1.matcher(msg);
+					Matcher m2 = p2.matcher(msg);
+					
+
+					if(m1.find()){
+					    System.out.println(my_cord[0] + " " + my_cord[1]);
+					    nameList.add(my_cord[1]);
+					}
+				
+					if(m2.find()){
+						maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
+               			System.out.println(maze);						
+					}
+                                       
                                 }
                                 catch(IOException e) {
                                         display("Server has close the connection: " + e);
@@ -575,6 +581,7 @@ ClassNotFoundException, IOException{
 
                                 catch(ClassNotFoundException e2) {
                                 }
+
                         }
                 }
         }
