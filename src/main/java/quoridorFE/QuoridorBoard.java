@@ -22,7 +22,7 @@ import org.jgrapht.graph.SimpleGraph;
 
 
 /**
-* The QuoridorBoard class implements the Quoridor board and the methods needed for interacting with it.
+* The QuoridorBoard class implements the Quoridor board and the methods needed to interact with it.
 * 
 * <img src="quoridorFEdiagram.png">
 * 
