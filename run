@@ -5,6 +5,7 @@ echo Building...
 count=$1
 
 function clean_up {
+	echo cleaning up
 	if [[ count -eq 2 ]]; then
 		kill -9 $pid1
 		kill -9 $pid2
@@ -24,31 +25,13 @@ port4=$[ 1 + $[ RANDOM % 10000 ]]
 
 if [[ count -eq 2 ]]; then
         echo Starting up two Servers on $port1 and $port2
-	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1 &
-	pid1=$!
-	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2 &
-        pid2=$!
 
-	echo Starting up viewer
-	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --text
+	gnome-terminal --geometry=150x50 --tab --title="Server 1" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1" --tab --title="Server 2" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2" --tab --title="Viewer" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --text"
 
 	echo Happy Hacking~
 else
         echo Starting up four Servers on ports $port1, $port2, $port3 and $port4
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1 &
-        pid1=$!
-
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2 &
-        pid2=$!
-
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port3 &
-        pid3=$!
-
-        java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port4 &
-        pid4=$!
-
-        echo Starting up viewer
-        java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 localhost:$port3 localhost:$port4 --text
+        gnome-terminal --geometry=150x50 --tab --title="Server 1" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1" --tab --title="Server 2" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2" --tab --title="Server 3" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port3" --tab --title="Server 4" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port4" --tab --title="Viewer" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 localhost:$port3 localhost:$port4 --text"
 
 	echo Happy Hacking~
 fi
