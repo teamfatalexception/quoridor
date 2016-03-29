@@ -24,16 +24,23 @@ public class Client  {
         private static ObjectInputStream sInput;                // to read from the socket
         private ObjectOutputStream sOutput;                // to write on the socket
         private Socket socket;
+
         // if I use a GUI or not
         private ClientGUI cg;
+
         // the server, the port and the username
         private String server, username;
         private int port;
         public static Maze maze;
+
         // Bools for our commandline parameter flags.
         public static boolean automate = false;
         public static boolean text_only = false;
         public static boolean gui_only = false;
+
+	// This is our EVERYTHING, the board that will hold the players, walls and their board states.
+	private static QuoridorBoard Board;
+
         /*
          *
          *  server: the server address
@@ -64,7 +71,7 @@ public class Client  {
                 // try to connect to the server
                 try {
                         socket = new Socket(server, port);
-                } 
+                }
 
                 catch(Exception ec) {
                         display("Error connectiong to server:" + ec);
@@ -260,6 +267,9 @@ socket.getPort();
                                 clients.add(client4);
                                 //Board to use
                                 maze = new Maze(9,9, 4);
+				// New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
+				Board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0), new Player(3, serverAddress, portNumber, 5, 0, 0), new Player(4, serverAddress, portNumber, 5, 0, 0));
+
 
                                 // Setup player objects time.
                                 // Some of these values will change as they become useful, like starting
@@ -304,6 +314,9 @@ socket.getPort();
                                 clients.add(client2);
                                 //Board to use
                                 maze = new Maze(9,9, 2);
+				// New board init  --          public QuoridorBoard(Player player1, Player player2) {
+				Board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0));
+
 
                                 // test if we can start the connection to the Server
                                 // if it failed nothing we can do
@@ -350,7 +363,7 @@ socket.getPort();
                         if(text_only){
                                 System.out.println(maze);
                         }else{
-				// Viewer.update();
+				// Viewer.refresh();
 			}
                         // Test if gui only flag is called.                        
                         if(gui_only){
@@ -474,8 +487,6 @@ socket.getPort();
                 }
         }
 
-
-
         // Basically a simple method that shuts down all the servers.
         public static void cleanUp(ArrayList<Client> clients){
                 System.out.println("  Cleaning up!");
@@ -522,6 +533,36 @@ ClassNotFoundException, IOException{
                 // all moves are valid here muthahhhhh
                 return true;
         }
+
+
+	//Checks the state of all players and states whether someone has won the match.
+	public static boolean isWinner(){
+
+		//If only one player remains!
+		if(players.size() == 1){
+			System.out.println("Player x has won!");
+			return true;
+		}
+
+		// Loop through players and see if any has reached it's win condition.
+		for(int i=0; i<players.size(); i++){
+			if(players.get(i).getID() == 1){ //board.getNodeByPlayer(1).getY() == 8
+				return true;
+			}
+			if(players.get(i).getID() == 2){
+                                return true;
+			}
+			if(players.get(i).getID() == 3){
+                                return true;
+			}
+			if(players.get(i).getID() == 4){
+                                return true;
+			}
+		}
+
+		// If we found nothing then no one has won yet return false.
+		return false;
+	}
 
 
 

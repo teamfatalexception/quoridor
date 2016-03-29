@@ -50,7 +50,7 @@ public class ClientTest {
 
     /**
      * Test of retrieveMessage method, of class Client.
-     */
+     
     @Ignore
     @Test
     public void testRetrieveMessage() {
@@ -62,6 +62,7 @@ public class ClientTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+    */
 
     /**
      * Test of main method, of class Client.
@@ -88,6 +89,16 @@ public class ClientTest {
         Client.nextTurn(currentClient, size);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
+    }
+
+   /**
+    * Test of isWinner method, of class Client.
+    **/
+    @Test
+    public void testIsWinner(){
+
+	System.out.println("Build a winner!");
+	assertTrue(!Client.isWinner());
     }
 
     /**

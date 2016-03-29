@@ -58,6 +58,13 @@ public class Viewer extends Application {
         Application.launch(args);
         // TODO: See how John handles the old GUI and launch this that way
     } 
+    /**
+     *  Called to update the state of the board based by the Server.
+    **/
+    public void refresh(){
+	// Need to change states here, placeholder stub mainly.
+	System.out.println("REFRESHING");
+    }
 
     /**
 	 * Top area - HBox
