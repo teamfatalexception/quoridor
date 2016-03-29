@@ -39,7 +39,7 @@ public class Client  {
         public static boolean gui_only = false;
 
 	// This is our EVERYTHING, the board that will hold the players, walls and their board states.
-	private static QuoridorBoard Board;
+	public static QuoridorBoard Board;
 
         /*
          *
@@ -539,23 +539,23 @@ ClassNotFoundException, IOException{
 	public static boolean isWinner(){
 
 		//If only one player remains!
-		if(players.size() == 1){
+		if(players.size() <= 1){
 			System.out.println("Player x has won!");
 			return true;
 		}
 
 		// Loop through players and see if any has reached it's win condition.
 		for(int i=0; i<players.size(); i++){
-			if(players.get(i).getID() == 1){ //board.getNodeByPlayer(1).getY() == 8
+			if(players.get(i).getID() == 1 && Board.getNodeByPlayerNumber(1).getyPos() == 8){
 				return true;
 			}
-			if(players.get(i).getID() == 2){
+			if(players.get(i).getID() == 2 && Board.getNodeByPlayerNumber(2).getyPos() == 0){
                                 return true;
 			}
-			if(players.get(i).getID() == 3){
+			if(players.get(i).getID() == 3 && Board.getNodeByPlayerNumber(3).getxPos() == 8){
                                 return true;
 			}
-			if(players.get(i).getID() == 4){
+			if(players.get(i).getID() == 4 && Board.getNodeByPlayerNumber(4).getxPos() == 0){
                                 return true;
 			}
 		}
