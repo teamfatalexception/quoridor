@@ -1,14 +1,17 @@
 package quoridorFE;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
 /*
  * The Client that can be run both as a console or a GUI
  */
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Client  {
 
@@ -121,22 +124,7 @@ socket.getPort();
                 }
         }
 
-        // Reads replies from server.
-        // Reads replies from server.
-        String retrieveMessage() {
-                try {
-                        //sInput  = new ObjectInputStream(socket.getInputStream());
-                        return sInput.readUTF();
-                }
-                catch(IOException e) {
-                        display("Exception reading from server: " + e);
-                }
-                return "ERROR!";
-        }
-
-
-
-
+       
         /*
          * When something goes wrong
          * Close the Input/Output streams and disconnect not much to do in the catch clause
@@ -175,6 +163,7 @@ socket.getPort();
          * when a GUI id used, the GUI is informed of the disconnection
          */
 
+        //  Synchronized list too hold team names from threads.
       private static final CopyOnWriteArrayList<String> nameList = new CopyOnWriteArrayList<>();
         public static void main(String[] args) throws ClassNotFoundException, IOException {
 
@@ -369,7 +358,7 @@ socket.getPort();
                                 gui_only = false;
                                 System.out.println("GUI is launching!!");
                                 // Launch to open Andrew's Viewer class
-                                Viewer.launch(Viewer.class);
+                              //S  Viewer.launch(Viewer.class);
                         }
                         // Default to text if no flags are entered
                         //                        else {
@@ -402,7 +391,9 @@ socket.getPort();
                                                 System.out.println("Writing HELLO to player" + temp);
                                                 temp++;
                                         }
-                                }else if(msg.contains("GAME")) {
+                                }
+                                //If Game Message then print out GAME <p> FEX:teamFatal
+                                else if(msg.contains("GAME")) {
 		                    System.out.print("GAME ");
 				    for(int i = 0 ; i < nameList.size(); i++){
 					System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
@@ -540,17 +531,16 @@ ClassNotFoundException, IOException{
          */
         class ListenFromServer extends Thread {
                 public void run() {
-                        Maze maze = new Maze(9,9, 2);
-
-                                               while(true) {
+                	//While the thread is still running
+                      while(true) {
                                 try {
+                    // reads in object from server
 				    String msg = (String) sInput.readObject();
-                                        // if console mode print the message and add back the prompt
 
-                                        //if(cg == null) {
-                                        String[] my_cord = msg.split(" ");
+				    // splits string into seperat components
+                    String[] my_cord = msg.split(" ");
                                        
-
+                    //Patterns to look for
 					String pattern = "IAM(\\s+)(.*)"; 
 					String pattern2 = "[((\\d)(,)(\\d)())(,)(.*)]"; //[(1, 0), v]
 					
@@ -560,12 +550,13 @@ ClassNotFoundException, IOException{
 					Matcher m1 = p1.matcher(msg);
 					Matcher m2 = p2.matcher(msg);
 					
-
+					//If IAM message
 					if(m1.find()){
 					    System.out.println(my_cord[0] + " " + my_cord[1]);
 					    nameList.add(my_cord[1]);
 					}
-				
+					
+					//If coordinate
 					if(m2.find()){
 						maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
                			System.out.println(maze);						
