@@ -372,7 +372,7 @@ public class Client  {
                             // Viewer.launch(Viewer.class);  
 
                             // Call function from set board
-                            // Viewer.setBoard(Board);
+                           //  Viewer.setBoard(Board);
 
                             // Refresh the board state 
                             // Viewer.refresh();

@@ -55,19 +55,19 @@ public class Viewer extends Application {
 	// This will be commented out eventually because it should be launched 
 	// from Client.java once, then updated as needed.
     public static void main(String[] args) {
-        Application.launch(args);
+      Application.launch(args);
     } 
 
     // COMMENT BACK!!
-	// private static QuoridorBoard board;
+	/*private static QuoridorBoard board;
 
-	/* public static QuoridorBoard getBoard() {
+	public static QuoridorBoard getBoard() {
 		return board;
 	}
 
 	public static void setBoard(QuoridorBoard board) {
 		Viewer.board = board;
-	} */
+	}  */
 	
     /**
      *  Called to update the state of the board based by the Server.
@@ -473,7 +473,7 @@ public class Viewer extends Application {
    	    theStage.setTitle("Quoridor");
 	    
 	    // FlowPane allows for static sizing when the window expands/shrinks
-	    FlowPane flowRoot = new FlowPane();
+	    // FlowPane flowRoot = new FlowPane();
 	   
 	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
 	    BorderPane theBorderPane = new BorderPane();
@@ -500,7 +500,7 @@ public class Viewer extends Application {
 	    theStage.setScene(scene);
 		
 		// Do not allow the player to resize the main window
-		theStage.setResizable(false);
+		// theStage.setResizable(false);
 
 		// Make the stage viewable. This is called last in the function
 		theStage.show();
@@ -559,6 +559,8 @@ public class Viewer extends Application {
 
 			// Set properties for the walls
 			theWall.setFill(null);
+
+			// Change this back to black if you need to see 
 			theWall.setStroke(Color.TRANSPARENT);	
 
 			// Add all the nodes to the object
