@@ -38,8 +38,8 @@ public class Client  {
         public static boolean text_only = false;
         public static boolean gui_only = false;
 
-	// This is our EVERYTHING, the board that will hold the players, walls and their board states.
-	public static QuoridorBoard Board;
+	   // This is our EVERYTHING, the board that will hold the players, walls and their board states.
+	   public static QuoridorBoard Board;
 
         /*
          *
@@ -78,8 +78,7 @@ public class Client  {
                         return false;
                 }
 
-                String msg = "Connection accepted " + socket.getInetAddress() + ":" +
-socket.getPort();
+                String msg = "Connection accepted " + socket.getInetAddress() + ":" + socket.getPort();
                 display(msg);
                 /* Creating both Data Stream */
                 try
@@ -353,34 +352,33 @@ socket.getPort();
                 int turn = 0;
                 /*
                         Main Interaction Loop
-                 */                
-                ///////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////                
+                 */                              
                 while(true) {
-                        ///////////////////////////////////////////////////////////////////////////////
-                        ////This section is for deciding how to represent the the board (text or gui)//
-                        // Test if text only flag has been called.
-                        if(text_only){
-                                System.out.println(maze);
-                        }else{
-				// Viewer.refresh();
-			}
-                        // Test if gui only flag is called.                        
-                        if(gui_only){
-                                //We only want to launch the viewer once
-                                gui_only = false;
-                                System.out.println("GUI is launching!!");
-                                // Launch to open Andrew's Viewer class
-                              //S  Viewer.launch(Viewer.class);
-                        }
-                        // Default to text if no flags are entered
-                        //                        else {
-                        //                                System.out.println("No flags for --text or --gui entered. Defaulting to --text.");
-                        //                                System.out.println(maze);
-                        //                        }
 
-                        ///////////////////////////////////////////////////////////////////////////////
-                        ///////////////////////////////////////////////////////////////////////////////                        
+                        // This section is for deciding how to represent the the board (text or gui)
+                        if(text_only) {
+                            System.out.println(maze);
+                        }
+
+                        // Test if gui only flag is called.                        
+                        if(gui_only) {
+
+                            System.out.println("GUI is launching!!");
+
+                            //We only want to launch the viewer once
+                            gui_only = false;
+                            
+                            // Launch to open Andrew's Viewer class
+                            Viewer.launch(Viewer.class);  
+
+                            // Call function from set board
+                            Viewer.setBoard(Board);
+
+                            // Refresh the board state 
+                            // Viewer.refresh();
+                              
+                        }
+                       
                         // Test if automated is run
                         if(!automate){
                                 System.out.print("> ");

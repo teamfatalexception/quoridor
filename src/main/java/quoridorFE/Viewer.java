@@ -51,19 +51,25 @@ import javafx.event.ActionEvent;
 
 
 public class Viewer extends Application {
-	
+
 	// This will be commented out eventually because it should be launched 
 	// from Client.java once, then updated as needed.
-    public static void main(String[] args) {
+     public static void main(String[] args) {
         Application.launch(args);
-        // TODO: See how John handles the old GUI and launch this that way
     } 
+
+	private static QuoridorBoard board;
+
+	public static void setBoard(QuoridorBoard board) {
+		Viewer.board = board;
+	}
+	
     /**
      *  Called to update the state of the board based by the Server.
     **/
     public void refresh(){
-	// Need to change states here, placeholder stub mainly.
-	System.out.println("REFRESHING");
+		// Need to change states here, placeholder stub mainly.
+		System.out.println("REFRESHING");
     }
 
     /**
@@ -114,9 +120,12 @@ public class Viewer extends Application {
 	    bottom.setId("bottom");
 	    
 	    // Set properties for the VBox
-            bottom.setStyle("-fx-background-color: #7FFFD4;");
+        bottom.setStyle("-fx-background-color: #7FFFD4;");
 
-	    Text textBottom = new Text("Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit, \nsed do eiusmod tempor incididunt ut labore et \ndolore magna aliqua. Ut enim ad \nminim veniam, quis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \nDuis aute irure dolor in reprehenderit in voluptate velit \nesse cillum dolore eu fugiat nulla pariatur. \nExcepteur sint occaecat cupidatat non proident, \nsunt in culpa qui officia deserunt mollit anim id est laborum.");
+	    // Text textBottom = new Text("Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit, \nsed do eiusmod tempor incididunt ut labore et \ndolore magna aliqua. Ut enim ad \nminim veniam, quis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \nDuis aute irure dolor in reprehenderit in voluptate velit \nesse cillum dolore eu fugiat nulla pariatur. \nExcepteur sint occaecat cupidatat non proident, \nsunt in culpa qui officia deserunt mollit anim id est laborum.");
+
+        // Attempt to display the board coords in the bottom of the text
+	    Text textBottom = new Text(board.getNodeByCoords(1, 2).toString());
 
 	    // Init the scrollpane.
 	    ScrollPane sp = new ScrollPane();
