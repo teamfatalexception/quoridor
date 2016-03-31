@@ -353,10 +353,10 @@ public class Viewer extends Application {
 			for (int l = 0; l < 17; l+=2) {     // row
 				
 				// Create the player tiles (9x9)
-				PlayerTile pTile = new PlayerTile();
+				// PlayerTile pTile = new PlayerTile();
 
 				// Add the player tiles to the board (red tiles)
-				thePane.add(pTile, k, l);	
+				// thePane.add(pTile, k, l);	
 			}
 		}
 
@@ -527,7 +527,7 @@ public class Viewer extends Application {
 			border.setFill(Color.GREEN);
 
 			// Set the line color of the tiles to black
-			border.setStroke(Color.BLACK);
+			border.setStroke(Color.TRANSPARENT);
 
 			// Align elements within the tile to be centered
 			// setAlignment(Pos.CENTER);
@@ -559,7 +559,7 @@ public class Viewer extends Application {
 
 			// Set properties for the walls
 			theWall.setFill(null);
-			theWall.setStroke(Color.BLACK);	
+			theWall.setStroke(Color.TRANSPARENT);	
 
 			// Add all the nodes to the object
 			getChildren().addAll(theWall);
