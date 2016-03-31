@@ -54,15 +54,20 @@ public class Viewer extends Application {
 
 	// This will be commented out eventually because it should be launched 
 	// from Client.java once, then updated as needed.
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         Application.launch(args);
     } 
 
-	private static QuoridorBoard board;
+    // COMMENT BACK!!
+	// private static QuoridorBoard board;
+
+	/* public static QuoridorBoard getBoard() {
+		return board;
+	}
 
 	public static void setBoard(QuoridorBoard board) {
 		Viewer.board = board;
-	}
+	} */
 	
     /**
      *  Called to update the state of the board based by the Server.
@@ -122,26 +127,26 @@ public class Viewer extends Application {
 	    // Set properties for the VBox
         bottom.setStyle("-fx-background-color: #7FFFD4;");
 
-	    // Text textBottom = new Text("Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit, \nsed do eiusmod tempor incididunt ut labore et \ndolore magna aliqua. Ut enim ad \nminim veniam, quis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \nDuis aute irure dolor in reprehenderit in voluptate velit \nesse cillum dolore eu fugiat nulla pariatur. \nExcepteur sint occaecat cupidatat non proident, \nsunt in culpa qui officia deserunt mollit anim id est laborum.");
+	    Text textBottom = new Text("Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit, \nsed do eiusmod tempor incididunt ut labore et \ndolore magna aliqua. Ut enim ad \nminim veniam, quis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \nDuis aute irure dolor in reprehenderit in voluptate velit \nesse cillum dolore eu fugiat nulla pariatur. \nExcepteur sint occaecat cupidatat non proident, \nsunt in culpa qui officia deserunt mollit anim id est laborum.");
 
         // Attempt to display the board coords in the bottom of the text
-	    Text textBottom = new Text(board.getNodeByCoords(1, 2).toString());
+	    // Text textBottom = new Text(board.getNodeByCoords(1, 2).toString());
 
-	    // Init the scrollpane.
+	    // Init the left scrollpane.
 	    ScrollPane sp = new ScrollPane();
 	    sp.setPrefSize(480, 110);
 	    sp.setContent(textBottom);
 
-	    // Init the fire HBox for bottom.
+	    // Init the right HBox
 	    HBox console = new HBox(30);
 	    console.getChildren().addAll(sp);
 
 	    // Default text for players turn
-            Text turn_text = new Text("It is no ones turn.");
-            turn_text.setFont(Font.font("Times New Roman", 50));
-	    //HBox players_turn = new HBox(30);
-            console.getChildren().addAll(turn_text);
-	    //players_turn.getChildren().addAll(turn_text);
+        Text turn_text = new Text("It is no ones turn.");
+        turn_text.setFont(Font.font("Times New Roman", 50));
+
+        // Add elements to the right text box
+        console.getChildren().addAll(turn_text);
 
 	    // Add all elements to the Vbox
 	    bottom.getChildren().addAll(console);
@@ -525,7 +530,7 @@ public class Viewer extends Application {
 			border.setStroke(Color.BLACK);
 
 			// Align elements within the tile to be centered
-			//setAlignment(Pos.CENTER);
+			// setAlignment(Pos.CENTER);
 
 			getChildren().addAll(border, circle, wall);
 
@@ -537,14 +542,6 @@ public class Viewer extends Application {
 					// TODO: Display the tile coords in terminal
 				}
 			});
-
-			/*
-			setOnMouseClicked(event -> {
-				if(event.getButton() == MouseButton.PRIMARY) {
-					drawWall();
-				}
-			});  
-			*/
 		}
 
 		private void drawCircle() {
@@ -552,39 +549,9 @@ public class Viewer extends Application {
 			circle.setCenterY(50.0f);
 			circle.setRadius(5.0f);
 		}
-
-		private void drawWall() {
-			wall.setFill(Color.BLUE);
-			wall.setStroke(Color.BLUE);
-			wall.setWidth(75);
-			wall.setHeight(25);
-		}
-	}
-
-	private class PlayerTile extends StackPane {
-		
-		public PlayerTile() {
-
-			Rectangle border = new Rectangle(25,25);
-
-			// Make the tile transparent (white)
-			border.setFill(Color.RED);
-
-			// Set the line color of the tiles to black
-			border.setStroke(Color.RED);
-
-			// Align elements within the tile to be centered
-			setAlignment(Pos.CENTER);
-
-			getChildren().addAll(border);
-
-		}
 	}
 
 	private class Wall extends StackPane {
-
-		// private Rectangle vWall = new Rectangle();
-		// private Rectangle hWall = new Rectangle();
 
 		public Wall(int wallLength, int wallHeight) {
 
@@ -613,20 +580,5 @@ public class Viewer extends Application {
 				}
 		    });
         }
-
-
-        /*
-        private void drawHWall() {
-            hWall.setWidth(100);
-            hWall.setHeight(10);
-        }
-
-        private void drawVWall() {
-            vWall.setWidth(10);
-            vWall.setHeight(100);
-        } */
 	}
-
 }
-
-

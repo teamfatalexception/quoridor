@@ -369,10 +369,10 @@ public class Client  {
                             gui_only = false;
                             
                             // Launch to open Andrew's Viewer class
-                            Viewer.launch(Viewer.class);  
+                            // Viewer.launch(Viewer.class);  
 
                             // Call function from set board
-                            Viewer.setBoard(Board);
+                            // Viewer.setBoard(Board);
 
                             // Refresh the board state 
                             // Viewer.refresh();
