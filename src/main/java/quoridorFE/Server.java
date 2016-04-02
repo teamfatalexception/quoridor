@@ -63,8 +63,8 @@ public class Server {
                                 for(int i = 0; i < al.size(); ++i) {
                                         ClientThread tc = al.get(i);
                                         try {
-                                                tc.sInput.close();
-                                                tc.sOutput.close();
+                                                tc.IOscannerIn.close();
+                                                tc.IOscannerOut.close();
                                                 tc.socket.close();
                                         }
                                         catch(IOException ioE) {
@@ -169,8 +169,8 @@ public class Server {
                 String PLAYERNAME = "fex:JONNYBOY";
                 // the socket where to listen/talk
                 Socket socket;
-                ObjectInputStream sInput;
-                ObjectOutputStream sOutput;
+                Scanner IOscannerIn;
+                PrintWriter IOscannerOut;
                 // my unique id (easier for deconnection)
                 int id;
                 // the Username of the Client
@@ -191,21 +191,16 @@ public class Server {
                         try
                         {
                                 // create output first
-                                sOutput = new ObjectOutputStream(socket.getOutputStream());
-                                sInput  = new ObjectInputStream(socket.getInputStream());
-                                // read the username
-                                username = (String) sInput.readObject();
-                                display(username + " just connected.");
+			   
+			    IOscannerOut = new PrintWriter(socket.getOutputStream(), true);
+                                IOscannerIn  = new Scanner(socket.getInputStream());
+                              
                         }
                         catch (IOException e) {
                                 display("Exception creating new Input/output Streams: " + e);
                                 return;
                         }
-                        // have to catch ClassNotFoundException
-                        // but I read a String
-                        catch (ClassNotFoundException e) {
-                        }
-                        date = new Date().toString() + "\n";
+            
                 }
 
                 //  will run forever
@@ -224,18 +219,11 @@ public class Server {
                                 // writeMsg once at the bottom.
                                 String answer = "";
                                 // read a String (which is an
-                                try {
-                                        cm = (String) sInput.readObject();
-                                }
-                                catch (IOException e) {
-                                        display(username + " Exception reading Streams: " + e);
-                                        break;
-                                }
-                                catch(ClassNotFoundException e2) {
-                                        break;
-                                }
+                              
+				    String message = IOscannerIn.nextLine();
+ 
                                 // the message part of the ChatMessage
-                                String message = cm;
+				    System.out.println(message);
                                 if (helloSpin) {
                                         if(message.equalsIgnoreCase("hello")) {
                                                 // Flip the hello toggle and build the IAM message
@@ -322,11 +310,11 @@ public class Server {
                 private void close() {
                         // try to close the connection
                         try {
-                                if(sOutput != null) sOutput.close();
+                                if(IOscannerOut != null) IOscannerOut.close();
                         }
                         catch(Exception e) {}
                         try {
-                                if(sInput != null) sInput.close();
+                                if(IOscannerIn != null) IOscannerIn.close();
                         }
                         catch(Exception e) {};
                         try {
@@ -345,14 +333,8 @@ public class Server {
                         //return false;
                         //}
                         // write the message to the stream
-                        try {
-                                sOutput.writeObject(msg);
-                        }
-                        // if an error occurs, do not abort just inform the user
-                        catch(IOException e) {
-                                display("Error sending message to " + username);
-                                display(e.toString());
-                        }
+                                IOscannerOut.println(msg);
+                       
                         return true;
                 }
 

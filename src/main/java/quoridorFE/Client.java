@@ -1,8 +1,7 @@
 package quoridorFE;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,8 +20,8 @@ public class Client  {
         private static Player currentPlayer;
 
         // for I/O
-        private static ObjectInputStream sInput;                // to read from the socket
-        private ObjectOutputStream sOutput;                // to write on the socket
+        private Scanner IOscannerIn;
+        private PrintWriter IOscannerOut;
         private Socket socket;
 
         // if I use a GUI or not
@@ -83,8 +82,8 @@ public class Client  {
                 /* Creating both Data Stream */
                 try
                 {
-                        sInput  = new ObjectInputStream(socket.getInputStream());
-                        sOutput = new ObjectOutputStream(socket.getOutputStream());
+                        IOscannerIn  = new Scanner(socket.getInputStream());
+                        IOscannerOut = new PrintWriter(socket.getOutputStream(), true);
                 }
                 catch (IOException eIO) {
                         display("Exception creating new Input/output Streams: " + eIO);
@@ -95,15 +94,9 @@ public class Client  {
                 new ListenFromServer().start();
                 // Send our username to the server this is the only message that we
                 // will send as a String. All other messages will be ChatMessage objects
-                try
-                {
-                        sOutput.writeObject(username);
-                }
-                catch (IOException eIO) {
-                        display("Exception doing login : " + eIO);
-                        disconnect();
-                        return false;
-                }
+              
+                        IOscannerOut.println(username);
+               
                 // success we inform the caller that it worked
                 return true;
         }
@@ -122,12 +115,9 @@ public class Client  {
          * To send a message to the server
          */
         void sendMessage(String msg) {
-                try {
-                        sOutput.writeObject(msg);
-                }
-                catch(IOException e) {
-                        display("Exception writing to server: " + e);
-                }
+               
+                        IOscannerOut.println(msg);
+               
         }
 
        
@@ -137,11 +127,11 @@ public class Client  {
          */
         private void disconnect() {
                 try { 
-                        if(sInput != null) sInput.close();
+                        if(IOscannerIn != null) IOscannerIn.close();
                 }
                 catch(Exception e) {}
                 try {
-                        if(sOutput != null) sOutput.close();
+                        if(IOscannerOut != null) IOscannerOut.close();
                 }
                 catch(Exception e) {}
                 try{
@@ -404,12 +394,12 @@ public class Client  {
                                         }
 				// A method that starts the game? We shouldn't need this.
                                 //If Game Message then print out GAME <p> FEX:teamFatal
-                                }else if(msg.contains("GAME")) {
-		                    System.out.print("GAME ");
-				    //for(int i = 0 ; i < nameList.size(); i++){
-					//System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
-				    //}
-				    System.out.println("GAME " + 1 + " " + players.get(1).getName() + " " + "keith");
+                                }else if(msg.equalsIgnoreCase("GAME")) {
+				    System.out.print("Game ");
+				    for(int i = 0 ; i < nameList.size(); i++){
+					System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+				    }
+				   
 				    broadcast(clients, "GAME " + 1 + " " + players.get(1).getName() + " " + "keith");
                                 }
                                 else if(msg.equalsIgnoreCase("next")){
@@ -505,7 +495,7 @@ public class Client  {
 	public static void broadcast(ArrayList<Client> clients, String text){
 		for(int i=0; i<clients.size(); i++){
                         try{
-                                System.out.println("Sending: " + text + " to " + clients.get(i).port);
+                               
                                 clients.get(i).sendMessage(text);
                         }catch(Exception e){
                                 System.out.print(e);
@@ -588,10 +578,11 @@ ClassNotFoundException, IOException{
         class ListenFromServer extends Thread {
                 public void run() {
                 	//While the thread is still running
+		    boolean game = true;
                       while(true) {
-                                try {
+                               
                     // reads in object from server
-				    String msg = (String) sInput.readObject();
+				    String msg = IOscannerIn.nextLine();
 
 				    // splits string into seperat components
                     String[] my_cord = msg.split(" ");
@@ -617,18 +608,8 @@ ClassNotFoundException, IOException{
 						maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
                			System.out.println(maze);						
 					}
-                                       
-                                }
-                                catch(IOException e) {
-                                        display("Server has close the connection: " + e);
-                                        if(cg != null) 
-                                                cg.connectionFailed();
-                                        break;
-                                }
-
-                                catch(ClassNotFoundException e2) {
-                                }
-
+                                
+                               
                         }
                 }
         }
