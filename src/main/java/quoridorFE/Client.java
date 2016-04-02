@@ -398,9 +398,16 @@ public class Client  {
 				    System.out.print("Game ");
 				    for(int i = 0 ; i < nameList.size(); i++){
 					System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+					if(clients.size() == 2){
+					    clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
+					}
+					if(clients.size() == 4){
+					    clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
+					}
 				    }
 				   
-				    broadcast(clients, "GAME " + 1 + " " + players.get(1).getName() + " " + "keith");
+				   
+				    
                                 }
                                 else if(msg.equalsIgnoreCase("next")){
                                         // first thing is send hello to all the servers...
