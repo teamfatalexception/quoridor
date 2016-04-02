@@ -402,13 +402,15 @@ public class Client  {
                                                 System.out.println("Writing HELLO to player" + temp);
                                                 temp++;
                                         }
-                                }
+				// A method that starts the game? We shouldn't need this.
                                 //If Game Message then print out GAME <p> FEX:teamFatal
-                                else if(msg.contains("GAME")) {
+                                }else if(msg.contains("GAME")) {
 		                    System.out.print("GAME ");
-				    for(int i = 0 ; i < nameList.size(); i++){
-					System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
-				    }
+				    //for(int i = 0 ; i < nameList.size(); i++){
+					//System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+				    //}
+				    System.out.println("GAME " + 1 + " " + players.get(1).getName() + " " + "keith");
+				    broadcast(clients, "GAME " + 1 + " " + players.get(1).getName() + " " + "keith");
                                 }
                                 else if(msg.equalsIgnoreCase("next")){
                                         // first thing is send hello to all the servers...
@@ -499,6 +501,21 @@ public class Client  {
                         }
                 }
         }
+
+	public static void broadcast(ArrayList<Client> clients, String text){
+		for(int i=0; i<clients.size(); i++){
+                        try{
+                                System.out.println("Sending: " + text + " to " + clients.get(i).port);
+                                clients.get(i).sendMessage(text);
+                        }catch(Exception e){
+                                System.out.print(e);
+                                System.out.println("    Failure to send " + text + " to " + clients.get(i).port);
+                        }
+                }
+
+
+	}
+
 
 
 

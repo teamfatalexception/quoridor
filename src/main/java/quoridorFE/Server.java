@@ -23,6 +23,8 @@ public class Server {
         // the name of the machine to be used
         private String machineName;
 
+	private QuoridorBoard board;
+
         /*
          *  server constructor that receive the port to listen to for connection as parameter
          *  in console
@@ -47,6 +49,7 @@ public class Server {
                                 display("Server waiting for Clients on port " + port + ".");
 
                                 Socket socket = serverSocket.accept();          // accept connection
+				System.out.println("	MADE IT");
                                 // if I was asked to stop
                                 if(!keepGoing)
                                         break;
@@ -242,16 +245,30 @@ public class Server {
                                                 writeMsg(answer);
                                         }
                                 } else if (gameSpin) {
-                                        Scanner sc = new Scanner(message);
-                                        String thisShouldBeGame = sc.next();
-                                        if (thisShouldBeGame.equals("GAME")) {
+					String[] sc = message.split("\\s+");
+                                        //Scanner sc = new Scanner(message);
+                                        //String thisShouldBeGame = sc.next();
+					//GAME <p> <name1> <name2> [<name3> <name4>]
+                                        if (sc[0].equalsIgnoreCase("GAME")) {
                                                 gameSpin = false;
                                                 //TODO Store the information from the game message into some data structure!
-                                                int playerNumber = Integer.parseInt(sc.next());
+                                                /*int playerNumber = Integer.parseInt(sc.next());
                                                 //TODO implement a possible read for the next 2 players in a 4 player game. 
                                                 String playerOneOnBoard = sc.next();
                                                 String playerTwoOnBoard = sc.next();
-                                                //TODO find a data structure and fill it...
+						//String playerThreeOnBoard = sc.next();
+						//String playerFourOnBoard = sc.next();
+                                                //TODO find a data structure and fill it...*/
+						//for(int i=0; i < sc.length; i++){
+							// If two players.
+							if(sc.length == 4){
+								board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
+								System.out.println("Two players locked in!");
+							}else{// is four player
+								board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
+								System.out.println("Four players locked in!");
+							}
+						//}
                                         }
                                 } else if(message.equals("MYOUSHU")){ // I'm being requested for a move.
                                         Random rand = new Random();
