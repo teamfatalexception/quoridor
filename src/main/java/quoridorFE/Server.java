@@ -86,8 +86,6 @@ public class Server {
          * Display an event (not a message) to the console or the GUI
          */
         private void display(String msg) {
-                //String time = sdf.format(new Date()) + " " + msg;
-                //System.out.println(time);
                 System.out.println(msg);
         }
 
@@ -169,6 +167,7 @@ public class Server {
                 String PLAYERNAME = "fex:JONNYBOY";
                 // the socket where to listen/talk
                 Socket socket;
+	        // IO handlers
                 Scanner IOscannerIn;
                 PrintWriter IOscannerOut;
                 // my unique id (easier for deconnection)
@@ -187,7 +186,7 @@ public class Server {
                         System.out.println(id);
                         this.socket = socket;
                         /* Creating both Data Stream */
-                        System.out.println("Thread trying to create Object Input/Output Streams");
+                        System.out.println("Thread trying to create Input/Output Streams");
                         try
                         {
                                 // create output first
@@ -218,7 +217,7 @@ public class Server {
                                 // im gong to initialize the string to write above everything and 
                                 // writeMsg once at the bottom.
                                 String answer = "";
-                                // read a String (which is an
+                                // read a String
                               
 				    String message = IOscannerIn.nextLine();
  
@@ -234,20 +233,12 @@ public class Server {
                                         }
                                 } else if (gameSpin) {
 					String[] sc = message.split("\\s+");
-                                        //Scanner sc = new Scanner(message);
-                                        //String thisShouldBeGame = sc.next();
+                                       
 					//GAME <p> <name1> <name2> [<name3> <name4>]
                                         if (sc[0].equalsIgnoreCase("GAME")) {
                                                 gameSpin = false;
-                                                //TODO Store the information from the game message into some data structure!
-                                                /*int playerNumber = Integer.parseInt(sc.next());
-                                                //TODO implement a possible read for the next 2 players in a 4 player game. 
-                                                String playerOneOnBoard = sc.next();
-                                                String playerTwoOnBoard = sc.next();
-						//String playerThreeOnBoard = sc.next();
-						//String playerFourOnBoard = sc.next();
-                                                //TODO find a data structure and fill it...*/
-						//for(int i=0; i < sc.length; i++){
+                                                //TODO find a way of communicating overall number of players to server
+						
 							// If two players.
 							if(sc.length == 4){
 								board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));

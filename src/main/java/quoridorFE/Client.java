@@ -27,8 +27,8 @@ public class Client  {
         // if I use a GUI or not
         private ClientGUI cg;
 
-        // the server, the port and the username
-        private String server, username;
+        // the server and the port
+        private String server;
         private int port;
         public static Maze maze;
 
@@ -92,12 +92,7 @@ public class Client  {
 
                 // creates the Thread to listen from the server 
                 new ListenFromServer().start();
-                // Send our username to the server this is the only message that we
-                // will send as a String. All other messages will be ChatMessage objects
               
-                        IOscannerOut.println(username);
-               
-                // success we inform the caller that it worked
                 return true;
         }
 
@@ -385,7 +380,7 @@ public class Client  {
 					//cleanUp(client2);
                                         System.exit(0);
                                 }else if(msg.equalsIgnoreCase("hello")) {
-                    // print out hello to each clinet we have
+                    // print out hello to each client we have
                                         int temp = 1;
                                         for (Client c : clients) {
                                                 c.sendMessage("HELLO");
@@ -398,9 +393,12 @@ public class Client  {
 				    System.out.print("Game ");
 				    for(int i = 0 ; i < nameList.size(); i++){
 					System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+					
+					//If two players print send server its player number along with opponents name.
 					if(clients.size() == 2){
 					    clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
 					}
+					//If four players send server its player number along with all opponents names
 					if(clients.size() == 4){
 					    clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
 					}
@@ -585,10 +583,9 @@ ClassNotFoundException, IOException{
         class ListenFromServer extends Thread {
                 public void run() {
                 	//While the thread is still running
-		    boolean game = true;
                       while(true) {
                                
-                    // reads in object from server
+                    // reads in characters from server
 				    String msg = IOscannerIn.nextLine();
 
 				    // splits string into seperat components
