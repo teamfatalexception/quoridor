@@ -1,46 +1,32 @@
 package quoridorFE;
 
 
+import java.util.concurrent.CountDownLatch;
+
 // Main import
 import javafx.application.Application;
-import javafx.stage.Stage;
-
-import javafx.scene.Scene;
-import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.FontPosture;
-import javafx.scene.image.Image;
-
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-
-// Import Panes
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.GridPane;
-
-
-import javafx.stage.Stage;
-import javafx.scene.shape.*;
-import javafx.scene.text.*;
-
+import javafx.event.ActionEvent;
 //Imports for mouse events
 import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.*;
-import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
+// Import Panes
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 
 /**
@@ -52,6 +38,37 @@ import javafx.event.ActionEvent;
 
 public class Viewer extends Application {
 
+	public static final CountDownLatch latch = new CountDownLatch(1);
+	public static Viewer viewer = null;
+	private static QuoridorBoard board;
+	
+	private BorderPane theBorderPane;
+	
+	public Viewer() {
+		viewerStartUp(this);
+	}
+	
+	public static void viewerStartUp(Viewer v) {
+		viewer = v;
+		latch.countDown();
+	}
+	
+	public static Viewer waitForViewerStartUp() {
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return viewer;
+	}
+	
+	public void testTheReference() {
+		VBox vbox = new VBox(10);
+		vbox.getChildren().addAll(new Button("Cut"), new Button("Copy"), new Button("Paste"));
+		this.theBorderPane.setLeft(vbox);
+		
+	}
+	
 	// This will be commented out eventually because it should be launched 
 	// from Client.java once, then updated as needed.
     public static void main(String[] args) {
@@ -476,24 +493,24 @@ public class Viewer extends Application {
 	    // FlowPane flowRoot = new FlowPane();
 	   
 	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
-	    BorderPane theBorderPane = new BorderPane();
+	    this.theBorderPane = new BorderPane();
 
 	    // Call functions to draw each area of the GUI
 	    // These can only take one function (that functions will return the node)
-	    theBorderPane.setTop(drawTop());
-	    theBorderPane.setBottom(drawBottom());
-	    theBorderPane.setRight(drawRight());
-	    theBorderPane.setLeft(drawLeft());
-	    theBorderPane.setCenter(drawCenterWithPane());
+	    this.theBorderPane.setTop(drawTop());
+	    this.theBorderPane.setBottom(drawBottom());
+	    this.theBorderPane.setRight(drawRight());
+	    //this.theBorderPane.setLeft(drawLeft());
+	    this.theBorderPane.setCenter(drawCenterWithPane());
 
 	    // This is the master control for the window size 
-	    theBorderPane.setPrefSize(1000, 1000);	// Width X Height
+	    this.theBorderPane.setPrefSize(1000, 1000);	// Width X Height
 
 	    // The code on this line sets a FlowPane so that when you resize the window, the elements all stay in place
 	    // Without this, resizing the window causes overlapping of the elements (but does not matter because resize is set to false)
 	    // flowRoot.getChildren().addAll(theBorderPane);
 
-	    Scene scene = new Scene(theBorderPane);	// change back to (flowRoot, size x size) so that it does not overlap
+	    Scene scene = new Scene(this.theBorderPane);	// change back to (flowRoot, size x size) so that it does not overlap
 	    scene.getStylesheets().add("application/ViewerStyle.css");
 	    
 	    // Set the scene for the stage
