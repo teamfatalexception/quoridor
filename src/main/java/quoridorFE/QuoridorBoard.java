@@ -27,7 +27,7 @@ import org.jgrapht.graph.SimpleGraph;
 * <img src="quoridorFEdiagram.png">
 * 
 */
-public class QuoridorBoard implements Cloneable{
+public class QuoridorBoard {
 	
 	UndirectedGraph<BoardNode, edgeFE> board;
 	
