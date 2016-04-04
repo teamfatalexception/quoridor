@@ -40,7 +40,7 @@ public class Viewer extends Application {
 
 	public static final CountDownLatch latch = new CountDownLatch(1);
 	public static Viewer viewer = null;
-	private static QuoridorBoard board;
+	private QuoridorBoard board;
 	
 	private BorderPane theBorderPane;
 	
@@ -75,16 +75,10 @@ public class Viewer extends Application {
       Application.launch(args);
     } 
 
-    // COMMENT BACK!!
-	/*private static QuoridorBoard board;
-
-	public static QuoridorBoard getBoard() {
-		return board;
-	}
-
-	public static void setBoard(QuoridorBoard board) {
-		Viewer.board = board;
-	}  */
+    
+	public void setBoard(QuoridorBoard board) {
+		this.board = board;
+	}  
 	
     /**
      *  Called to update the state of the board based by the Server.

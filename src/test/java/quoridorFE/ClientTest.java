@@ -12,9 +12,6 @@ import static org.junit.Assert.*;
  */
 public class ClientTest {
     
-    public ClientTest() {
-    }
-    
     @BeforeClass
     public static void setUpClass() {
     }
@@ -96,22 +93,21 @@ public class ClientTest {
     **/
     @Test
     public void testIsWinner(){
-
-	System.out.println("No or one players!");
-	assertTrue(Client.isWinner());
+    	System.out.println("No or one players!");
+		assertTrue(Client.isWinner());
     }
 
     @Test
     public void testIsWinner1(){
-	System.out.println("First player makes it to goal.");
-	Client.Board = new QuoridorBoard(new Player(1, "localhost", 8888, 5, 0, 0), new Player(2, "localhost", 9999, 5, 0, 0));
-	//Client.Board.getNodeByCoords(4, 8).setPlayer(Client.Board.playerSet);
-	Client.Board.movePawn(1, 5, 0);
-	for(int i=1; i<9; i++){
-		Client.Board.movePawn(1, 5, i);
-	}
-	System.out.println(Client.Board.getNodeByPlayerNumber(1).getxPos() + "  " + Client.Board.getNodeByPlayerNumber(1).getyPos());
-	assertTrue(Client.isWinner());
+		System.out.println("First player makes it to goal.");
+		Client.board = new QuoridorBoard(new Player(1, "localhost", 8888, 5, 0, 0), new Player(2, "localhost", 9999, 5, 0, 0));
+		//Client.board.getNodeByCoords(4, 8).setPlayer(Client.board.playerSet);
+		Client.board.movePawn(1, 5, 0);
+		for(int i=1; i<9; i++){
+			Client.board.movePawn(1, 5, i);
+		}
+		System.out.println(Client.board.getNodeByPlayerNumber(1).getxPos() + "  " + Client.board.getNodeByPlayerNumber(1).getyPos());
+		assertTrue(Client.isWinner());
     }
 
     /**

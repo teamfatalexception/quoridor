@@ -18,19 +18,18 @@ public class Player {
         this.name = name;
         this.port = -1;
         this.wallsLeft = wallsLeft;
-       	this.X = -1;
-	 	this.Y = -1;
+        this.X = -1;
+        this.Y = -1;
 	}
 	
 	// FIXME can we please depreciate this constructor?     AV - 4/3/2016
 	public Player(int ID, String name, int port, int wallsLeft, int startingX, int startingY){
-
-	     	this.ID = ID;
-	        this.name = name;
-	        this.port = port;
-	        this.wallsLeft = wallsLeft;
-	       	this.X = startingX;
-		 	this.Y = startingY;
+		this.ID = ID;
+		this.name = name;
+		this.port = port;
+		this.wallsLeft = wallsLeft;
+		this.X = startingX;
+		this.Y = startingY;
 	}
 
 	public int getID(){

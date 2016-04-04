@@ -37,7 +37,7 @@ public class Client  {
     public static boolean gui_only = false;
 
     // This is our EVERYTHING, the board that will hold the players, walls and their board states.
-    public static QuoridorBoard Board; // FIXME Why the fuck is this capitalized?
+    public static QuoridorBoard board;
     
     public static Viewer viewer = null;
 
@@ -254,7 +254,7 @@ public class Client  {
                     //Board to use
                     maze = new Maze(9,9, 4);
                     // New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
-                    Board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0), new Player(3, serverAddress, portNumber, 5, 0, 0), new Player(4, serverAddress, portNumber, 5, 0, 0));
+                    board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0), new Player(3, serverAddress, portNumber, 5, 0, 0), new Player(4, serverAddress, portNumber, 5, 0, 0));
 
 
                     // Setup player objects time.
@@ -300,7 +300,7 @@ public class Client  {
                     //Board to use
                     maze = new Maze(9,9, 2);
                     // New board init  --          public QuoridorBoard(Player player1, Player player2) {
-                    Board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0));
+                    board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0));
 
 
                     // test if we can start the connection to the Server
@@ -379,7 +379,7 @@ public class Client  {
                         System.out.println("I ran the thing.");
 
                         // Call function from set board
-                        //  Viewer.setBoard(Board);
+                        viewer.setBoard(board);
 
                         // Refresh the board state 
                         // Viewer.refresh();
@@ -576,16 +576,16 @@ public class Client  {
 
 	// Loop through players and see if any has reached it's win condition.
 	for(int i=0; i<players.size(); i++){
-		if(players.get(i).getID() == 1 && Board.getNodeByPlayerNumber(1).getyPos() == 8){
+		if(players.get(i).getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
 			return true;
 		}
-		if(players.get(i).getID() == 2 && Board.getNodeByPlayerNumber(2).getyPos() == 0){
+		if(players.get(i).getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
                             return true;
 		}
-		if(players.get(i).getID() == 3 && Board.getNodeByPlayerNumber(3).getxPos() == 8){
+		if(players.get(i).getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
                             return true;
 		}
-		if(players.get(i).getID() == 4 && Board.getNodeByPlayerNumber(4).getxPos() == 0){
+		if(players.get(i).getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
                             return true;
 		}
 	}
