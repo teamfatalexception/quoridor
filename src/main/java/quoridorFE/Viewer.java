@@ -72,7 +72,7 @@ public class Viewer extends Application {
 	// This will be commented out eventually because it should be launched 
 	// from Client.java once, then updated as needed.
     public static void main(String[] args) {
-      Application.launch(args);
+        Application.launch(args);
     } 
 
     
@@ -284,8 +284,6 @@ public class Viewer extends Application {
 		return right;
 	}
 
-	
-
 	/**
 	 * Left Area - Vbox
 	 * Vbox will lay out children in a single vertical row 
@@ -313,92 +311,6 @@ public class Viewer extends Application {
 	    left.getChildren().addAll(rect4,rect5,rect6);
 
 	    return left;
-	}
-
-	 /**
-	  * Center Area
-	  */ 
-	public GridPane drawCenterwithGridPane () {
-
-	    // TODO: OnClick, change the tile color itself
-	    // TODO: Create a 9x9 grid (or 17x17?)
-	    // TODO: Create the walls between the grid squares
-	    // TODO: Place players on the board
-	    // TODO: Give each player a unique color and number overlayed on top of them
-	    // TODO: Place walls on the board
-	    // TODO: Place valid walls on the board
-	    // TODO: Move players
-	    // TODO: onClick of player, hover the valid moves that can be made on the board (see mock)
-        // TODO: import jpeg/png files
-
-		// Image imagetest = new Image(getClass().getResourceAsStream("image.png"));
-		// ImageView disp = new ImageView(imagetest);
-		// Set as backround!
-
-		// Create a GridPane
-	    GridPane thePane = new GridPane();
-
-	    // TODO: Create multiple GridPanes to nest on top of each other?
-	    // One GridPane for the Tiles
-	    // One GridPane for the vertical walls
-	    // One GridPane for the horizontal walls
-
-	    // Draw the initial grid
-		for (int i = 0; i < 17; i++) {
-			for (int j = 0; j < 17; j++) {
-			
-				// Create a tile for the 17 x 17 board
-				Tile tile = new Tile();
-
-				// Add the tiles to the board
-				thePane.add(tile, i, j);
-
-				// Removed this line for adding children, goes it in one line with thePane.add()
-				// thePane.getChildren().add(tile);
-
-			}
-		}
-
-		// Draw the player tiles on the board
-		for (int k = 0; k < 17; k+=2) {		  	// column
-			for (int l = 0; l < 17; l+=2) {     // row
-				
-				// Create the player tiles (9x9)
-				// PlayerTile pTile = new PlayerTile();
-
-				// Add the player tiles to the board (red tiles)
-				// thePane.add(pTile, k, l);	
-			}
-		}
-
-		// Draw the walls on the board
-		// May just handle this in the Tile class 
-		// This does not work because creating wall overlaps things incorrectly
-		for (int a = 0; a < 17; a++) {		   // column
-			for (int b = 0; b < 17; b++) {     // row
-
-				String theOrientation;
-				
-				// TODO: regexp to match the ((x,y),orientation)
-				// TODO: Capture x, y, orientation in capture groups
-
-				theOrientation = "h";
-
-				if (theOrientation.equals("v")) {
-
-					//Wall wall = new Wall(25,75);
-					//thePane.add(wall, 0, 0);
-				}
-					
-				else if (theOrientation.equals("h")) {
-					//Wall wall = new Wall(75,25);
-					//thePane.add(wall, 0, 0);
-				
-				}
-			}
-		}
-	    	
-	    return thePane;
 	}
 
 	/** 
@@ -482,9 +394,7 @@ public class Viewer extends Application {
 	    
 	    // Set the title of the stage
    	    theStage.setTitle("Quoridor");
-	    
-	    // FlowPane allows for static sizing when the window expands/shrinks
-	    // FlowPane flowRoot = new FlowPane();
+	   
 	   
 	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
 	    this.theBorderPane = new BorderPane();
@@ -500,22 +410,35 @@ public class Viewer extends Application {
 	    // This is the master control for the window size 
 	    this.theBorderPane.setPrefSize(1000, 1000);	// Width X Height
 
-	    // The code on this line sets a FlowPane so that when you resize the window, the elements all stay in place
-	    // Without this, resizing the window causes overlapping of the elements (but does not matter because resize is set to false)
-	    // flowRoot.getChildren().addAll(theBorderPane);
-
 	    Scene scene = new Scene(this.theBorderPane);	// change back to (flowRoot, size x size) so that it does not overlap
 	    scene.getStylesheets().add("application/ViewerStyle.css");
 	    
 	    // Set the scene for the stage
 	    theStage.setScene(scene);
-		
-		// Do not allow the player to resize the main window
-		// theStage.setResizable(false);
 
 		// Make the stage viewable. This is called last in the function
 		theStage.show();
 	}
+
+	/**
+	* Draw the board statically, moving everything out of start
+	*/
+	@Override
+	public void drawInitBoard () {
+
+		theBorderPane = new BorderPane();
+
+		theBorderPane.setTop(drawTop());
+	    theBorderPane.setBottom(drawBottom());
+	    theBorderPane.setRight(drawRight());
+	    theBorderPane.setLeft(drawLeft());
+	    theBorderPane.setCenter(drawCenterWithPane());
+
+	    // TODO: Get the elements of the top, getTop returns a node
+	    theBorderPane.getTop().getChildren();
+
+	}
+
 
 	/**
 	 * Tile class for creating a square on the grid
@@ -530,6 +453,9 @@ public class Viewer extends Application {
 		private Rectangle wall = new Rectangle();
 
 		public Tile() {
+
+			// TODO: Set an identifier to access by tile (x,y)
+			// TODO: Checking if a circle is on the tile means there
 
 			// Create a new rectangle for the grid
 			Rectangle border = new Rectangle (25,25);
@@ -563,6 +489,8 @@ public class Viewer extends Application {
 	}
 
 	private class Wall extends StackPane {
+
+		// TODO: Set an identifier to access by wall (x,y,h) (x,y,v)
 
 		public Wall(int wallLength, int wallHeight) {
 
