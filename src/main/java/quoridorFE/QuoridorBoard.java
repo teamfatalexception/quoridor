@@ -154,7 +154,7 @@ public class QuoridorBoard {
 	 * @param player Number of the player whos location you're looking for.
 	 * @return BoardNode representing the location of the given player.
 	 */
-	public BoardNode getNodeByPlayerNumber(int player) {
+	public synchronized BoardNode getNodeByPlayerNumber(int player) {
 		for (BoardNode n : this.board.vertexSet()) {
 			if (n.getPlayer() != null) {
 				if (player == n.getPlayer().getID()) {
@@ -182,7 +182,7 @@ public class QuoridorBoard {
 	 * @return A HashSet containing all the walls that have been placed on the board.
 	 * @see Wall
 	 */
-	public HashSet<Wall> getWallSet() {
+	public synchronized HashSet<Wall> getWallSet() {
 		return wallSet;
 	}
 
@@ -194,7 +194,7 @@ public class QuoridorBoard {
 	 * @param y The destination y position.
 	 * @return False for an invalid move, True for a valid one.
 	 */
-	public boolean isValidMove(int player, int x, int y) {
+	public synchronized boolean isValidMove(int player, int x, int y) {
 		
 		if (x > 8 || y > 8) return false; // Move is out of bounds.
 		
@@ -237,7 +237,7 @@ public class QuoridorBoard {
 	 * @param orientation The orientation of the wall. 
 	 * @return False for an invalid move, True for a valid one.
 	 */
-	public boolean isValidMove(int player, int x, int y, char orientation) {
+	public synchronized boolean isValidMove(int player, int x, int y, char orientation) {
 		// check for out of bounds
 		if (x > 7 || y > 7) return false;
 		
@@ -314,7 +314,7 @@ public class QuoridorBoard {
 	 * @param y The y position of the wall
 	 * @param orientation The orientation of the wall. 
 	 */
-	public void placeWall(int player, int x, int y, char orientation) {
+	public synchronized void placeWall(int player, int x, int y, char orientation) {
 		if (this.isValidMove(player, x, y, orientation) == false) throw new IllegalMoveException("You fucked up, scrub.");
 		
 		Player p = this.getNodeByPlayerNumber(player).getPlayer();
@@ -372,7 +372,7 @@ public class QuoridorBoard {
 	 * 
 	 * @param placedWall
 	 */
-	private void generateInvalidWalls(Wall placedWall) {
+	private synchronized void generateInvalidWalls(Wall placedWall) {
 		if (placedWall.orientation == 'h') {
 			invalidWallSet.add(new Wall(placedWall.x, placedWall.y, 'v')); 
 			if (placedWall.x > 0) invalidWallSet.add(new Wall(placedWall.x - 1, placedWall.y, 'h'));
@@ -391,7 +391,7 @@ public class QuoridorBoard {
 	 * @param x The x position destination of the pawn.  
 	 * @param y The y position of the wall
 	 */
-	public void movePawn(int player, int x, int y) {
+	public synchronized void movePawn(int player, int x, int y) {
 		if (this.isValidMove(player, x, y) == false) throw new IllegalMoveException("You fucked up, scrub.");
 		
 		BoardNode currentLocation = this.getNodeByPlayerNumber(player);
