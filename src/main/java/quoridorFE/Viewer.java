@@ -326,10 +326,11 @@ public class Viewer extends Application {
 
 		Pane thePane = new Pane();
 
+		// May need to alter to be 1 to 10
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 
-				Tile tile = new Tile();
+				Tile tile = new Tile(i, j);
 
 				// Old way of drawing the tiles
 				// Translate the X and Y, drawing another tile
@@ -394,23 +395,10 @@ public class Viewer extends Application {
 	    
 	    // Set the title of the stage
    	    theStage.setTitle("Quoridor");
-	   
-	   
-	    // BorderPane allows for you to create multiple areas on the window (top, bottom, left, right, center)
-	    this.theBorderPane = new BorderPane();
 
-	    // Call functions to draw each area of the GUI
-	    // These can only take one function (that functions will return the node)
-	    this.theBorderPane.setTop(drawTop());
-	    this.theBorderPane.setBottom(drawBottom());
-	    this.theBorderPane.setRight(drawRight());
-	    //this.theBorderPane.setLeft(drawLeft());
-	    this.theBorderPane.setCenter(drawCenterWithPane());
+	    Scene scene = new Scene(theBorderPane);
 
-	    // This is the master control for the window size 
-	    this.theBorderPane.setPrefSize(1000, 1000);	// Width X Height
-
-	    Scene scene = new Scene(this.theBorderPane);	// change back to (flowRoot, size x size) so that it does not overlap
+	    // Add a stylesheet to the scene
 	    scene.getStylesheets().add("application/ViewerStyle.css");
 	    
 	    // Set the scene for the stage
@@ -424,20 +412,23 @@ public class Viewer extends Application {
 	* Draw the board statically, moving everything out of start
 	*/
 	@Override
-	public void drawInitBoard () {
+	public void init() {
 
 		theBorderPane = new BorderPane();
 
-		theBorderPane.setTop(drawTop());
+	    theBorderPane.setTop(drawTop());
 	    theBorderPane.setBottom(drawBottom());
 	    theBorderPane.setRight(drawRight());
-	    theBorderPane.setLeft(drawLeft());
+	    theBorderPane.setLeft(drawLeft());      // Comment this out and it will draw andrews left from within client
 	    theBorderPane.setCenter(drawCenterWithPane());
 
-	    // TODO: Get the elements of the top, getTop returns a node
-	    theBorderPane.getTop().getChildren();
+	    // Master control for the window size
+	    theBorderPane.setPrefSize(1000, 1000);	// Width X Height
 
-	}
+	    // TODO: Get the elements of the top, getTop returns a node
+	    // theBorderPane.getTop().getChildren();
+
+	} 
 
 
 	/**
@@ -452,10 +443,16 @@ public class Viewer extends Application {
 		// I'm still not sure the best way to do it because it can be done through both
 		private Rectangle wall = new Rectangle();
 
-		public Tile() {
+		public Tile(int row, int column) {
+
+			System.out.println("Row placed at " + row + " Column placed at " + column);
+
 
 			// TODO: Set an identifier to access by tile (x,y)
 			// TODO: Checking if a circle is on the tile means there
+			// TODO: Place players on the board
+
+			// List of tiles
 
 			// Create a new rectangle for the grid
 			Rectangle border = new Rectangle (25,25);
@@ -475,7 +472,7 @@ public class Viewer extends Application {
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					drawCircle();
-					System.out.println("Clicked a tile at coordinate X, Y!");
+					System.out.println("Clicked a tile at coordinate (x,y)");
 					// TODO: Display the tile coords in terminal
 				}
 			});
@@ -509,7 +506,7 @@ public class Viewer extends Application {
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					
-					System.out.println("Clicked a wall!");
+					System.out.println("Clicked a wall at coordinate (x, y, orientation)");
 
 					// IF (the wall color is red) theWall.getFill()
 						// wall placed here!
