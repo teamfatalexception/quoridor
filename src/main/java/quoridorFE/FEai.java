@@ -42,7 +42,7 @@ public class FEai {
 		// Now I've gotta get the first node on the path that isn't my current pawn position.
 		BoardNode firstTry = edgeList.get(0).getTarget();
 		
-		String retStr = firstTry.toString();
+		String retStr = "("+ firstTry.getxPos() + ", "+ firstTry.getyPos() +")";
 		
 		return retStr;
 	}
