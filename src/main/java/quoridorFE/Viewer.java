@@ -27,7 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
+import java.util.ArrayList;
 
 /**
 * BEFORE YOU START
@@ -43,6 +43,8 @@ public class Viewer extends Application {
 	private QuoridorBoard board;
 	
 	private BorderPane theBorderPane;
+
+	private static ArrayList<Tile> tilesArray = new ArrayList<Tile>();
 	
 	public Viewer() {
 		viewerStartUp(this);
@@ -300,10 +302,12 @@ public class Viewer extends Application {
 	    left.setSpacing(10);
 
 	    // Create shapes
-	   Rectangle rect4 = new Rectangle(5,5,100,100);
+	    Rectangle rect4 = new Rectangle(5,5,100,100);
 	    rect4.setFill(Color.SKYBLUE);
+
 	    Rectangle rect5 = new Rectangle(5,5,100,100);
 	    rect5.setFill(Color.BURLYWOOD);
+
 	    Rectangle rect6 = new Rectangle(5,5,100,100);
 	    rect6.setFill(Color.GREEN);
 
@@ -330,21 +334,26 @@ public class Viewer extends Application {
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++) {
 
+				// Create a new tile
 				Tile tile = new Tile(row, column);
 
-				// Old way of drawing the tiles
+				// setRow and column here instead? then modify the constructor? not sure the best way to handle this.
+				// tile.setRow(row);
+				// tile.setColumn(column);
+
+				// Add the tile to an array
+				tilesArray.add(tile);
+
 				// Translate the X and Y, drawing another tile
 				tile.setTranslateX(column * 50);
 				tile.setTranslateY(row * 50);
 
+				// Add the tile to the board
 				thePane.getChildren().add(tile);
-
-				// wall.setTranslateX(s*25);
-				// wall.setTranslateY(r*25);
 
 				// Pesudo: Adding multiple children in a list into pane
 				// for (Node node: elements)
-				// objectname.getChildren().add(node);
+					// objectname.getChildren().add(node);
 			}
 		}
 		
@@ -409,7 +418,7 @@ public class Viewer extends Application {
 	}
 
 	/**
-	* Draw the board statically, moving everything out of start
+	* Draw the board before start() is called
 	*/
 	@Override
 	public void init() {
@@ -438,21 +447,14 @@ public class Viewer extends Application {
 		
 		private Circle circle = new Circle();
 
-		// I was trying to handle the wall within the tile class so that I would not
-		// need the Wall class, and instead it could handle it here.
-		// I'm still not sure the best way to do it because it can be done through both
-		private Rectangle wall = new Rectangle();
-
 		public Tile(int row, int column) {
 
 			System.out.println("Row placed at " + row + " Column placed at " + column);
 
+			// TODO: Add tile to data structures, then on click should return the proper coordinates
 
-			// TODO: Set an identifier to access by tile (x,y)
 			// TODO: Checking if a circle is on the tile means there
-			// TODO: Place players on the board
-
-			// List of tiles
+			// TODO: Place players on the board on startup (2 or 4 players)
 
 			// Create a new rectangle for the grid
 			Rectangle border = new Rectangle (25,25);
@@ -463,20 +465,44 @@ public class Viewer extends Application {
 			// Set the line color of the tiles to black
 			border.setStroke(Color.TRANSPARENT);
 
-			// Align elements within the tile to be centered
-			// setAlignment(Pos.CENTER);
-
-			getChildren().addAll(border, circle, wall);
+			getChildren().addAll(border, circle);
 
 			// On mouse click, draw an X on the tile
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
-					drawCircle();
+
+					// TODO: Display the tile coords properly in terminal
 					System.out.println("Clicked a tile at coordinate (x,y)");
-					// TODO: Display the tile coords in terminal
+
+					// Draw a small circle on the tile (this will eventually be player)
+					drawCircle();
+
+					// Print the correct row and column of the tile
+					/* This is how I would like to grab the coordinates
+					for (Tile theTile : tilesArray) {
+						System.out.println("Clicked a tile at row: " + theTile.getRow());
+						System.out.println("Clicked a tile at column: " + theTile.getColumn());
+					} */
 				}
 			});
 		}
+
+		// These were the getters and setters I was working with
+		/*public void setRow(int row) {
+			this.row = row;
+		}
+
+		public void setColumn(int column) {
+			this.column = column;
+		}
+
+		public int getRow() {
+			return row;
+		}
+
+		public int getColumn() {
+			return column;
+		}*/
 
 		private void drawCircle() {
 			circle.setCenterX(50.0f);
