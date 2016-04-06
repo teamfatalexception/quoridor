@@ -444,12 +444,18 @@ public class Viewer extends Application {
 	 * Tile class for creating a square on the grid
 	 */
 	private class Tile extends StackPane {
+
+		int theRow;
+		int theColumn;
 		
 		private Circle circle = new Circle();
 
 		public Tile(int row, int column) {
 
-			System.out.println("Row placed at " + row + " Column placed at " + column);
+			this.theRow = row;
+			this.theColumn = column;
+
+			System.out.println("Initial tile drawn at (" + this.theRow + "," + this.theColumn + ")");
 
 			// TODO: Add tile to data structures, then on click should return the proper coordinates
 
@@ -471,38 +477,35 @@ public class Viewer extends Application {
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 
-					// TODO: Display the tile coords properly in terminal
-					System.out.println("Clicked a tile at coordinate (x,y)");
-
 					// Draw a small circle on the tile (this will eventually be player)
 					drawCircle();
 
-					// Print the correct row and column of the tile
-					/* This is how I would like to grab the coordinates
-					for (Tile theTile : tilesArray) {
-						System.out.println("Clicked a tile at row: " + theTile.getRow());
-						System.out.println("Clicked a tile at column: " + theTile.getColumn());
+					// Print the tile coordinates through the array (currently doesn't work)
+					/*for (Tile theTile : tilesArray) {
+						System.out.println("Tile placed at (" + this.getRow() + "," + this.getColumn() + ")");
 					} */
+
+					System.out.println("Tile placed at (" + this.getRow() + "," + this.getColumn() + ")");
 				}
 			});
 		}
 
 		// These were the getters and setters I was working with
-		/*public void setRow(int row) {
-			this.row = row;
+		public void setRow(int theRow) {
+			this.theRow = theRow;
 		}
 
-		public void setColumn(int column) {
-			this.column = column;
+		public void setColumn(int theColumn) {
+			this.theColumn = theColumn;
 		}
 
 		public int getRow() {
-			return row;
+			return theRow;
 		}
 
 		public int getColumn() {
-			return column;
-		}*/
+			return theColumn;
+		}
 
 		private void drawCircle() {
 			circle.setCenterX(50.0f);
