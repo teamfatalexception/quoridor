@@ -327,15 +327,15 @@ public class Viewer extends Application {
 		Pane thePane = new Pane();
 
 		// May need to alter to be 1 to 10
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int row = 0; row < 9; row++) {
+			for (int column = 0; column < 9; column++) {
 
-				Tile tile = new Tile(i, j);
+				Tile tile = new Tile(row, column);
 
 				// Old way of drawing the tiles
 				// Translate the X and Y, drawing another tile
-				tile.setTranslateX(j * 50);
-				tile.setTranslateY(i * 50);
+				tile.setTranslateX(column * 50);
+				tile.setTranslateY(row * 50);
 
 				thePane.getChildren().add(tile);
 
