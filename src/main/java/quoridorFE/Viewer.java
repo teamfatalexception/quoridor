@@ -318,15 +318,13 @@ public class Viewer extends Application {
 	}
 
 	/** 
-	 * Alernative way to draw the center
+	 * Draw the center using a pane
 	 */
 	public Pane drawCenterWithPane () {
 
-		// TODO: Display the coordinates of the tile on click
 		// TODO: Display the coordinates of the wall on click
 		// TODO: Update the sizes of the tiles to be 100 x 100 -- update coords of 25x25 to 100x100 and update translations
 		// TODO: Make the columns and rows smaller
-		// TODO: Remove code that is not being used (pTile, commented out code)
 
 		Pane thePane = new Pane();
 
@@ -336,10 +334,6 @@ public class Viewer extends Application {
 
 				// Create a new tile
 				Tile tile = new Tile(row, column);
-
-				// setRow and column here instead? then modify the constructor? not sure the best way to handle this.
-				// tile.setRow(row);
-				// tile.setColumn(column);
 
 				// Add the tile to an array
 				tilesArray.add(tile);
@@ -358,15 +352,14 @@ public class Viewer extends Application {
 		}
 		
 		// Draw Vertical Walls
-		for (int i = 0; i < 15; i++) {
-			for (int j = 0; j < 16; j+=2) {		// Making this +=2 sets the proper row for the vertical
+		for (int row = 0; row < 15; row++) {
+			for (int column = 0; column < 16; column+=2) {		// Making this +=2 sets the proper row for the vertical
 				
-				Wall wall;
-		
-				wall = new Wall(25, 75);	
+				// Wall wall = new Wall(25, 75);	
+				Wall wall = new Wall(25, 75, row, column, 'v');
 
-				wall.setTranslateX(25 + (j * 25));
-				wall.setTranslateY(i * 25);
+				wall.setTranslateX(25 + (column * 25));
+				wall.setTranslateY(row * 25);
 
 				thePane.getChildren().add(wall);											
 
@@ -375,16 +368,14 @@ public class Viewer extends Application {
 		
 		
 		// Draw horiztonal walls
-		for (int i = 0; i < 16; i+=2) {
-			for (int j = 0; j < 15; j++) {		// Making this +=2 sets the proper row for the vertical
+		for (int row = 0; row < 16; row+=2) {
+			for (int column = 0; column < 15; column++) {		// Making this +=2 sets the proper row for the vertical
 
-				Wall wall;
+				// Wall wall = new Wall(75, 25);
+				Wall wall = new Wall(75, 25, row, column, 'h');
 
-				// Length, Height
-				wall = new Wall(75, 25);
-
-				wall.setTranslateX(j * 25);
-				wall.setTranslateY(25 + (i * 25));
+				wall.setTranslateX(column * 25);
+				wall.setTranslateY(25 + (row * 25));
 
 				thePane.getChildren().add(wall);
 
@@ -445,6 +436,7 @@ public class Viewer extends Application {
 	 */
 	private class Tile extends StackPane {
 
+		// Declare local variables so that we can use getters for the parameters passed into the constructor
 		int theRow;
 		int theColumn;
 		
@@ -518,9 +510,22 @@ public class Viewer extends Application {
 
 		// TODO: Set an identifier to access by wall (x,y,h) (x,y,v)
 
-		public Wall(int wallLength, int wallHeight) {
+		// Declare local variables so that we can use getters for the parameters passed into the constructor
+		int theWallLength;
+		int theWallHeight;
+		int theRow;
+		int theColumn;
+		char theOrientation;
 
-			Rectangle theWall = new Rectangle(wallLength, wallHeight);
+		public Wall(int wallLength, int wallHeight, int row, int column, char orientation) {
+
+			this.theWallLength = wallLength;
+			this.theWallHeight = wallHeight;
+			this.theRow = row;
+			this.theColumn = column;
+			this.theOrientation = orientation;
+
+			Rectangle theWall = new Rectangle(this.theWallLength, this.theWallHeight);
 
 			// Set properties for the walls
 			theWall.setFill(null);
@@ -535,7 +540,9 @@ public class Viewer extends Application {
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
 					
-					System.out.println("Clicked a wall at coordinate (x, y, orientation)");
+					// System.out.println("Clicked a wall at coordinate (x, y, orientation)");
+
+					System.out.println("Wall placed at (" + this.getRow() + "," + this.getColumn() +  "," + this.getTheOrientation() + ")");
 
 					// IF (the wall color is red) theWall.getFill()
 						// wall placed here!
@@ -547,5 +554,25 @@ public class Viewer extends Application {
 				}
 		    });
         }
+
+        public int getTheWallLength() {
+			return theWallLength;
+		}
+
+		public int getTheWallHeight() {
+			return theWallHeight;
+		}
+
+        public int getRow() {
+			return theRow;
+		}
+
+		public int getColumn() {
+			return theColumn;
+		}
+
+		public char getTheOrientation() {
+			return theOrientation;
+		}
 	}
 }
