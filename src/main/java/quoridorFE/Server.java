@@ -177,6 +177,8 @@ public class Server {
             String cm;
             // the date I connect
             String date;
+            
+            int playerId = 0;
 
             // Constructor
             ClientThread(Socket socket) {
@@ -200,7 +202,7 @@ public class Server {
             public void run() {
 
                 //ANOTHER MAIN LOOP
-                // I want our program to spin until it see's "hello"
+                // I want our program to spin until it sees "hello"
                 // im going to add a boolean to toggle the spin
                 boolean helloSpin = true;
                 boolean gameSpin = true;
@@ -232,7 +234,7 @@ public class Server {
                     	if (sc[0].equalsIgnoreCase("GAME")) {
                             gameSpin = false;
                             //TODO find a way of communicating overall number of players to server
-		
+                            playerId = Integer.parseInt(sc[1]);
                             // If two players.
 							if(sc.length == 4){
 								board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
@@ -243,10 +245,9 @@ public class Server {
 							}
                         }
                     } else if(message.equals("MYOUSHU")){ // I'm being requested for a move.
-                        Random rand = new Random();
-                        int randomNum = rand.nextInt((8) + 1);
+                        
                         //System.out.println("I will give you a move, give me a god damned second..");
-                        answer = "TESUJI " + randomNum + " " + randomNum;
+                        answer = "TESUJI " + FEai.getShitMove(playerId, board);
                         System.out.println("Sending to the client: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
