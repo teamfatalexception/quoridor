@@ -264,10 +264,10 @@ public class Server {
 			String[] sc = message.split("\\s+");
 			// Is a wall move
 			if(message.contains("h") || message.contains("v")){
-				board.placeWallUnchecked(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
+				board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
 			}else{
 				// ..else is a pawn move
-				board.movePawnUnchecked(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
+				board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
 			}
 
                         System.out.println("Recieved: " + message);

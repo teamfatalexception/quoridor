@@ -630,7 +630,7 @@ public class Client  {
 			//TODO Check if legal..
 			System.out.println(Arrays.toString(my_cord));
                         //maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
-                        board.placeWallUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6].charAt(0));
+                        board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6].charAt(0));
 			// Gotta broad cast all changes after that.
                         broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[3] + "), " + my_cord[5] + "]");
 
@@ -639,7 +639,7 @@ public class Client  {
 		        //TODO Check if legal..
 			System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
 		        //syntax - movePawn(int player, int x, int y)
-			board.movePawnUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+			board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
 			// Gotta broadcast all changes after that.
 			// syntax - broadcast(ArrayList<Client> clients, String text)
 			broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
