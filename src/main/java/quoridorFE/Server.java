@@ -248,6 +248,7 @@ public class Server {
                         
                         //System.out.println("I will give you a move, give me a god damned second..");
                         answer = "TESUJI " + FEai.getShitMove(playerId, board);
+			//answer = "[" + FEai.getShitMove(playerId, board) + "]";
                         System.out.println("Sending to the client: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
 /*
@@ -38,7 +39,7 @@ public class Client  {
 
     // This is our EVERYTHING, the board that will hold the players, walls and their board states.
     public static QuoridorBoard board;
-    
+    public static ArrayList<Client> clients;
     public static Viewer viewer = null;
 
     /*
@@ -203,7 +204,8 @@ public class Client  {
             Client client4 = new Client(serverAddress, portNumber);
 
             //List for holding all clients
-            ArrayList<Client> clients =  new ArrayList<Client>();
+            //ArrayList<Client> 
+	    clients =  new ArrayList<Client>();
 
             //TODO change the names of the patterns and matchers to be more descriptive!
 
@@ -437,8 +439,10 @@ public class Client  {
                                     // This functionality could easily go inside a wrapper method, but just gonna
 				//place move request inside here.
                                     if(turn == 0){
+					    currentPlayer = players.get(0);
                                             nextTurn(client,clients.size());
                                     }else if(turn == 1){
+					    currentPlayer = players.get(1);
                                             nextTurn(client2,clients.size());
                                             //client2.sendMessage("MYOUSHU");
                                     }else if(turn == 2){
@@ -522,15 +526,12 @@ public class Client  {
 	public static void broadcast(ArrayList<Client> clients, String text){
 		for(int i=0; i<clients.size(); i++){
 	                    try{
-	                           
 	                            clients.get(i).sendMessage(text);
 	                    }catch(Exception e){
 	                            System.out.print(e);
 	                            System.out.println("    Failure to send " + text + " to " + clients.get(i).port);
 	                    }
 	            }
-	
-	
 	}
 
 
@@ -602,38 +603,63 @@ public class Client  {
      */
     class ListenFromServer extends Thread {
             public void run() {
-            	//While the thread is still running
-                  while(true) {
-                           
-                // reads in characters from server
-			    String msg = IOscannerIn.nextLine();
 
-			    // splits string into seperat components
-                String[] my_cord = msg.split(" ");
-                                   
-                //Patterns to look for
-				String pattern = "IAM(\\s+)(.*)"; 
+            	//While the thread is still running
+                while(true) {
+
+                    // reads in characters from server
+ 		    String msg = IOscannerIn.nextLine();
+
+		    // splits string into seperat components
+                    String[] my_cord = msg.split(" ");
+
+		    // It is ID speach.
+		    if(msg.contains("IAM")){
+                        System.out.println(my_cord[0] + " " + my_cord[1]);
+                        nameList.add(my_cord[1]);
+
+		    // It is a wall.
+		    }else if(msg.contains("TESUJI") && (msg.contains("V") || msg.contains("H") )){
+			//TODO Check if legal..
+			System.out.println(Arrays.toString(my_cord));
+                        //maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
+                        board.placeWallUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6].charAt(0));
+			// Gotta broad cast all changes after that.
+                        broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[3] + "), " + my_cord[5] + "]");
+
+		    // It is a pawn movement.
+		    }else if(msg.contains("TESUJI")){
+		        //TODO Check if legal..
+			System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
+		        //syntax - movePawn(int player, int x, int y)
+			board.movePawnUnchecked(currentPlayer.getID(), 1, 1);//Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[1]) );
+			// Gotta broadcast all changes after that.
+			// syntax - broadcast(ArrayList<Client> clients, String text)
+			broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + 1 + ", " + 1 + ") ");
+			//+ my_cord[1] + ", " + my_cord[2] + ")");
+
+		    }else{
+			System.out.println("I didn't quite catch that..");
+		    }
+
+                /*Patterns to look for
+				String pattern = "IAM(\\s+)(.*)";
 				String pattern2 = "[((\\d)(,)(\\d)())(,)(.*)]"; //[(1, 0), v]
-				
 				Pattern p1 = Pattern.compile(pattern);
 				Pattern p2 = Pattern.compile(pattern2);
-				
 				Matcher m1 = p1.matcher(msg);
 				Matcher m2 = p2.matcher(msg);
-				
 				//If IAM message
 				if(m1.find()){
 				    System.out.println(my_cord[0] + " " + my_cord[1]);
 				    nameList.add(my_cord[1]);
 				}
-				
 				//If coordinate
 				if(m2.find()){
 					maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
-           			System.out.println(maze);						
+           			        System.out.println(maze);
 				}
-                            
-                           
+				*/
                     }
             }
     }
