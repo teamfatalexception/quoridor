@@ -411,7 +411,6 @@ public class Client  {
                                             System.out.println("Writing HELLO to player" + temp);
                                             temp++;
                                     }
-			// A method that starts the game? We shouldn't need this.
                             //If Game Message then print out GAME <p> FEX:teamFatal
                             }else if(msg.equalsIgnoreCase("GAME")) {
 			    System.out.print("Game ");
@@ -610,8 +609,16 @@ public class Client  {
                     // reads in characters from server
  		    String msg = IOscannerIn.nextLine();
 
+                    // tired of parsing clutter, so removed all.
+                    msg = msg.replace(',', ' ');
+                    msg = msg.replace('(', ' ');
+                    msg = msg.replace(')', ' ');
+                    msg = msg.replace('[', ' ');
+                    msg = msg.replace(']', ' ');
+                    //System.out.println("    Fixed String. " + msg);
+
 		    // splits string into seperat components
-                    String[] my_cord = msg.split(" ");
+                    String[] my_cord = msg.split("\\s+");
 
 		    // It is ID speach.
 		    if(msg.contains("IAM")){
@@ -619,7 +626,7 @@ public class Client  {
                         nameList.add(my_cord[1]);
 
 		    // It is a wall.
-		    }else if(msg.contains("TESUJI") && (msg.contains("V") || msg.contains("H") )){
+		    }else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
 			//TODO Check if legal..
 			System.out.println(Arrays.toString(my_cord));
                         //maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
@@ -632,10 +639,10 @@ public class Client  {
 		        //TODO Check if legal..
 			System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
 		        //syntax - movePawn(int player, int x, int y)
-			board.movePawnUnchecked(currentPlayer.getID(), 1, 1);//Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[1]) );
+			board.movePawnUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
 			// Gotta broadcast all changes after that.
 			// syntax - broadcast(ArrayList<Client> clients, String text)
-			broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + 1 + ", " + 1 + ") ");
+			broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
 			//+ my_cord[1] + ", " + my_cord[2] + ")");
 
 		    }else{

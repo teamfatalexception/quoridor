@@ -220,7 +220,7 @@ public class Server {
                                 // the message part of the ChatMessage
 				    System.out.println(message);
                     if (helloSpin) {
-                        if(message.equalsIgnoreCase("hello")) {
+                        if(message.equalsIgnoreCase("HELLO")) {
                             // Flip the hello toggle and build the IAM message
                             helloSpin = false;
                             answer = "IAM " + PLAYERNAME;
@@ -229,63 +229,65 @@ public class Server {
                         }
                     } else if (gameSpin) {
                     	String[] sc = message.split("\\s+");
-                       
-                		//GAME <p> <name1> <name2> [<name3> <name4>]
+               		//GAME <p> <name1> <name2> [<name3> <name4>]
                     	if (sc[0].equalsIgnoreCase("GAME")) {
                             gameSpin = false;
                             //TODO find a way of communicating overall number of players to server
+				
                             playerId = Integer.parseInt(sc[1]);
                             // If two players.
-							if(sc.length == 4){
-								board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
-								System.out.println("Two players locked in!");
-							} else {// is four player
-								board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
-								System.out.println("Four players locked in!");
-							}
+			    if(sc.length == 4){
+				board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
+			        System.out.println("Two players locked in!");
+			    } else {// is four player
+				board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
+				System.out.println("Four players locked in!");
+			    }
                         }
-                    } else if(message.equals("MYOUSHU")){ // I'm being requested for a move.
-                        
+                    } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         //System.out.println("I will give you a move, give me a god damned second..");
+				
                         answer = "TESUJI " + FEai.getShitMove(playerId, board);
-			//answer = "[" + FEai.getShitMove(playerId, board) + "]";
                         System.out.println("Sending to the client: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
+
+			// tired of parsing clutter, so removed all.
+			message = message.replace(',', ' ');
+			message = message.replace('(', ' ');
+			message = message.replace(')', ' ');
+			message = message.replace('[', ' ');
+			message = message.replace(']', ' ');
+			//System.out.println("	Fixed String. " + message);
+
+			// Split message, parse out what we want and update the local board.
+			String[] sc = message.split("\\s+");
+			// Is a wall move
+			if(message.contains("h") || message.contains("v")){
+				board.placeWallUnchecked(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
+			}else{
+				// ..else is a pawn move
+				board.movePawnUnchecked(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
+			}
+
                         System.out.println("Recieved: " + message);
+
                     } else if(message.contains("GOTE")){ // Someone made and illegal move and is now gone.
+			
                         System.out.println("Recieved: " + message);
                     } else if(message.contains("KIKASHI")){ // Game is over and someone won.
                         System.out.println("Recieved: " + message);
                         break;
                     }
-
-                    // Switch on the type of message receive
-                    //broadcast(message);
-                    /*(        switch(cm) {
-
-                    case ChatMessage.MESSAGE:
-                            broadcast(username + ": " + message);
-                            break;
-                    case ChatMessage.LOGOUT:
-                            display(username + " disconnected with a LOGOUT message.");
-                            keepGoing = false;
-                            break;
-                    case ChatMessage.WHOISIN:
-                            writeMsg("List of the users connected at " + sdf.format(new Date()) + "\n");
-                            // scan al the users connected
-                            for(int i = 0; i < al.size(); ++i) {
-                                    ClientThread ct = al.get(i);
-                                    writeMsg((i+1) + ") " + ct.username + " since " + ct.date);
-
-                            break;
-                    }
-                    }*/
                 }
                 // remove myself from the arrayList containing the list of the
                 // connected Clients
+		System.out.println("	Exiting.");
                 remove(id);
+		System.out.print(".");
                 close();
+		System.out.print(".");
+		System.exit(0);
             }
 
             // try to close everything
