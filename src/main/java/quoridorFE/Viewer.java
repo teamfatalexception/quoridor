@@ -466,6 +466,7 @@ public class Viewer extends Application {
 	public void init() {
 
 		theBorderPane = new BorderPane();
+		tileSet = new HashSet<Tile>();
 
 	    theBorderPane.setTop(drawTop());
 	    theBorderPane.setBottom(drawBottom());
