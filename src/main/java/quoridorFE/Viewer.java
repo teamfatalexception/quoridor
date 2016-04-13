@@ -423,7 +423,7 @@ public class Viewer extends Application {
 	    theBorderPane.setCenter(drawCenterWithPane());
 
 	    // Master control for the window size
-	    theBorderPane.setPrefSize(1000, 1000);	// Width X Height
+	    theBorderPane.setPrefSize(1000, 600);	// Width X Height
 
 	    // TODO: Get the elements of the top, getTop returns a node
 	    // theBorderPane.getTop().getChildren();
