@@ -176,6 +176,17 @@ public class QuoridorBoard {
 		return null;
 	}
 	
+	
+	/**
+	 * Allows access to the set of players on the board
+	 * 
+	 * @return A HashSet containing all the walls that have been placed on the board.
+	 * @see Wall
+	 */
+	public HashSet<Player> getPlayerSet() {
+		return this.playerSet;
+	}
+	
 	/**
 	 * Allows access to the set of walls that have been placed so far.
 	 * 
@@ -183,7 +194,7 @@ public class QuoridorBoard {
 	 * @see Wall
 	 */
 	public synchronized HashSet<Wall> getWallSet() {
-		return wallSet;
+		return this.wallSet;
 	}
 
 	/**
@@ -395,6 +406,7 @@ public class QuoridorBoard {
 		if (this.isValidMove(player, x, y) == false) throw new IllegalMoveException("You fucked up, scrub.");
 		movePawnUnchecked(player, x, y);
 	}
+	
 	private synchronized void movePawnUnchecked(int player, int x, int y) {
 		BoardNode currentLocation = this.getNodeByPlayerNumber(player);
 		BoardNode targetLocation = this.getNodeByCoords(x, y);

@@ -1,10 +1,13 @@
 package quoridorFE;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.CountDownLatch;
 
 // Main import
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 //Imports for mouse events
 import javafx.event.EventHandler;
@@ -15,7 +18,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 // Import Panes
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -27,7 +29,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.util.ArrayList;
 
 /**
 * BEFORE YOU START
@@ -43,8 +44,14 @@ public class Viewer extends Application {
 	private QuoridorBoard board;
 	
 	private BorderPane theBorderPane;
+	private Pane centerPane;
+	
+	private HashSet<Tile> tileSet;
+	
+	private static int DEFAULT_WALL_WIDTH = 25;
+	private static int DEFAULT_WALL_HEIGHT = 75;
+	
 
-	private static ArrayList<Tile> tilesArray = new ArrayList<Tile>();
 	
 	public Viewer() {
 		viewerStartUp(this);
@@ -52,7 +59,7 @@ public class Viewer extends Application {
 	
 	public static void viewerStartUp(Viewer v) {
 		viewer = v;
-		latch.countDown();
+		//latch.countDown();
 	}
 	
 	public static Viewer waitForViewerStartUp() {
@@ -88,6 +95,49 @@ public class Viewer extends Application {
     public void refresh(){
 		// Need to change states here, placeholder stub mainly.
 		System.out.println("REFRESHING");
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+				for (Wall w : board.getWallSet()) {
+					centerPane.getChildren().add(convertWall(w));
+				}
+				
+            }
+		});
+    }
+    
+    private Tile getTileByCoords(int x, int y) {
+    	for (Tile t : tileSet) {
+    		if (t.theColumn == x && t.theRow == y) {
+    			return t;
+    		}
+		}
+    	return null;
+    }
+    
+    private Rectangle convertWall(Wall w) {
+    	Rectangle rect = new Rectangle();
+    	if (w.orientation == 'v') {
+    		rect = new Rectangle(DEFAULT_WALL_WIDTH, DEFAULT_WALL_HEIGHT);
+    		rect.setTranslateX(25 + (w.x * 50));
+    		rect.setTranslateY(w.y * 50);
+    	} else {
+    		rect = new Rectangle(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH);
+    		rect.setTranslateX(w.x * 50);
+    		rect.setTranslateY(25 + (w.y * 50));
+    	}
+    	rect.setFill(Color.RED);
+    	
+    	return rect;
     }
 
     /**
@@ -320,13 +370,13 @@ public class Viewer extends Application {
 	/** 
 	 * Draw the center using a pane
 	 */
-	public Pane drawCenterWithPane () {
+	public Pane drawCenterWithPane (Pane thePane) {
 
 		// TODO: Display the coordinates of the wall on click
 		// TODO: Update the sizes of the tiles to be 100 x 100 -- update coords of 25x25 to 100x100 and update translations
 		// TODO: Make the columns and rows smaller
 
-		Pane thePane = new Pane();
+		
 
 		// May need to alter to be 1 to 10
 		for (int row = 0; row < 9; row++) {
@@ -336,7 +386,7 @@ public class Viewer extends Application {
 				Tile tile = new Tile(row, column);
 
 				// Add the tile to an array
-				tilesArray.add(tile);
+				tileSet.add(tile);
 
 				// Translate the X and Y, drawing another tile
 				tile.setTranslateX(column * 50);
@@ -356,7 +406,7 @@ public class Viewer extends Application {
 			for (int column = 0; column < 16; column+=2) {		// Making this +=2 sets the proper row for the vertical
 				
 				// Wall wall = new Wall(25, 75);	
-				Wall wall = new Wall(25, 75, row, column, 'v');
+				Jwall wall = new Jwall(25, 75, row, column, 'v');
 
 				wall.setTranslateX(25 + (column * 25));
 				wall.setTranslateY(row * 25);
@@ -367,12 +417,12 @@ public class Viewer extends Application {
 		} // END FOR 
 		
 		
-		// Draw horiztonal walls
+		// Draw horizontal walls
 		for (int row = 0; row < 16; row+=2) {
 			for (int column = 0; column < 15; column++) {		// Making this +=2 sets the proper row for the vertical
 
 				// Wall wall = new Wall(75, 25);
-				Wall wall = new Wall(75, 25, row, column, 'h');
+				Jwall wall = new Jwall(75, 25, row, column, 'h');
 
 				wall.setTranslateX(column * 25);
 				wall.setTranslateY(25 + (row * 25));
@@ -406,6 +456,7 @@ public class Viewer extends Application {
 
 		// Make the stage viewable. This is called last in the function
 		theStage.show();
+		latch.countDown();
 	}
 
 	/**
@@ -415,12 +466,14 @@ public class Viewer extends Application {
 	public void init() {
 
 		theBorderPane = new BorderPane();
+		tileSet = new HashSet<Tile>();
 
 	    theBorderPane.setTop(drawTop());
 	    theBorderPane.setBottom(drawBottom());
 	    theBorderPane.setRight(drawRight());
-	    theBorderPane.setLeft(drawLeft());      // Comment this out and it will draw andrews left from within client
-	    theBorderPane.setCenter(drawCenterWithPane());
+	    //theBorderPane.setLeft(drawLeft());      // Comment this out and it will draw andrews left from within client
+	    centerPane = new Pane();
+	    theBorderPane.setCenter(drawCenterWithPane(centerPane));
 
 	    // Master control for the window size
 	    theBorderPane.setPrefSize(1000, 600);	// Width X Height
@@ -506,7 +559,7 @@ public class Viewer extends Application {
 		}
 	}
 
-	private class Wall extends StackPane {
+	private class Jwall extends StackPane {
 
 		// TODO: Set an identifier to access by wall (x,y,h) (x,y,v)
 
@@ -517,7 +570,7 @@ public class Viewer extends Application {
 		int theColumn;
 		char theOrientation;
 
-		public Wall(int wallLength, int wallHeight, int row, int column, char orientation) {
+		public Jwall(int wallLength, int wallHeight, int row, int column, char orientation) {
 
 			this.theWallLength = wallLength;
 			this.theWallHeight = wallHeight;
