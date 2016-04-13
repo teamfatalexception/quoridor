@@ -355,7 +355,7 @@ public class Client  {
                         System.out.println("GUI is launching!!");
 
                         //We only want to launch the viewer once
-                        gui_only = false;
+                        //gui_only = false;
                         
                         // Launch to open Andrew's Viewer class
                         // Viewer.launch(Viewer.class);  
@@ -385,9 +385,7 @@ public class Client  {
                         viewer.setBoard(board);
                         
                         viewer.testTheReference();
-                        System.out.println("I ran the thing.");
-
-                        
+                        //System.out.println("I ran the thing.");
                         viewer.refresh();
 
                         // Refresh the board state 
@@ -451,34 +449,7 @@ public class Client  {
 				cleanUp(clients);
 				//cleanUp(client2);
                                     System.exit(0);
-                            }/*else if(msg.equalsIgnoreCase("hello")) {
-                // print out hello to each client we have
-                                    int temp = 1;
-                                    for (Client c : clients) {
-                                            c.sendMessage("HELLO");
-                                            System.out.println("Writing HELLO to player" + temp);
-                                            temp++;
-                                    }
-                            //If Game Message then print out GAME <p> FEX:teamFatal
-                            }else if(msg.equalsIgnoreCase("GAME")) {
-			    System.out.print("Game ");
-			    for(int i = 0 ; i < nameList.size(); i++){
-				System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
-				
-				//If two players print send server its player number along with opponents name.
-				if(clients.size() == 2){
-				    clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
-				}
-				//If four players send server its player number along with all opponents names
-				if(clients.size() == 4){
-				    clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
-				}
-			    }
-			   
-			   
-			    
-                            }*/
-                            else if(msg.equalsIgnoreCase("next")){
+                            }else if(msg.equalsIgnoreCase("next")){
                                     // first thing is send hello to all the servers...
                                     // Ask for a move from the next player.
                                     //System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
@@ -511,6 +482,17 @@ public class Client  {
                                     }else{
                                             turn++;
                                     }
+				    if(gui_only){
+		                        // Refreshing the GUI
+        		                viewer.refresh();
+				    }
+        	                    // Gotta check if there is a winner yet!
+                	            if(isWinner()){
+                        	        System.out.println("There is a winner!");
+                                	cleanUp(clients);
+                                	System.exit(0);
+                            	    }
+
 
                             }else if(msg.equalsIgnoreCase("help")){
                                     //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
@@ -555,13 +537,25 @@ public class Client  {
                                     turn++;
                             }
 
+			    if(gui_only){
+			        // Refreshing the GUI
+        	                viewer.refresh();
+		            }
+
+			    // Gotta check if there is a winner yet!
+			    if(isWinner()){
+			        System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
+				//broadcast(clients, "");
+                                cleanUp(clients);
+                                System.exit(0);
+			    }
+
                             // Make thread sleep for a momment before requesting teh next move.
                             try {
                                     Thread.sleep(400);
                             } catch(InterruptedException ex) {
                                     Thread.currentThread().interrupt();
                             }
-                            //System.exit(0);
                     }
             }
     }
