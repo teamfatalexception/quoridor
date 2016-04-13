@@ -365,23 +365,29 @@ public class Client  {
                          * How to launch the application thread in order to be
                          * able to update the player move
                          */
-                        new Thread() {
+                        Thread t = new Thread() {
                             @Override
                             public void run() {
                                 javafx.application.Application.launch(Viewer.class);
                             }
-                        }.start();
+                        };
+                        t.setDaemon(true);
+                        t.start();
                         /**
                          * Called after launching the UI
                          */
                         viewer = Viewer.waitForViewerStartUp();
 
-                        // now test
+                       
+                        
+                        // Call function from set board
+                        viewer.setBoard(board);
+                        
                         viewer.testTheReference();
                         System.out.println("I ran the thing.");
 
-                        // Call function from set board
-                        viewer.setBoard(board);
+                        
+                        viewer.refresh();
 
                         // Refresh the board state 
                         // Viewer.refresh();
