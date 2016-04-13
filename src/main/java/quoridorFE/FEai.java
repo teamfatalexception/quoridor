@@ -39,17 +39,22 @@ public class FEai {
 		List<edgeFE> edgeList = shortestPath.getPathEdgeList();
 		Set<BoardNode> nodesOnThePath = new HashSet<BoardNode>();
 		
+		for (edgeFE e : edgeList) {
+			nodesOnThePath.add(e.getSource());
+			nodesOnThePath.add(e.getTarget());
+		}
+		
 		// Now I've gotta get the first node on the path that isn't my current pawn position
 		// and that isn't occupied by another pawn
 		BoardNode attempt = edgeList.get(0).getTarget();
-		if (attempt.getPlayer() != null) {
-			attempt = edgeList.get(1).getTarget();
-			if (attempt.getPlayer() != null) {
-				
-				
+		
+		for (edgeFE e : edgeList) {
+			attempt = e.getTarget();
+			if (qboard.isValidMove(player, attempt.getxPos(), attempt.getyPos())) {
+				// we found a good move
+				break;
 			}
 		}
-		
 		
 		String retStr = "("+ attempt.getxPos() + ", "+ attempt.getyPos() +")";
 		
