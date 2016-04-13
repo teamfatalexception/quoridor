@@ -171,9 +171,9 @@ public class Client  {
             }
 
             // Gotta check and see if they sent us any little flags. ;)
-            if(line.contains("-a")){
+            if(line.contains("-auto_off")){
                 automate = false;
-                System.out.println("        Automate is ON");
+                System.out.println("        Automate is OFF");
             }
             if(line.contains("--text")){
                 text_only = true;
