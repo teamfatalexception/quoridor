@@ -33,7 +33,7 @@ public class Client  {
     public static Maze maze;
 
     // Bools for our commandline parameter flags.
-    public static boolean automate = false;
+    public static boolean automate = true;
     public static boolean text_only = false;
     public static boolean gui_only = false;
 
@@ -171,9 +171,9 @@ public class Client  {
             }
 
             // Gotta check and see if they sent us any little flags. ;)
-            if(line.contains("-a")){
-                automate = true;
-                System.out.println("        Automate is ON");
+            if(line.contains("-auto_off")){
+                automate = false;
+                System.out.println("        Automate is OFF");
             }
             if(line.contains("--text")){
                 text_only = true;
@@ -340,16 +340,17 @@ public class Client  {
             int turn = 0;
             /*
                     Main Interaction Loop
-             */                              
-            while(true) {
+            */
+            //while(true) {
 
-                    // This section is for deciding how to represent the the board (text or gui)
+                    /*( This section is for deciding how to represent the the board (text or gui)
                     if(text_only) {
                         System.out.println(maze);
                     }
+		    */
 
                     // Test if gui only flag is called.                        
-                    if(gui_only) {
+             if(gui_only) {
 
                         System.out.println("GUI is launching!!");
 
@@ -394,6 +395,47 @@ public class Client  {
                           
                     }
                    
+
+		//hello section
+		int temp = 1;
+                for (Client c : clients) {
+
+                    c.sendMessage("HELLO");
+                    System.out.println("Writing HELLO to player" + temp);
+                    temp++;
+                }
+                // Make thread sleep for a momment before requesting teh next move.
+                try {
+                    Thread.sleep(100);
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+		//game
+                for(int i = 0 ; i < nameList.size(); i++){
+                    System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+
+                    //If two players print send server its player number along with opponents name.
+                    if(clients.size() == 2){
+                         clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
+                    }
+                    //If four players send server its player number along with all opponents names
+                    if(clients.size() == 4){
+                         clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
+                    }
+ 		}
+
+
+		try {
+                    Thread.sleep(100);
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+
+
+		while(true){
+
                     // Test if automated is run
                     if(!automate){
                             System.out.print("> ");
@@ -409,7 +451,7 @@ public class Client  {
 				cleanUp(clients);
 				//cleanUp(client2);
                                     System.exit(0);
-                            }else if(msg.equalsIgnoreCase("hello")) {
+                            }/*else if(msg.equalsIgnoreCase("hello")) {
                 // print out hello to each client we have
                                     int temp = 1;
                                     for (Client c : clients) {
@@ -435,11 +477,11 @@ public class Client  {
 			   
 			   
 			    
-                            }
+                            }*/
                             else if(msg.equalsIgnoreCase("next")){
                                     // first thing is send hello to all the servers...
                                     // Ask for a move from the next player.
-                                    System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
+                                    //System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
 
                                     // This functionality could easily go inside a wrapper method, but just gonna
 				//place move request inside here.
@@ -451,9 +493,11 @@ public class Client  {
                                             nextTurn(client2,clients.size());
                                             //client2.sendMessage("MYOUSHU");
                                     }else if(turn == 2){
+					    currentPlayer = players.get(2);
                                             nextTurn(client3,clients.size());
                                             //client3.sendMessage("MYOUSHU");
                                     }else if(turn == 3){
+					    currentPlayer = players.get(3);
                                             nextTurn(client4,clients.size());
                                             //client4.sendMessage("MYOUSHU");
                                     }else{
@@ -476,19 +520,28 @@ public class Client  {
                                     continue;
                             }
                     }else{
-
+			//System.out.println("	Nope");
+			
                             //If automation is on we do . . .
                             System.out.println("Automating");
 
                             if(turn == 0){
+
+				    currentPlayer = players.get(0);
                                     nextTurn(client,clients.size());
                             }else if(turn == 1){
+
+                                    currentPlayer = players.get(1);
                                     nextTurn(client2,clients.size());
                                     //client2.sendMessage("MYOUSHU");
                             }else if(turn == 2){
+
+				    currentPlayer = players.get(2);
                                     nextTurn(client3,clients.size());
                                     //client3.sendMessage("MYOUSHU");
                             }else if(turn == 3){
+
+				    currentPlayer = players.get(3);
                                     nextTurn(client4,clients.size());
                                     //client4.sendMessage("MYOUSHU");
                             }else{
