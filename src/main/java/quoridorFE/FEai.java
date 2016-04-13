@@ -39,10 +39,19 @@ public class FEai {
 		List<edgeFE> edgeList = shortestPath.getPathEdgeList();
 		Set<BoardNode> nodesOnThePath = new HashSet<BoardNode>();
 		
-		// Now I've gotta get the first node on the path that isn't my current pawn position.
-		BoardNode firstTry = edgeList.get(0).getTarget();
+		// Now I've gotta get the first node on the path that isn't my current pawn position
+		// and that isn't occupied by another pawn
+		BoardNode attempt = edgeList.get(0).getTarget();
+		if (attempt.getPlayer() != null) {
+			attempt = edgeList.get(1).getTarget();
+			if (attempt.getPlayer() != null) {
+				
+				
+			}
+		}
 		
-		String retStr = "("+ firstTry.getxPos() + ", "+ firstTry.getyPos() +")";
+		
+		String retStr = "("+ attempt.getxPos() + ", "+ attempt.getyPos() +")";
 		
 		return retStr;
 	}
