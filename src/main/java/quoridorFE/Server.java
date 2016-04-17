@@ -247,7 +247,8 @@ public class Server {
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         //System.out.println("I will give you a move, give me a god damned second..");
 				
-                        answer = "TESUJI " + FEai.getShitMove(playerId, board);
+			answer = "TESUJI " + FEai.getMove(playerId, board);
+                        //answer = "TESUJI " + FEai.getShitMove(playerId, board);
                         System.out.println("Sending to the client: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.

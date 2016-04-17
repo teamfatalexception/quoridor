@@ -352,7 +352,7 @@ public class QuoridorBoard {
 		generateInvalidWalls(placedWall);
 	}
 	
-	private void placeWallUnchecked(int player, int x, int y, char orientation) {
+	public void placeWallUnchecked(int player, int x, int y, char orientation) {
 		Player p = this.getNodeByPlayerNumber(player).getPlayer();
 		
 		if (orientation == 'v') {
@@ -407,7 +407,7 @@ public class QuoridorBoard {
 		movePawnUnchecked(player, x, y);
 	}
 	
-	private synchronized void movePawnUnchecked(int player, int x, int y) {
+	public synchronized void movePawnUnchecked(int player, int x, int y) {
 		BoardNode currentLocation = this.getNodeByPlayerNumber(player);
 		BoardNode targetLocation = this.getNodeByCoords(x, y);
 		Player p = currentLocation.getPlayer();

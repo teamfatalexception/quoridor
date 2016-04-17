@@ -681,18 +681,19 @@ public class Client  {
 		    // It is a wall.
 		    }else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
 			//TODO Check if legal..
-			System.out.println(Arrays.toString(my_cord));
                         //maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
-                        board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6].charAt(0));
+			//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
+                        board.placeWallUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 			// Gotta broad cast all changes after that.
-                        broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[3] + "), " + my_cord[5] + "]");
+			//System.out.println("ERROR 2?");
+                        broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
 
 		    // It is a pawn movement.
 		    }else if(msg.contains("TESUJI")){
 		        //TODO Check if legal..
 			System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
 		        //syntax - movePawn(int player, int x, int y)
-			board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+			board.movePawnUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
 			// Gotta broadcast all changes after that.
 			// syntax - broadcast(ArrayList<Client> clients, String text)
 			broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
@@ -702,25 +703,7 @@ public class Client  {
 			System.out.println("I didn't quite catch that..");
 		    }
 
-                /*Patterns to look for
-				String pattern = "IAM(\\s+)(.*)";
-				String pattern2 = "[((\\d)(,)(\\d)())(,)(.*)]"; //[(1, 0), v]
-				Pattern p1 = Pattern.compile(pattern);
-				Pattern p2 = Pattern.compile(pattern2);
-				Matcher m1 = p1.matcher(msg);
-				Matcher m2 = p2.matcher(msg);
-				//If IAM message
-				if(m1.find()){
-				    System.out.println(my_cord[0] + " " + my_cord[1]);
-				    nameList.add(my_cord[1]);
-				}
-				//If coordinate
-				if(m2.find()){
-					maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
-           			        System.out.println(maze);
-				}
-				*/
-                    }
+                }
             }
     }
     // this is a method to print out a "prompt" for the game, it tells you how to send
