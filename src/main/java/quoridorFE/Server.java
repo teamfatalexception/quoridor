@@ -265,9 +265,11 @@ public class Server {
 			String[] sc = message.split("\\s+");
 			// Is a wall move
 			if(message.contains("h") || message.contains("v")){
+				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
 				board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
 			}else{
 				// ..else is a pawn move
+				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
 				board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
 			}
 
