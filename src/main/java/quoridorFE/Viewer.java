@@ -2,7 +2,6 @@ package quoridorFE;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.concurrent.CountDownLatch;
 
 // Main import
@@ -46,7 +45,7 @@ public class Viewer extends Application {
 	private BorderPane theBorderPane;
 	private Pane centerPane;
 	
-	private HashSet<Tile> tileSet;
+	private ArrayList<Tile> tileList;
 	
 	private static int DEFAULT_WALL_WIDTH = 25;
 	private static int DEFAULT_WALL_HEIGHT = 75;
@@ -98,10 +97,10 @@ public class Viewer extends Application {
 		Platform.runLater(new Runnable() {
             @Override
             public void run() {
-            	
-            	
-            	
-            	
+            	for (Player p : board.getPlayerSet()) {
+            		// This finds the tile and draws a circle on it
+            		getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), board.getNodeByPlayerNumber(p.getID()).getyPos()).drawCircle();
+            	}
             	
             	
             	
@@ -109,6 +108,7 @@ public class Viewer extends Application {
             	
 				for (Wall w : board.getWallSet()) {
 					centerPane.getChildren().add(convertWall(w));
+					System.out.println("Should be drawing: " + w.toString());
 				}
 				
             }
@@ -116,7 +116,7 @@ public class Viewer extends Application {
     }
     
     private Tile getTileByCoords(int x, int y) {
-    	for (Tile t : tileSet) {
+    	for (Tile t : tileList) {
     		if (t.theColumn == x && t.theRow == y) {
     			return t;
     		}
@@ -386,7 +386,7 @@ public class Viewer extends Application {
 				Tile tile = new Tile(row, column);
 
 				// Add the tile to an array
-				tileSet.add(tile);
+				tileList.add(tile);
 
 				// Translate the X and Y, drawing another tile
 				tile.setTranslateX(column * 50);
@@ -396,7 +396,7 @@ public class Viewer extends Application {
 				thePane.getChildren().add(tile);
 
 				// Pesudo: Adding multiple children in a list into pane
-				// for (Node node: elements)
+				// for (Node node: Collection)
 					// objectname.getChildren().add(node);
 			}
 		}
@@ -466,7 +466,7 @@ public class Viewer extends Application {
 	public void init() {
 
 		theBorderPane = new BorderPane();
-		tileSet = new HashSet<Tile>();
+		tileList = new ArrayList<Tile>();
 
 	    theBorderPane.setTop(drawTop());
 	    theBorderPane.setBottom(drawBottom());

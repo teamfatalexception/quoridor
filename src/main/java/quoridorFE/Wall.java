@@ -42,4 +42,10 @@ public class Wall {
 		return true;
 	}
 	
+
+	@Override
+	public String toString() {
+		return "Wall [x=" + x + ", y=" + y + ", orientation=" + orientation + "]";
+	}
+	
 }

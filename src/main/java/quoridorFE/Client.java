@@ -384,7 +384,7 @@ public class Client  {
                         // Call function from set board
                         viewer.setBoard(board);
                         
-                        viewer.testTheReference();
+                        //viewer.testTheReference();
                         //System.out.println("I ran the thing.");
                         viewer.refresh();
 
