@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 //Imports for mouse events
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -47,8 +48,8 @@ public class Viewer extends Application {
 	
 	private ArrayList<Tile> tileList;
 	
-	private static int DEFAULT_WALL_WIDTH = 25;
-	private static int DEFAULT_WALL_HEIGHT = 75;
+	private static int DEFAULT_WALL_WIDTH = 30;
+	private static int DEFAULT_WALL_HEIGHT = 3 * DEFAULT_WALL_WIDTH;
 	
 
 	
@@ -104,16 +105,10 @@ public class Viewer extends Application {
         			}
         		}
             	
-            	
-            	
             	for (Player p : board.getPlayerSet()) {
             		// This finds the tile and draws a circle on it
             		getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), board.getNodeByPlayerNumber(p.getID()).getyPos()).placePawn();
             	}
-            	// TODO get the pawns to go away
-            	
-            	
-            	
             	
 				for (Wall w : board.getWallSet()) {
 					centerPane.getChildren().add(convertWall(w));
@@ -137,12 +132,12 @@ public class Viewer extends Application {
     	Rectangle rect = new Rectangle();
     	if (w.orientation == 'v') {
     		rect = new Rectangle(DEFAULT_WALL_WIDTH, DEFAULT_WALL_HEIGHT);
-    		rect.setTranslateX(25 + (w.x * 50));
-    		rect.setTranslateY(w.y * 50);
+    		rect.setTranslateX(DEFAULT_WALL_WIDTH + (w.x * (2 * DEFAULT_WALL_WIDTH)));
+    		rect.setTranslateY(w.y * (2 * DEFAULT_WALL_WIDTH));
     	} else {
     		rect = new Rectangle(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH);
-    		rect.setTranslateX(w.x * 50);
-    		rect.setTranslateY(25 + (w.y * 50));
+    		rect.setTranslateX(w.x * (2 * DEFAULT_WALL_WIDTH));
+    		rect.setTranslateY(DEFAULT_WALL_WIDTH + (w.y * (2 * DEFAULT_WALL_WIDTH)));
     	}
     	rect.setFill(Color.RED);
     	
@@ -239,7 +234,7 @@ public class Viewer extends Application {
 
 		VBox right = new VBox(50);
 		right.setId("right");
-
+		right.setPrefWidth(200);
 		// Set properties for the VBox
 	    right.setStyle("-fx-background-color: #000088;");
 	    
@@ -329,15 +324,15 @@ public class Viewer extends Application {
 		}
 	     });
 	     
-	     buttons.getChildren().addAll(moveUp, moveDown, moveLeft, moveRight, kickPlayer, endGame);
+	    buttons.getChildren().addAll(moveUp, moveDown, moveLeft, moveRight, kickPlayer, endGame);
 	     
 	    //TODO: Listener to get the number of walls for each player
 	    //TODO: Update player walls on each turn for all players
 	    
 
 	    // Add all elements to the VBox
-	    right.getChildren().addAll(p1, p2, p3, p4, buttons);
-	   
+	    //right.getChildren().addAll(p1, p2, p3, p4, buttons);
+	    right.getChildren().addAll(p1, p2, p3, p4);
         
         // Center the right pane
 		//right.setAlignment(Pos.CENTER);
@@ -345,47 +340,11 @@ public class Viewer extends Application {
 		return right;
 	}
 
-	/**
-	 * Left Area - Vbox
-	 * Vbox will lay out children in a single vertical row 
-	 */ 
-	public VBox drawLeft() {
-
-	    //TODO: Delete this area eventually if not needed
-	    //OR TODO: List of all of our names or other relevant information
-
-		VBox left = new VBox(50);
-		left.setId("left");
-
-	    // Set properties for the VBox
-	    left.setSpacing(10);
-
-	    // Create shapes
-	    Rectangle rect4 = new Rectangle(5,5,100,100);
-	    rect4.setFill(Color.SKYBLUE);
-
-	    Rectangle rect5 = new Rectangle(5,5,100,100);
-	    rect5.setFill(Color.BURLYWOOD);
-
-	    Rectangle rect6 = new Rectangle(5,5,100,100);
-	    rect6.setFill(Color.GREEN);
-
-	    // Add all elements to the VBox
-	    left.getChildren().addAll(rect4,rect5,rect6);
-
-	    return left;
-	}
-
+	
 	/** 
 	 * Draw the center using a pane
 	 */
 	public Pane drawCenterWithPane (Pane thePane) {
-
-		// TODO: Display the coordinates of the wall on click
-		// TODO: Update the sizes of the tiles to be 100 x 100 -- update coords of 25x25 to 100x100 and update translations
-		// TODO: Make the columns and rows smaller
-
-		
 
 		// May need to alter to be 1 to 10
 		for (int row = 0; row < 9; row++) {
@@ -398,8 +357,8 @@ public class Viewer extends Application {
 				tileList.add(tile);
 
 				// Translate the X and Y, drawing another tile
-				tile.setTranslateX(column * 50);
-				tile.setTranslateY(row * 50);
+				tile.setTranslateX(column * (2 * DEFAULT_WALL_WIDTH));
+				tile.setTranslateY(row * (2 * DEFAULT_WALL_WIDTH));
 
 				// Add the tile to the board
 				thePane.getChildren().add(tile);
@@ -415,10 +374,10 @@ public class Viewer extends Application {
 			for (int column = 0; column < 16; column+=2) {		// Making this +=2 sets the proper row for the vertical
 				
 				// Wall wall = new Wall(25, 75);	
-				Jwall wall = new Jwall(25, 75, row, column, 'v');
+				Jwall wall = new Jwall(DEFAULT_WALL_WIDTH, DEFAULT_WALL_HEIGHT, row, column, 'v');
 
-				wall.setTranslateX(25 + (column * 25));
-				wall.setTranslateY(row * 25);
+				wall.setTranslateX(DEFAULT_WALL_WIDTH + (column * DEFAULT_WALL_WIDTH));
+				wall.setTranslateY(row * DEFAULT_WALL_WIDTH);
 
 				thePane.getChildren().add(wall);											
 
@@ -431,10 +390,10 @@ public class Viewer extends Application {
 			for (int column = 0; column < 15; column++) {		// Making this +=2 sets the proper row for the vertical
 
 				// Wall wall = new Wall(75, 25);
-				Jwall wall = new Jwall(75, 25, row, column, 'h');
+				Jwall wall = new Jwall(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH, row, column, 'h');
 
-				wall.setTranslateX(column * 25);
-				wall.setTranslateY(25 + (row * 25));
+				wall.setTranslateX(column * DEFAULT_WALL_WIDTH);
+				wall.setTranslateY(DEFAULT_WALL_WIDTH + (row * DEFAULT_WALL_WIDTH));
 
 				thePane.getChildren().add(wall);
 
@@ -478,14 +437,16 @@ public class Viewer extends Application {
 		tileList = new ArrayList<Tile>();
 
 	    theBorderPane.setTop(drawTop());
-	    theBorderPane.setBottom(drawBottom());
+	    //theBorderPane.setBottom(drawBottom());
 	    theBorderPane.setRight(drawRight());
 	    //theBorderPane.setLeft(drawLeft());      // Comment this out and it will draw andrews left from within client
 	    centerPane = new Pane();
+	    centerPane.setPrefSize(DEFAULT_WALL_WIDTH * 17, DEFAULT_WALL_WIDTH * 17);
+	    
 	    theBorderPane.setCenter(drawCenterWithPane(centerPane));
 
 	    // Master control for the window size
-	    theBorderPane.setPrefSize(1000, 600);	// Width X Height
+	    //theBorderPane.setPrefSize(1000, 600);	// Width X Height
 
 	    // TODO: Get the elements of the top, getTop returns a node
 	    // theBorderPane.getTop().getChildren();
@@ -517,7 +478,7 @@ public class Viewer extends Application {
 			// TODO: Place players on the board on startup (2 or 4 players)
 
 			// Create a new rectangle for the grid
-			Rectangle border = new Rectangle (25,25);
+			Rectangle border = new Rectangle (DEFAULT_WALL_WIDTH, DEFAULT_WALL_WIDTH);
 			
 			// Make the tile transparent (white)
 			border.setFill(Color.GREEN);
