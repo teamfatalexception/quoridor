@@ -97,11 +97,20 @@ public class Viewer extends Application {
 		Platform.runLater(new Runnable() {
             @Override
             public void run() {
+            	
+            	for (int row = 0; row < 9; row++) {
+        			for (int column = 0; column < 9; column++) {
+        				getTileByCoords(column, row).removePawn();
+        			}
+        		}
+            	
+            	
+            	
             	for (Player p : board.getPlayerSet()) {
             		// This finds the tile and draws a circle on it
-            		getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), board.getNodeByPlayerNumber(p.getID()).getyPos()).drawCircle();
+            		getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), board.getNodeByPlayerNumber(p.getID()).getyPos()).placePawn();
             	}
-            	
+            	// TODO get the pawns to go away
             	
             	
             	
@@ -493,7 +502,7 @@ public class Viewer extends Application {
 		int theRow;
 		int theColumn;
 		
-		private Circle circle = new Circle();
+		private Circle circle;
 
 		public Tile(int row, int column) {
 
@@ -516,8 +525,8 @@ public class Viewer extends Application {
 			// Set the line color of the tiles to black
 			border.setStroke(Color.TRANSPARENT);
 
-			getChildren().addAll(border, circle);
-
+			getChildren().addAll(border);
+			/*
 			// On mouse click, draw an X on the tile
 			setOnMouseClicked(event -> {
 				if(event.getButton() == MouseButton.PRIMARY) {
@@ -525,14 +534,12 @@ public class Viewer extends Application {
 					// Draw a small circle on the tile (this will eventually be player)
 					drawCircle();
 
-					// Print the tile coordinates through the array (currently doesn't work)
-					/*for (Tile theTile : tilesArray) {
-						System.out.println("Tile placed at (" + this.getRow() + "," + this.getColumn() + ")");
-					} */
+					
 
 					System.out.println("Tile placed at (" + this.getRow() + "," + this.getColumn() + ")");
 				}
 			});
+			*/
 		}
 
 		// These were the getters and setters I was working with
@@ -552,10 +559,16 @@ public class Viewer extends Application {
 			return theColumn;
 		}
 
-		private void drawCircle() {
+		public void placePawn() {
+			circle = new Circle();
 			circle.setCenterX(50.0f);
 			circle.setCenterY(50.0f);
 			circle.setRadius(5.0f);
+			getChildren().add(circle);
+		}
+		
+		public void removePawn() {
+			getChildren().remove(circle);
 		}
 	}
 
