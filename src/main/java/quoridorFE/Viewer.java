@@ -99,17 +99,17 @@ public class Viewer extends Application {
             @Override
             public void run() {
             	
-            	for (int row = 0; row < 9; row++) {
-        			for (int column = 0; column < 9; column++) {
-        				getTileByCoords(column, row).removePawn();
-        			}
-        		}
+            	// this clears out the pawns on the board
+            	for (Tile t : tileList) {
+            		t.removePawn();
+            	}
             	
+            	// This finds the tile and draws a circle on it
             	for (Player p : board.getPlayerSet()) {
-            		// This finds the tile and draws a circle on it
             		getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), board.getNodeByPlayerNumber(p.getID()).getyPos()).placePawn();
             	}
             	
+            	// This draws the walls
 				for (Wall w : board.getWallSet()) {
 					centerPane.getChildren().add(convertWall(w));
 					System.out.println("Should be drawing: " + w.toString());
