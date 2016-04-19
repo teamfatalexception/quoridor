@@ -33,6 +33,7 @@ public class FEai {
 		ArrayList<BoardNode> winningNodeList = generateWinningNodeList(player, qboard);
 		ArrayList<DijkstraShortestPath<BoardNode, edgeFE>> pathList = new ArrayList<DijkstraShortestPath<BoardNode, edgeFE>>(); 
 		
+		// Getting
 		for (BoardNode n : winningNodeList) {
 			pathList.add(new DijkstraShortestPath<BoardNode, edgeFE>(board, source, n));
 		}
@@ -68,6 +69,10 @@ public class FEai {
 		}
 		
 		String retStr = "("+ attempt.getxPos() + ", "+ attempt.getyPos() +")";
+		
+		// Currently, prints out all the path lengths from player to all other nodes on the board
+		/*ArrayList<int[]> pathChart = getPaths
+		    (qboard.getNodeByPlayerNumber(player), qboard);*/
 		
 		return retStr;
 	}
@@ -166,4 +171,30 @@ public class FEai {
 		return list;
 	}
 	
+	
+	// Method getPaths()
+	// Param: Boardnode player: The position of a player
+	// Returns: ArrayList<int[]> rows:
+	//	List of lists of each row, filled with the distance from player to each node in that row.
+	public static ArrayList<int[]> getPaths(BoardNode player, QuoridorBoard qboard) {
+	    
+	    System.out.println("Shortest Path from player to all other nodes on the board:"
+		+	"Player is at position 0");
+	    
+	    ArrayList<int[]> rows = new ArrayList<int[]>(9);		//initializing rows
+	    for(int i = 0; i < 9; i++){
+		int[] row = new int[9];
+		for(int j = 0; j < 9; j++){
+		    // getting the path from player to node at (i, j)
+		    UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
+		    row[j] = (int)(new DijkstraShortestPath<BoardNode, edgeFE>
+		    (board, player, qboard.getNodeByCoords(i, j)).getPathLength());
+		    System.out.print(row[j] + " ");
+		}
+		rows.add(i, row);	// Adding each row to rows<>
+		System.out.println("");
+	    }
+	    return rows;
+	}
+		
 }
