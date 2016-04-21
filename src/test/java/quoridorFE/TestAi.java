@@ -101,5 +101,19 @@ public class TestAi {
 			cmpstr = FEai.getShitMove(1, testBoard);
 			assertTrue("Expected a valid move to be returned by FEai.getShitMove()", testBoard.isValidMove(1, Integer.parseInt(Character.toString(cmpstr.charAt(1))), Integer.parseInt(Character.toString(cmpstr.charAt(4)))));
 	}
+	
+	@Test
+	public void testDefendCloseOpponents() {
+		// Build testboard
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5), 
+					    new Player(2, "TST", "test2", 5),
+					    new Player(3, "TST", "test3", 5),
+					    new Player(4, "TST", "test4", 5));
+		// Move player 2 to 4, 3
+		testBoard.movePawn(2, 4, 3);
+		FEai testAI = new FEai();
+		String blockingWall = testAI.getMove(1, testBoard);// Asking for a move
+		assertEquals(blockingWall, "[(4, 3), h]" );	
+	}
 
 }

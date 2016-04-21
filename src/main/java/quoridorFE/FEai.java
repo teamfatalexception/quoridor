@@ -77,6 +77,7 @@ public class FEai {
 		return retStr;
 	}
 	
+	
 
 	/**
 	Just lets you quickly know if your move if an illegal one with a boolean return value.
@@ -147,8 +148,6 @@ public class FEai {
 	    return getShitMove(player, qboard);
 	}
 
-
-
 	private static ArrayList<BoardNode> generateWinningNodeList(int player, QuoridorBoard qboard) {
 		ArrayList<BoardNode> list = new ArrayList<BoardNode>();
 		if (player == 1) {
@@ -174,6 +173,7 @@ public class FEai {
 	
 	// Method getPaths()
 	// Param: Boardnode player: The position of a player
+	// 	  QuoridorBoard qboard: Current iteration of the board
 	// Returns: ArrayList<int[]> rows:
 	//	List of lists of each row, filled with the distance from player to each node in that row.
 	public static ArrayList<int[]> getPaths(BoardNode player, QuoridorBoard qboard) {
