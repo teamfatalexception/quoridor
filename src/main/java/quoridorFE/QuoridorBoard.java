@@ -258,8 +258,12 @@ public class QuoridorBoard {
 		// check number of walls left
 		if (this.getNodeByPlayerNumber(player).getPlayer().wallsLeft() == 0) return false;
 		
+		// check against repeat wall placements
+		Wall testy = new Wall(x, y, orientation);
+		if (this.getWallSet().contains(testy)) return false;
+		
 		// check wall against list of invalid walls
-		if (invalidWallSet.contains(new Wall(x, y, orientation))) return false;
+		if (this.invalidWallSet.contains(testy)) return false;
 		
 		// check for path to win condition
 		SimpleGraph<BoardNode, edgeFE> boardCopy = new SimpleGraph<BoardNode, edgeFE>(edgeFE.class);

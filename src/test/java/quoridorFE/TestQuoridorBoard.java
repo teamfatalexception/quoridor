@@ -88,7 +88,7 @@ public class TestQuoridorBoard {
 													new Player(3, "test3", 6668, 5, 0, 4), new Player(4, "test4", 6669, 5, 8, 4));
 		
 		// test good placement case
-		assertTrue("isValidMove() should return true for a good move. 2", testBoard.isValidMove(1, 3, 0, 'v'));
+		assertTrue("isValidMove() should return true for a good move. 1", testBoard.isValidMove(1, 3, 0, 'v'));
 		
 		// test blocking in player 1
 		testBoard.placeWall(2, 3, 0, 'v');
@@ -115,6 +115,12 @@ public class TestQuoridorBoard {
 		
 		// test another good move
 		assertTrue("isValidMove() should return true for a good move. 2", testBoard.isValidMove(3, 6, 7, 'v'));
+		
+		// test repeat wall placements
+		assertFalse("isValidMove() should return false for a repeat wall placement.", testBoard.isValidMove(1, 0, 7, 'h'));
+		
+		// test another bad wall case
+		assertFalse("isValidMove() should return false for a wall placementt hat would intersect another wall.", testBoard.isValidMove(1, 0, 7, 'v'));
 	}
 
 	@Test

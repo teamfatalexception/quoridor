@@ -33,11 +33,11 @@ public class Wall {
 		if (getClass() != obj.getClass())
 			return false;
 		Wall other = (Wall) obj;
-		if (orientation != other.orientation)
+		if (this.orientation != other.orientation)
 			return false;
-		if (x != other.x)
+		if (this.x != other.x)
 			return false;
-		if (y != other.y)
+		if (this.y != other.y)
 			return false;
 		return true;
 	}
