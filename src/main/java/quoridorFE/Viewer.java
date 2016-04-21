@@ -115,7 +115,7 @@ public class Viewer extends Application {
             	// This draws the walls
 				for (Wall w : board.getWallSet()) {
 					centerPane.getChildren().add(convertWall(w));
-					System.out.println("Should be drawing: " + w.toString());
+					//System.out.println("Should be drawing: " + w.toString());
 				}
 				
             }

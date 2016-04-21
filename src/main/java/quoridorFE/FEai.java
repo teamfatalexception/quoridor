@@ -142,8 +142,8 @@ public class FEai {
                 //else return getShitMove(player, qboard);
 	    //}
 	    if(!defendCloseOpponents(player, qboard).equals("") ){
-		return defendCloseOpponents(player, qboard);
-            }
+	    	return defendCloseOpponents(player, qboard);
+        }
             // If it's not time just do shortest path.
 	    return getMoveShortestPath(player, qboard);
 	}

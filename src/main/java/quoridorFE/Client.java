@@ -628,6 +628,7 @@ public class Client  {
 	}
 
 	// Loop through players and see if any has reached it's win condition.
+	/*
 	for(int i=0; i<players.size(); i++){
 		if(players.get(i).getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
 			return true;
@@ -642,6 +643,23 @@ public class Client  {
                             return true;
 		}
 	}
+	*/
+	
+	for (Player p : board.getPlayerSet()) {
+		if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
+			return true;
+		}
+		if(p.getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
+            return true;
+		}
+		if(p.getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
+            return true;
+		}
+		if(p.getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
+            return true;
+		}
+	}
+	
 
 	// If we found nothing then no one has won yet return false.
 	return false;
@@ -661,7 +679,7 @@ public class Client  {
 
                     // reads in characters from server
  		    String msg = IOscannerIn.nextLine();
-
+ 		    System.out.println(msg);
                     // tired of parsing clutter, so removed all.
                     msg = msg.replace(',', ' ');
                     msg = msg.replace('(', ' ');
@@ -675,8 +693,8 @@ public class Client  {
 
 		    // It is ID speach.
 		    if(msg.contains("IAM")){
-                        System.out.println(my_cord[0] + " " + my_cord[1]);
-                        nameList.add(my_cord[1]);
+		    	System.out.println(my_cord[0] + " " + my_cord[1]);
+                nameList.add(my_cord[1]);
 
 		    // It is a wall.
 		    }else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
@@ -685,35 +703,30 @@ public class Client  {
 			//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
                         //board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 			if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
-				System.out.println("BAM, KICKED!");
-				board.removePlayer(currentPlayer.getID());
-				broadcast(clients, "GOTE " + currentPlayer.getID());
-			}else{
 				System.out.println("IS GOOD!");
-        	                board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+        	    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 				// Gotta broad cast all changes after that.
 				//System.out.println("ERROR 2?");
-                        	broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
+                broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
+			}else{
+                System.out.println("BAM, KICKED!");
+				board.removePlayer(currentPlayer.getID());
+				broadcast(clients, "GOTE " + currentPlayer.getID());
+                
 			}
 		    // It is a pawn movement.
 		    }else if(msg.contains("TESUJI")){
-		        //TODO Check if legal..
-			//System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
-		        //syntax - movePawn(int player, int x, int y)
+                if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
+    				board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+    				broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
+                }else{
+                	System.out.println("BAM, KICKED!");
+                    board.removePlayer(currentPlayer.getID());
+                    broadcast(clients, "GOTE " + currentPlayer.getID());
 
-                        if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
-                                System.out.println("BAM, KICKED!");
-                                board.removePlayer(currentPlayer.getID());
-                                broadcast(clients, "GOTE " + currentPlayer.getID());
-                        }else{
-				board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
-				// Gotta broadcast all changes after that.
-				// syntax - broadcast(ArrayList<Client> clients, String text)
-				broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
-				//+ my_cord[1] + ", " + my_cord[2] + ")");
-			}
+                }
 		    }else{
-			System.out.println("I didn't quite catch that..");
+		    	System.out.println("I didn't quite catch that..");
 		    }
 
                 }
