@@ -129,27 +129,22 @@ public class FEai {
 		    // If it's not time just do shortest path.
 		    return getShitMove(player, qboard);
 	    	}
-	    }else if(player == 2){
-                if(qboard.getNodeByPlayerNumber(1).getyPos() > 4){
+	    }else */
+		if(player == 2){
+                    //if(qboard.getNodeByPlayerNumber(1).getyPos() > 4){
                     // Gotta check it legal too.. But increment everytime otherwise will try same move forever!
 		    counter++;
                     if(counter < move.length-1 && isValid(player, qboard, move[counter]) ){
                         return move[counter];
 		    }
-                }   
+                }
                 // If it's not time just do shortest path.
-                else return getShitMove(player, qboard);
-             
-	    /*}else{
-		System.out.println("*Sweats* I-I'm not ready for more than two.");
-	    */
+                //else return getShitMove(player, qboard);
 	    //}
-	    
 	    if(!defendCloseOpponents(player, qboard).equals("") ){
 		return defendCloseOpponents(player, qboard);
-            }    
-                // If it's not time just do shortest path.
-	    //return "broke";
+            }
+            // If it's not time just do shortest path.
 	    return getShitMove(player, qboard);
 	}
 
