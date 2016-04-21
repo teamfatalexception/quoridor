@@ -48,8 +48,11 @@ public class Viewer extends Application {
 	
 	private ArrayList<Tile> tileList;
 	
-	private static int DEFAULT_WALL_WIDTH = 30;
-	private static int DEFAULT_WALL_HEIGHT = 3 * DEFAULT_WALL_WIDTH;
+	private static int DEFAULT_WALL_WIDTH = 15; // Used to be 30. Needs to be 15
+	private static int DEFAULT_WALL_HEIGHT = 75;  // Used to be 90. Needs to be 75
+
+	private static int DEFAULT_TILE_TRANSLATE = 45;
+	private static int DEFAULT_TILE_DIMMENSION = 30;
 	
 
 	
@@ -130,14 +133,31 @@ public class Viewer extends Application {
     
     private Rectangle convertWall(Wall w) {
     	Rectangle rect = new Rectangle();
+
     	if (w.orientation == 'v') {
     		rect = new Rectangle(DEFAULT_WALL_WIDTH, DEFAULT_WALL_HEIGHT);
-    		rect.setTranslateX(DEFAULT_WALL_WIDTH + (w.x * (2 * DEFAULT_WALL_WIDTH)));
-    		rect.setTranslateY(w.y * (2 * DEFAULT_WALL_WIDTH));
+    		// OLD WAY
+    		// rect.setTranslateX(DEFAULT_WALL_WIDTH + (w.x * (2 * DEFAULT_WALL_WIDTH))); 
+    		// rect.setTranslateY(w.y * (2 * DEFAULT_WALL_WIDTH));
+
+    		rect.setTranslateX((DEFAULT_WALL_WIDTH * 2) + (w.x * DEFAULT_WALL_WIDTH));  
+    		rect.setTranslateY(w.y * (3 * DEFAULT_WALL_WIDTH));
+
+    		// This is how the behavior should act
+    		// wall.setTranslateX(30 + (column * 15));
+		    // wall.setTranslateY(row * 45);
     	} else {
     		rect = new Rectangle(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH);
-    		rect.setTranslateX(w.x * (2 * DEFAULT_WALL_WIDTH));
-    		rect.setTranslateY(DEFAULT_WALL_WIDTH + (w.y * (2 * DEFAULT_WALL_WIDTH)));
+    		// OLD WAY
+    		// rect.setTranslateX(w.x * (2 * DEFAULT_WALL_WIDTH));
+    		// rect.setTranslateY(DEFAULT_WALL_WIDTH + (w.y * (2 * DEFAULT_WALL_WIDTH)));
+
+    		rect.setTranslateX(w.x * (3 * DEFAULT_WALL_WIDTH));
+    		rect.setTranslateY((DEFAULT_WALL_WIDTH * 2) + (w.y * DEFAULT_WALL_WIDTH));
+
+    		// This is how the behavior should act
+    		// wall.setTranslateX(column * 45);  
+			// wall.setTranslateY(30 + (row * 15));
     	}
     	rect.setFill(Color.RED);
     	
@@ -356,9 +376,12 @@ public class Viewer extends Application {
 				// Add the tile to an array
 				tileList.add(tile);
 
-				// Translate the X and Y, drawing another tile
-				tile.setTranslateX(column * (2 * DEFAULT_WALL_WIDTH));
-				tile.setTranslateY(row * (2 * DEFAULT_WALL_WIDTH));
+				// Translate the X and Y, drawing another tile (old way to do it)
+				// tile.setTranslateX(column * (1.5 * DEFAULT_WALL_WIDTH));
+				// tile.setTranslateY(row * (1.5 * DEFAULT_WALL_WIDTH));
+
+				tile.setTranslateX(column * DEFAULT_TILE_TRANSLATE);
+				tile.setTranslateY(row * DEFAULT_TILE_TRANSLATE);
 
 				// Add the tile to the board
 				thePane.getChildren().add(tile);
@@ -370,31 +393,29 @@ public class Viewer extends Application {
 		}
 		
 		// Draw Vertical Walls
-		for (int row = 0; row < 15; row++) {
-			for (int column = 0; column < 16; column+=2) {		// Making this +=2 sets the proper row for the vertical
-				
-				// Wall wall = new Wall(25, 75);	
-				Jwall wall = new Jwall(DEFAULT_WALL_WIDTH, DEFAULT_WALL_HEIGHT, row, column, 'v');
+		for (int row = 0; row < 8; row++) {
+			for (int column = 0; column < 24; column+=3) { // +=3 lines up the columns properly
+					
+				Jwall wall = new Jwall(15, 75, row, column, 'v');
 
-				wall.setTranslateX(DEFAULT_WALL_WIDTH + (column * DEFAULT_WALL_WIDTH));
-				wall.setTranslateY(row * DEFAULT_WALL_WIDTH);
+				wall.setTranslateX(30 + (column * 15));
+				wall.setTranslateY(row * 45);
 
 				thePane.getChildren().add(wall);											
 
 			} // END FOR
-		} // END FOR 
+		} // END FOR  
 		
 		
 		// Draw horizontal walls
-		for (int row = 0; row < 16; row+=2) {
-			for (int column = 0; column < 15; column++) {		// Making this +=2 sets the proper row for the vertical
+		for (int row = 0; row < 24; row+=3) { // +=3 lines up the rows properly
+			for (int column = 0; column < 8; column++) {
 
-				// Wall wall = new Wall(75, 25);
-				Jwall wall = new Jwall(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH, row, column, 'h');
+				Jwall wall = new Jwall(75, 15, row, column, 'h'); 
 
-				wall.setTranslateX(column * DEFAULT_WALL_WIDTH);
-				wall.setTranslateY(DEFAULT_WALL_WIDTH + (row * DEFAULT_WALL_WIDTH));
-
+				wall.setTranslateX(column * 45);  
+				wall.setTranslateY(30 + (row * 15));
+				
 				thePane.getChildren().add(wall);
 
 			} // END FOR
@@ -441,7 +462,8 @@ public class Viewer extends Application {
 	    theBorderPane.setRight(drawRight());
 	    //theBorderPane.setLeft(drawLeft());      // Comment this out and it will draw andrews left from within client
 	    centerPane = new Pane();
-	    centerPane.setPrefSize(DEFAULT_WALL_WIDTH * 17, DEFAULT_WALL_WIDTH * 17);
+
+	    centerPane.setPrefSize(DEFAULT_TILE_DIMMENSION * 17, DEFAULT_TILE_DIMMENSION * 17);
 	    
 	    theBorderPane.setCenter(drawCenterWithPane(centerPane));
 
@@ -470,7 +492,7 @@ public class Viewer extends Application {
 			this.theRow = row;
 			this.theColumn = column;
 
-			System.out.println("Initial tile drawn at (" + this.theRow + "," + this.theColumn + ")");
+			// System.out.println("Initial tile drawn at (" + this.theRow + "," + this.theColumn + ")");
 
 			// TODO: Add tile to data structures, then on click should return the proper coordinates
 
@@ -478,7 +500,7 @@ public class Viewer extends Application {
 			// TODO: Place players on the board on startup (2 or 4 players)
 
 			// Create a new rectangle for the grid
-			Rectangle border = new Rectangle (DEFAULT_WALL_WIDTH, DEFAULT_WALL_WIDTH);
+			Rectangle border = new Rectangle (DEFAULT_TILE_DIMMENSION, DEFAULT_TILE_DIMMENSION);
 			
 			// Make the tile transparent (white)
 			border.setFill(Color.GREEN);
@@ -555,7 +577,7 @@ public class Viewer extends Application {
 			Rectangle theWall = new Rectangle(this.theWallLength, this.theWallHeight);
 
 			// Set properties for the walls
-			theWall.setFill(null);
+			theWall.setFill(null);  // This needs to be null
 
 			// Change this back to black if you need to see 
 			theWall.setStroke(Color.TRANSPARENT);	
