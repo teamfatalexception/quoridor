@@ -110,10 +110,10 @@ public class TestAi {
 					    new Player(3, "TST", "test3", 5),
 					    new Player(4, "TST", "test4", 5));
 		// Move player 2 to 4, 3
-		testBoard.movePawn(2, 4, 3);
+		testBoard.movePawnUnchecked(2, 4, 3);
 		FEai testAI = new FEai();
 		String blockingWall = testAI.getMove(1, testBoard);// Asking for a move
-		assertEquals(blockingWall, "[(4, 3), h]" );	
+		assertEquals( "[(4, 3), h]", blockingWall);	
 	}
 
 }

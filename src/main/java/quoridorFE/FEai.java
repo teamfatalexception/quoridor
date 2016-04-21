@@ -129,22 +129,27 @@ public class FEai {
 		    // If it's not time just do shortest path.
 		    return getShitMove(player, qboard);
 	    	}
-	    }else*/ if(player == 2){
+	    }else if(player == 2){
                 if(qboard.getNodeByPlayerNumber(1).getyPos() > 4){
                     // Gotta check it legal too.. But increment everytime otherwise will try same move forever!
 		    counter++;
                     if(counter < move.length-1 && isValid(player, qboard, move[counter]) ){
                         return move[counter];
 		    }
-                }else{
-                    // If it's not time just do shortest path.
-                    return getShitMove(player, qboard);
-                }
+                }   
+                // If it's not time just do shortest path.
+                else return getShitMove(player, qboard);
+             
 	    /*}else{
 		System.out.println("*Sweats* I-I'm not ready for more than two.");
 	    */
-	    }
-
+	    //}
+	    
+	    if(!defendCloseOpponents(player, qboard).equals("") ){
+		return defendCloseOpponents(player, qboard);
+            }    
+                // If it's not time just do shortest path.
+	    //return "broke";
 	    return getShitMove(player, qboard);
 	}
 
@@ -196,5 +201,44 @@ public class FEai {
 	    }
 	    return rows;
 	}
+	
+	// Method defendCloseOpponents
+	private static String defendCloseOpponents(int player, QuoridorBoard qboard) {
+	    UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
+	    if(shortestPathToWin(2, qboard) < 4){
+		// Put a wall right in front of player 2
+		return "[(" + qboard.getNodeByPlayerNumber(2).getxPos() + ", " 
+		    +  qboard.getNodeByPlayerNumber(2).getyPos() + "), h]";
+	    }
+ 	    return "";
+	}
+	
+	// Param: player p, and an instance of the board
+	// Returns: shortest path to a winning node
+	private static int shortestPathToWin(int player, QuoridorBoard qboard){
+	
+	    ArrayList<BoardNode> winningNodes = generateWinningNodeList(player, qboard);
+	    UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
+	    int shortest = 10000000;
+	    for(int i = 0; i< winningNodes.size(); i++) {
+		int pathLength = (int)(new DijkstraShortestPath<BoardNode, edgeFE>
+		    (board, qboard.getNodeByPlayerNumber(player), winningNodes.get(i)).getPathLength() );
+		if(pathLength < shortest)
+		    shortest = pathLength;
+	    }
+	    return shortest;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
 }
