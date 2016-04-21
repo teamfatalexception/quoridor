@@ -14,7 +14,7 @@ public class TestAi {
 													new Player(4, "TST", "test4", 5));
 		
 		String str = "(4, 1)";
-		String cmpstr = FEai.getShitMove(1, testBoard);
+		String cmpstr = FEai.getMoveShortestPath(1, testBoard);
 		assertEquals("Expected " + str, str, cmpstr);
 		
 		testBoard.movePawn(1, 4, 1);
@@ -26,7 +26,7 @@ public class TestAi {
 		testBoard.movePawn(2, 4, 5);
 		// pawn 1 is at (4, 4) and 2 is at (4, 5)
 		str = "(4, 6)";
-		cmpstr = FEai.getShitMove(1, testBoard);
+		cmpstr = FEai.getMoveShortestPath(1, testBoard);
 		assertEquals("Single jump, expected " + str + " Recieved: " + cmpstr, str, cmpstr);
 		// tested single jump
 		
@@ -38,7 +38,7 @@ public class TestAi {
 		testBoard.movePawn(3, 4, 6);
 		// pawn 1 is at (4, 4), 2 is at (4, 5), and 3 is at (4, 6)
 		str = "(4, 7)";
-		cmpstr = FEai.getShitMove(1, testBoard);
+		cmpstr = FEai.getMoveShortestPath(1, testBoard);
 		assertEquals("Double jump, expected " + str + " Recieved: " + cmpstr, str, cmpstr);
 		// tested double jump
 		
@@ -51,7 +51,7 @@ public class TestAi {
 		testBoard.movePawn(4, 4, 7);
 		// pawn 1 is at (4, 4), 2 is at (4, 5), 3 is at (4, 6), and 4 is at (4, 7)
 		str = "(4, 8)";
-		cmpstr = FEai.getShitMove(1, testBoard);
+		cmpstr = FEai.getMoveShortestPath(1, testBoard);
 		assertEquals("Triple jump, expected " + str + " Recieved: " + cmpstr, str, cmpstr);
 		// tested triple jump
 		
@@ -66,7 +66,7 @@ public class TestAi {
 													new Player(4, "TST", "test4", 5));
 
 			String str = "(4, 1)";
-			String cmpstr = FEai.getShitMove(1, testBoard);
+			String cmpstr = FEai.getMoveShortestPath(1, testBoard);
 			assertEquals("Expected " + str, str, cmpstr);
 			
 			testBoard.movePawn(1, 4, 1);
@@ -98,7 +98,7 @@ public class TestAi {
 			
 			// 4/13/2014 AV - This test is here to highlight how the shit AI might return a bad move if it's shortest path to victory ends on an occupied space. 
 			
-			cmpstr = FEai.getShitMove(1, testBoard);
+			cmpstr = FEai.getMoveShortestPath(1, testBoard);
 			assertTrue("Expected a valid move to be returned by FEai.getShitMove()", testBoard.isValidMove(1, Integer.parseInt(Character.toString(cmpstr.charAt(1))), Integer.parseInt(Character.toString(cmpstr.charAt(4)))));
 	}
 	

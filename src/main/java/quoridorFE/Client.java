@@ -598,12 +598,12 @@ public class Client  {
         //String message = (String) sInput.readObject();
 
         // Next we check it's legality. Will impliment after.
-        String broadcast = "ATARI";
+        //String broadcast = "ATARI";
         // This check is going to ban players who make bad moves!
-        if(!isValidMove()){
+        //if(!isValidMove()){
             // GOTE is protocol for BAN THAT FUCKER
-            broadcast = "GOTE" + currentClient;
-        }
+            //broadcast = "GOTE" + currentClient;
+        //}
         // Then if it fails we boot the player, if it passes we broadcast and update our board.
 
         // Returns to viewer's control to wait for new command, usually next turn.
@@ -683,22 +683,35 @@ public class Client  {
 			//TODO Check if legal..
                         //maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
 			//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
-                        board.placeWallUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
-			// Gotta broad cast all changes after that.
-			//System.out.println("ERROR 2?");
-                        broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
-
+                        //board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+			if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
+				System.out.println("BAM, KICKED!");
+				board.removePlayer(currentPlayer.getID());
+				broadcast(clients, "GOTE " + currentPlayer.getID());
+			}else{
+				System.out.println("IS GOOD!");
+        	                board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+				// Gotta broad cast all changes after that.
+				//System.out.println("ERROR 2?");
+                        	broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
+			}
 		    // It is a pawn movement.
 		    }else if(msg.contains("TESUJI")){
 		        //TODO Check if legal..
-			System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
+			//System.out.println(Arrays.toString(my_cord) + "  " + currentPlayer.getID());
 		        //syntax - movePawn(int player, int x, int y)
-			board.movePawnUnchecked(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
-			// Gotta broadcast all changes after that.
-			// syntax - broadcast(ArrayList<Client> clients, String text)
-			broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
-			//+ my_cord[1] + ", " + my_cord[2] + ")");
 
+                        if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
+                                System.out.println("BAM, KICKED!");
+                                board.removePlayer(currentPlayer.getID());
+                                broadcast(clients, "GOTE " + currentPlayer.getID());
+                        }else{
+				board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+				// Gotta broadcast all changes after that.
+				// syntax - broadcast(ArrayList<Client> clients, String text)
+				broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
+				//+ my_cord[1] + ", " + my_cord[2] + ")");
+			}
 		    }else{
 			System.out.println("I didn't quite catch that..");
 		    }

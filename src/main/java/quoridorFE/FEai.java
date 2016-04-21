@@ -26,7 +26,7 @@ public class FEai {
 	}
 
 	
-	public static String getShitMove(int player, QuoridorBoard qboard) {
+	public static String getMoveShortestPath(int player, QuoridorBoard qboard) {
 		
 		UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
 		BoardNode source = qboard.getNodeByPlayerNumber(player);
@@ -145,7 +145,7 @@ public class FEai {
 		return defendCloseOpponents(player, qboard);
             }
             // If it's not time just do shortest path.
-	    return getShitMove(player, qboard);
+	    return getMoveShortestPath(player, qboard);
 	}
 
 	private static ArrayList<BoardNode> generateWinningNodeList(int player, QuoridorBoard qboard) {
