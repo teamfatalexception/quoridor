@@ -48,11 +48,11 @@ public class Viewer extends Application {
 	
 	private ArrayList<Tile> tileList;
 	
-	private static int DEFAULT_WALL_WIDTH = 15; // Used to be 30. Needs to be 15
-	private static int DEFAULT_WALL_HEIGHT = 75;  // Used to be 90. Needs to be 75
+	private static int DEFAULT_WALL_WIDTH = 25; // Used to be 30. Needs to be 15
+	private static int DEFAULT_WALL_HEIGHT = 5 * DEFAULT_WALL_WIDTH;  // Used to be 90. Needs to be 75
 
-	private static int DEFAULT_TILE_TRANSLATE = 45;
-	private static int DEFAULT_TILE_DIMMENSION = 30;
+	private static int DEFAULT_TILE_TRANSLATE = 3 * DEFAULT_WALL_WIDTH;
+	private static int DEFAULT_TILE_DIMMENSION = 2 * DEFAULT_WALL_WIDTH;
 	
 
 	
@@ -137,10 +137,10 @@ public class Viewer extends Application {
     	if (w.orientation == 'v') {
     		rect = new Rectangle(DEFAULT_WALL_WIDTH, DEFAULT_WALL_HEIGHT);
     		// OLD WAY
-    		// rect.setTranslateX(DEFAULT_WALL_WIDTH + (w.x * (2 * DEFAULT_WALL_WIDTH))); 
+    		//rect.setTranslateX(DEFAULT_WALL_WIDTH + (w.x * (4 * DEFAULT_WALL_WIDTH))); 
     		// rect.setTranslateY(w.y * (2 * DEFAULT_WALL_WIDTH));
 
-    		rect.setTranslateX((DEFAULT_WALL_WIDTH * 2) + (w.x * DEFAULT_WALL_WIDTH));  
+    		rect.setTranslateX((DEFAULT_WALL_WIDTH * 2) + (3 * w.x * DEFAULT_WALL_WIDTH));  
     		rect.setTranslateY(w.y * (3 * DEFAULT_WALL_WIDTH));
 
     		// This is how the behavior should act
@@ -148,16 +148,10 @@ public class Viewer extends Application {
 		    // wall.setTranslateY(row * 45);
     	} else {
     		rect = new Rectangle(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH);
-    		// OLD WAY
-    		// rect.setTranslateX(w.x * (2 * DEFAULT_WALL_WIDTH));
-    		// rect.setTranslateY(DEFAULT_WALL_WIDTH + (w.y * (2 * DEFAULT_WALL_WIDTH)));
-
-    		rect.setTranslateX(w.x * (3 * DEFAULT_WALL_WIDTH));
-    		rect.setTranslateY((DEFAULT_WALL_WIDTH * 2) + (w.y * DEFAULT_WALL_WIDTH));
-
-    		// This is how the behavior should act
-    		// wall.setTranslateX(column * 45);  
-			// wall.setTranslateY(30 + (row * 15));
+    		
+    		rect.setTranslateY((DEFAULT_WALL_WIDTH * 2) + (3 * w.x * DEFAULT_WALL_WIDTH));    
+    		rect.setTranslateX(w.y * (3 * DEFAULT_WALL_WIDTH));
+    		
     	}
     	rect.setFill(Color.RED);
     	
