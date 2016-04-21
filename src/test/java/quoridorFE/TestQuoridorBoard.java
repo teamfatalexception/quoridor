@@ -137,6 +137,18 @@ public class TestQuoridorBoard {
 		assertEquals("Y value was not as expected.", newY, testBoard.getNodeByPlayerNumber(1).getyPos());
 	}
 	
-	// TODO make sure the HashSet PlayerSet works
-	
+	@Test
+	public void testRemovePawn() {
+		// TODO make sure the pawn gets removed
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5), 
+														new Player(2, "TST", "test2", 5),
+														new Player(3, "TST", "test3", 5),
+														new Player(4, "TST", "test4", 5));
+		
+		int expectedPlayerCount = 3;
+		testBoard.removePlayer(4);
+		assertEquals("Expected player count to be " + expectedPlayerCount + ", got " + testBoard.getPlayerSet().size(), expectedPlayerCount, testBoard.getPlayerSet().size());
+		
+		
+	}
 }
