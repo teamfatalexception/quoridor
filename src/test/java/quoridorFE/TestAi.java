@@ -6,10 +6,13 @@ import org.junit.Ignore;
 
 public class TestAi {
 
-	@Ignore
 	@Test
-	public void testGetShitMove() {
-		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5),  new Player(2, "TST", "test2", 5));
+	public void testGetMoveShortestPath() {
+		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5), 
+                                                                                                        new Player(2, "TST", "test2", 5),
+                                                                                                        new Player(3, "TST", "test3", 5),
+                                                                                                        new Player(4, "TST", "test4", 5));
+
 		String str = "(4, 1)";
 		String cmpstr = FEai.getMoveShortestPath(1, testBoard);
 		assertEquals("Expected " + str, str, cmpstr);
@@ -60,7 +63,6 @@ public class TestAi {
 													new Player(2, "TST", "test2", 5),
 													new Player(3, "TST", "test3", 5),
 													new Player(4, "TST", "test4", 5));
-
 			String str = "(4, 1)";
 			String cmpstr = FEai.getMoveShortestPath(1, testBoard);
 			assertEquals("Expected " + str, str, cmpstr);
