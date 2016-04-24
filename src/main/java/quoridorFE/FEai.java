@@ -129,7 +129,7 @@ public class FEai {
 		    // If it's not time just do shortest path.
 		    return getShitMove(player, qboard);
 	    	}
-	    }else */
+	    }else 
 		if(player == 2){
                     //if(qboard.getNodeByPlayerNumber(1).getyPos() > 4){
                     // Gotta check it legal too.. But increment everytime otherwise will try same move forever!
@@ -137,13 +137,15 @@ public class FEai {
                     if(counter < move.length-1 && isValid(player, qboard, move[counter]) ){
                         return move[counter];
 		    }
-                }
+                }*/
                 // If it's not time just do shortest path.
                 //else return getShitMove(player, qboard);
 	    //}
+
+
 	    if(!defendCloseOpponents(player, qboard).equals("") ){
-	    	return defendCloseOpponents(player, qboard);
-        }
+		return defendCloseOpponents(player, qboard);
+            }
             // If it's not time just do shortest path.
 	    return getMoveShortestPath(player, qboard);
 	}
@@ -200,18 +202,68 @@ public class FEai {
 	// Method defendCloseOpponents
 	private static String defendCloseOpponents(int player, QuoridorBoard qboard) {
 	    UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
-	    if(shortestPathToWin(2, qboard) < 4){
-		// Put a wall right in front of player 2
-		return "[(" + qboard.getNodeByPlayerNumber(2).getxPos() + ", " 
-		    +  qboard.getNodeByPlayerNumber(2).getyPos() + "), h]";
+	    // shortest guys player number paired with his shortest path to win.
+	    int[] playerPair = new int[]{0, 1000};
+	    //String m = "[(";
+	    // Iterate through all players
+	    for(int i=1; i<5; i++){
+		// If it is us or the player has been kicked.
+		if(i == player || qboard.getNodeByPlayerNumber(i) == null){
+		    continue;
+		}else{
+		    // Check for shortest path.
+		    int temp = shortestPathToWin(i, qboard);
+   	            if(temp < playerPair[1] && temp < 4){
+			playerPair[0] = i;
+			playerPair[1] = temp;
+		    }
+	        }
 	    }
- 	    return "";
+	    // Now we have the player who is quickest to winning and we need to find is next step on shortest path and block it with a wall.
+	    String hisMove = "" + getMoveShortestPath(playerPair[0], qboard);
+
+	    // parse out everything that is not a number
+	    hisMove = hisMove.replace(',', ' ');
+            hisMove = hisMove.replace('(', ' ');
+            hisMove = hisMove.replace(')', ' ');
+            hisMove = hisMove.replace('[', ' ');
+            hisMove = hisMove.replace(']', ' ');
+
+	    String[] holder = hisMove.trim().split("\\s++");
+
+            // We gotta remove this later.
+	    if(!qboard.isValidMove(playerPair[0], Integer.parseInt(holder[0]), Integer.parseInt(holder[1]))){
+                return "";
+            }
+
+	    // figure out which direction that is.
+	    //int dirY = Math.abs(qboard.getNodeByPlayerNumber(playerPair[0]).getyPos() - Integer.parseInt(holder[1]));
+	    int dirX = qboard.getNodeByPlayerNumber(playerPair[0]).getxPos() - Integer.parseInt(holder[0]);
+
+	    // Now use offset to move walls
+	    /*if(Integer.parseInt(holder[0]) == -1){
+		holder[0] = ""+(Integer.parseInt(holder[0]) - 1);
+	    }else if(Integer.parseInt(holder[1]) == -1){
+                holder[1] = ""+(Integer.parseInt(holder[1]) - 1);
+            }*/
+
+
+	    // give the wall coordinate that blocks that.
+	    switch(Math.abs(dirX)){
+		case 1:
+			//vertical
+		    return "[(" + holder[0] + ", " + holder[1] + "), v]";
+	        case 0:
+			//horizontial
+		    return "[(" + holder[0] + ", " + holder[1] + "), h]";
+	    }
+	    return "";
 	}
-	
+
 	// Param: player p, and an instance of the board
 	// Returns: shortest path to a winning node
 	private static int shortestPathToWin(int player, QuoridorBoard qboard){
-	
+
 	    ArrayList<BoardNode> winningNodes = generateWinningNodeList(player, qboard);
 	    UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
 	    int shortest = 10000000;
