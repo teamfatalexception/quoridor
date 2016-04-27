@@ -43,7 +43,7 @@ if [[ count -eq 2 ]]; then
 
 	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1 &
 	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2 &
-	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --gui
+	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --gui --delay 2000
 
 	echo Happy Hacking~
 else
@@ -52,7 +52,7 @@ else
 	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2 &
 	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port3 &
 	java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port4 &
-	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 localhost:$port3 localhost:$port4 --gui
+	java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 localhost:$port3 localhost:$port4 --gui --delay 2000
 
 	echo Happy Hacking~
 fi
