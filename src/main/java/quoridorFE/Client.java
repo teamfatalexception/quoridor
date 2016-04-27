@@ -169,7 +169,12 @@ public class Client  {
             for (int n = 0; n < args.length; n++){
                 line += args[n] + " ";
             }
-
+            for (int i = 1; i < args.length; i++) {
+                if(args[i].equals("--delay")) {
+                    DELAY = Integer.parseInt(args[i+1]);
+                    break;
+                }
+            }
 
             // Gotta check and see if they sent us any little flags. ;)
             if(line.contains("-auto_off")){
