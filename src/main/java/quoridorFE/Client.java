@@ -175,9 +175,9 @@ public class Client  {
                     break;
                 }
             }
-
+            System.out.println("Delay is set to: " + DELAY);
             // Gotta check and see if they sent us any little flags. ;)
-            if(line.contains("-auto_off")){
+            if(line.contains("--auto_off")){
                 automate = false;
                 System.out.println("        Automate is OFF");
             }
@@ -190,7 +190,6 @@ public class Client  {
                 System.out.println("    GUI Only is ON");
             }
 //TODO DELAY PARAMETER 
-            DELAY = 1000;
 
             //Replace all colons in line with whitespace
             String my_line = line.replaceAll(":", " ");
@@ -685,7 +684,8 @@ public class Client  {
 
                     // reads in characters from server
  		    String msg = IOscannerIn.nextLine();
- 		    System.out.println(msg);
+ 		    System.out.println("Recieved from Player: " + " msg: " + msg);
+
                     // tired of parsing clutter, so removed all.
                     msg = msg.replace(',', ' ');
                     msg = msg.replace('(', ' ');
