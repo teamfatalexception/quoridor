@@ -218,13 +218,13 @@ public class Server {
 				    String message = IOscannerIn.nextLine();
  
                                 // the message part of the ChatMessage
-				    System.out.println(message);
+				    System.out.println("Recieved: " + message);
                     if (helloSpin) {
                         if(message.equalsIgnoreCase("HELLO")) {
                             // Flip the hello toggle and build the IAM message
                             helloSpin = false;
                             answer = "IAM " + PLAYERNAME;
-                            System.out.println("Sending to the client: " + answer);
+                            System.out.println("Sending: " + answer);
                             writeMsg(answer);
                         }
                     } else if (gameSpin) {
@@ -249,7 +249,7 @@ public class Server {
 				
 			answer = "TESUJI " + FEai.getMoveShortestPath(playerId, board);
                         //answer = "TESUJI " + FEai.getShitMove(playerId, board);
-                        System.out.println("Sending to the client: " + answer);
+                        System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
 

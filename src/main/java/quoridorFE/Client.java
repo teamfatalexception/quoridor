@@ -36,7 +36,7 @@ public class Client  {
     public static boolean automate = true;
     public static boolean text_only = false;
     public static boolean gui_only = false;
-
+    public static int DELAY = 0;
     // This is our EVERYTHING, the board that will hold the players, walls and their board states.
     public static QuoridorBoard board;
     public static ArrayList<Client> clients;
@@ -170,6 +170,7 @@ public class Client  {
                 line += args[n] + " ";
             }
 
+
             // Gotta check and see if they sent us any little flags. ;)
             if(line.contains("-auto_off")){
                 automate = false;
@@ -183,8 +184,8 @@ public class Client  {
                 gui_only = true;
                 System.out.println("    GUI Only is ON");
             }
-
-
+//TODO DELAY PARAMETER 
+            DELAY = 1000;
 
             //Replace all colons in line with whitespace
             String my_line = line.replaceAll(":", " ");
@@ -404,7 +405,7 @@ public class Client  {
                 }
                 // Make thread sleep for a momment before requesting teh next move.
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(DELAY);
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -425,7 +426,7 @@ public class Client  {
 
 
 		try {
-                    Thread.sleep(100);
+                    Thread.sleep(DELAY);
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -552,7 +553,7 @@ public class Client  {
 
                             // Make thread sleep for a momment before requesting teh next move.
                             try {
-                                    Thread.sleep(400);
+                                    Thread.sleep(DELAY);
                             } catch(InterruptedException ex) {
                                     Thread.currentThread().interrupt();
                             }
