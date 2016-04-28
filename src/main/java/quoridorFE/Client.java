@@ -36,7 +36,7 @@ public class Client  {
     public static boolean automate = true;
     public static boolean text_only = false;
     public static boolean gui_only = false;
-    public static int DELAY = 0;
+    public static int DELAY = 500;
     // This is our EVERYTHING, the board that will hold the players, walls and their board states.
     public static QuoridorBoard board;
     public static ArrayList<Client> clients;
