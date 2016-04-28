@@ -12,7 +12,6 @@ public class TestAi {
                                                                                                         new Player(2, "TST", "test2", 5),
                                                                                                         new Player(3, "TST", "test3", 5),
                                                                                                         new Player(4, "TST", "test4", 5));
-
 		String str = "(4, 1)";
 		String cmpstr = FEai.getMoveShortestPath(1, testBoard);
 		assertEquals("Expected " + str, str, cmpstr);
@@ -101,19 +100,19 @@ public class TestAi {
 	}
 	
 	@Test
-	public void testDefendCloseOpponents2Player() {
+	public void testBlockClosestPlayer2() {
 		// Build testboard
 		QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5), 
 					    new Player(2, "TST", "test2", 5));
 		// Move player 2 to 4, 3
 		testBoard.movePawnUnchecked(2, 4, 3);
 		FEai testAI = new FEai();
-		String blockingWall = testAI.getMove(1, testBoard);// Asking for a move
+		String blockingWall = testAI.blockClosestOpponent(1, testBoard);// Asking for a move
 		assertEquals( "[(4, 2), h]", blockingWall);
 	}
 	
 	@Ignore
-	public void testDefendCloseOpponents4Player(){
+	public void testBlockClosestPlayer4(){
                 // Build testboard
                 QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5), 
                                             new Player(2, "TST", "test2", 5),
@@ -122,7 +121,7 @@ public class TestAi {
                 // Move player 2 to 4, 3
                 testBoard.movePawnUnchecked(3, 3, 4);
                 FEai testAI = new FEai();
-                String blockingWall = testAI.getMove(1, testBoard);// Asking for a move
+                String blockingWall = testAI.blockClosestOpponent(1, testBoard);// Asking for a move
 		assertEquals("[(2, 4), v]", blockingWall);
 	}
 }

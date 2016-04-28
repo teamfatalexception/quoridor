@@ -51,6 +51,11 @@ public class QuoridorBoard {
 		this(player1, player2, null, null);
 	}
 	
+
+	public int getNumPlayers(){
+	    return numPlayers;
+	}
+
 	/**
 	 * Constructor for initializing a 4 player quoridor board.
 	 * 
