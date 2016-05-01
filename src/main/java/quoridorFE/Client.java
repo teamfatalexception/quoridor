@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Semaphore;
 /*
  * The Client that can be run both as a console or a GUI
  */
@@ -31,6 +32,9 @@ public class Client  {
     private String server;
     private int port;
     public static Maze maze;
+
+    // Thread safe semaphore.
+    static Semaphore semaphore = new Semaphore(0);
 
     // Bools for our commandline parameter flags.
     public static boolean automate = true;
@@ -116,6 +120,12 @@ public class Client  {
                     IOscannerOut.println(msg);
            
     }
+
+    /*
+    Semaphore controls
+    */
+
+
 
    
     /*
@@ -561,6 +571,13 @@ public class Client  {
                             } catch(InterruptedException ex) {
                                     Thread.currentThread().interrupt();
                             }
+															
+			    try{
+ 		                semaphore.acquire();
+			    }catch(InterruptedException e){
+				System.out.println(e);
+			    }
+															
                     }
             }
     }
@@ -684,6 +701,9 @@ public class Client  {
 
                     // reads in characters from server
  		    String msg = IOscannerIn.nextLine();
+		    									
+		    semaphore.release();
+											
  		    System.out.println("Recieved from Player: " + " msg: " + msg);
 
                     // tired of parsing clutter, so removed all.
@@ -700,8 +720,7 @@ public class Client  {
 		    // It is ID speach.
 		    if(msg.contains("IAM")){
 		    	System.out.println(my_cord[0] + " " + my_cord[1]);
-                nameList.add(my_cord[1]);
-
+                	nameList.add(my_cord[1]);
 		    // It is a wall.
 		    }else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
 			//TODO Check if legal..
@@ -710,12 +729,12 @@ public class Client  {
                         //board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 			if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
 				System.out.println("IS GOOD!");
-        	    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+        	    		board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 				// Gotta broad cast all changes after that.
 				//System.out.println("ERROR 2?");
-                broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
+                		broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
 			}else{
-                System.out.println("BAM, KICKED!");
+                		System.out.println("BAM, KICKED!");
 				board.removePlayer(currentPlayer.getID());
 				broadcast(clients, "GOTE " + currentPlayer.getID());
                 

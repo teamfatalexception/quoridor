@@ -16,14 +16,22 @@ public class FEai {
 	    "[(4, 4), v]",
 	    "[(4, 6), v]",
 	    "[(4, 8), h]",
-	    "[(6, 8), h]"
-
+	    "[(6, 8), h]",
+            "[(2, 4), v]",
+            "[(2, 2), v]",
+            "[(7, 4), h]",
+            "[(7, 8), h]",
 	};
 	public static int counter = -1;
 
 
 	public FEai() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public static String getRecordedMove(){
+	    counter++;
+	    return move[counter];
 	}
 
 	
@@ -74,7 +82,6 @@ public class FEai {
 		// Currently, prints out all the path lengths from player to all other nodes on the board
 		/*ArrayList<int[]> pathChart = getPaths
 		    (qboard.getNodeByPlayerNumber(player), qboard);*/
-		
 		return retStr;
 	}
 	
@@ -97,9 +104,7 @@ public class FEai {
                     if (qboard.isValidMove(player, x, y, or) ) {
                         // we found a good move
 	                return true;
-                    }else{
-			System.out.println("	STRING IS ILLEGAL: " + attempt);
-		    }
+                    }
 		}else{
 
 		    // It is a pawn move.
@@ -119,23 +124,28 @@ public class FEai {
 	The actual AI move method.
 	**/
 	public static String getMove(int player, QuoridorBoard qboard){
-	    Random ran = new Random();
+	    Random ran = new Random(9001);
 	    int r = ran.nextInt(10);
 	    boolean keepgoing = true;
 	    String output = getMoveShortestPath(player, qboard);
 	    while(keepgoing){
+
                 // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
-		if((r % 2) == 0){
+		System.out.println(""+r);
+		if(r < 4){
 		    output = blockClosestOpponent(player, qboard);
+		}else if(r > 4 && r < 8){
+		    output = getRecordedMove();
 		}else{
-		    getMoveShortestPath(player, qboard);
+		    output = getMoveShortestPath(player, qboard);
 		}
+
 		// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
 		if(isValid(player, qboard, output)){
 		    keepgoing = false;
 		    System.out.println("        LEGAL MOVE:" + output);
 		}else{
-		    r = ran.nextInt(10) + 1;
+		    r = ran.nextInt(10);
 		    System.out.println("	ILLEGAL MOVE:" + output);
 		}
 	    }
@@ -199,20 +209,19 @@ public class FEai {
 
 	    //UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
 	    // shortest guys player number paired with his shortest path to win.
-	    int[] playerPair = new int[]{1, 1000};
+	    int[] playerPair = new int[]{0, 1000};
 
 	    // Iterate through all players
 	    for(int i=0; i<qboard.getNumPlayers()+1; i++){
 
 		// If it is us or the player has been kicked.
 		if(i == player || qboard.getNodeByPlayerNumber(i) == null){
-		    //System.out.println("	Player number " + i + " not found!");
-		    continue;
+		    System.out.println(qboard.getNodeByPlayerNumber(i));
 		}else{
 		    // Check for shortest path.
 		    int temp = shortestPathToWin(i, qboard);
    	            if(temp < playerPair[1]){
-			//System.out.println("	New shortest is:" + i + "!");
+			System.out.println("	New shortest is:" + i + "!");
 			playerPair[0] = i;
 			playerPair[1] = temp;
 		    }
@@ -228,10 +237,12 @@ public class FEai {
 	//Returns: string of wall to block that player's shortest path.
 	// Will be modified to smartly increase their shortest path the most.
         public static String blockPlayer(int player, QuoridorBoard qboard){
+	    System.out.println("	BLOCLKING:" + player);
 	    // Now we have the player who is quickest to winning and we need to find is next step on shortest path and block it with a wall.
-	    String hisMove = "" + getMoveShortestPath(player, qboard);
+	    String thisMove = "" + getMoveShortestPath(player, qboard);
 
 	    // parse out everything that is not a number into a nice array
+	    String hisMove = thisMove;
 	    hisMove = hisMove.replace(',', ' ');
             hisMove = hisMove.replace('(', ' ');
             hisMove = hisMove.replace(')', ' ');
@@ -258,7 +269,7 @@ public class FEai {
 	    //if(Math.abs(dirX) == 1 && isValid(player, qboard, ("["+hisMove+", v]") )){
 		//return "[" + hisMove + ", v]";
 	    //}else{
-  	        return "[" + hisMove + ", h]";
+  	        return "[" + thisMove + ", h]";
 	    //}
 	}
 
