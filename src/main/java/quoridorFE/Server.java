@@ -182,9 +182,6 @@ public class Server {
 
             // Constructor
             ClientThread(Socket socket) {
-                // a unique id
-                id = ++uniqueId;
-                System.out.println(id);
                 this.socket = socket;
                 /* Creating both Data Stream */
                 System.out.println("Thread trying to create Input/Output Streams");

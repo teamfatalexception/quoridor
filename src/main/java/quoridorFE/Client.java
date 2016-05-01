@@ -729,7 +729,8 @@ public class Client  {
                         //board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 			if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
 				System.out.println("IS GOOD!");
-        	    		board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+        	    		board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[2]), Integer.parseInt(my_cord[1]), my_cord[3].charAt(0));
+				System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
 				// Gotta broad cast all changes after that.
 				//System.out.println("ERROR 2?");
                 		broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
