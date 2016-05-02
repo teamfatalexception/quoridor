@@ -171,441 +171,431 @@ public class Client  {
     
     public static void main(String[] args) throws ClassNotFoundException, IOException {
 
-            //Board to use
-            Maze maze;
-            //Line to be used for regex
-            String line = "";
-            //Loop through commands and add them to line
-            for (int n = 0; n < args.length; n++){
-                line += args[n] + " ";
+        //Board to use
+        Maze maze;
+        //Line to be used for regex
+        String line = "";
+        //Loop through commands and add them to line
+        for (int n = 0; n < args.length; n++){
+            line += args[n] + " ";
+        }
+        for (int i = 1; i < args.length; i++) {
+            if(args[i].equals("--delay")) {
+                DELAY = Integer.parseInt(args[i+1]);
+                break;
             }
-            for (int i = 1; i < args.length; i++) {
-                if(args[i].equals("--delay")) {
-                    DELAY = Integer.parseInt(args[i+1]);
-                    break;
-                }
-            }
-            System.out.println("Delay is set to: " + DELAY);
-            // Gotta check and see if they sent us any little flags. ;)
-            if(line.contains("--auto_off")){
-                automate = false;
-                System.out.println("        Automate is OFF");
-            }
-            if(line.contains("--text")){
-                text_only = true;
-                System.out.println("    Text Only is ON");
-            }
-            if(line.contains("--gui")){
-                gui_only = true;
-                System.out.println("    GUI Only is ON");
-            }
-//TODO DELAY PARAMETER 
+        }
+        System.out.println("Delay is set to: " + DELAY);
+        // Gotta check and see if they sent us any little flags. ;)
+        if(line.contains("--auto_off")){
+            automate = false;
+            System.out.println("        Automate is OFF");
+        }
+        if(line.contains("--text")){
+            text_only = true;
+            System.out.println("    Text Only is ON");
+        }
+        if(line.contains("--gui")){
+            gui_only = true;
+            System.out.println("    GUI Only is ON");
+        }
+        //TODO DELAY PARAMETER 
 
-            //Replace all colons in line with whitespace
-            String my_line = line.replaceAll(":", " ");
+        //Replace all colons in line with whitespace
+        String my_line = line.replaceAll(":", " ");
 
-            //Split line up into individual string components
-            String[] wordsOfCommandLineParameters = my_line.split("\\s+");
+        //Split line up into individual string components
+        String[] wordsOfCommandLineParameters = my_line.split("\\s+");
 
-            // default values
-            int portNumber = 1500;  //Default port
-            String serverAddress = "localhost";  // Default hostname
+        // default values
+        int portNumber = 1500;  //Default port
+        String serverAddress = "localhost";  // Default hostname
 
 
-            //Instantiate several clients to use
-            Client client = new Client(serverAddress, portNumber);
-            Client client2 = new Client(serverAddress, portNumber);
-            Client client3 = new Client(serverAddress, portNumber);
-            Client client4 = new Client(serverAddress, portNumber);
+        //Instantiate several clients to use
+        Client client = new Client(serverAddress, portNumber);
+        Client client2 = new Client(serverAddress, portNumber);
+        Client client3 = new Client(serverAddress, portNumber);
+        Client client4 = new Client(serverAddress, portNumber);
 
-            //List for holding all clients
-            //ArrayList<Client> 
-	    clients =  new ArrayList<Client>();
+        //List for holding all clients
+        //ArrayList<Client> 
+        clients =  new ArrayList<Client>();
 
-            //TODO change the names of the patterns and matchers to be more descriptive!
+        //TODO change the names of the patterns and matchers to be more descriptive!
 
-            //Patter to use for checking if two players
-            //to check against command line parameters
-            String pattern = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
+        //Patter to use for checking if two players
+        //to check against command line parameters
+        String pattern = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
 
-            //Pattern to use for checking if four players
-            //to check against command line parameters
-            String pattern2 = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
+        //Pattern to use for checking if four players
+        //to check against command line parameters
+        String pattern2 = "(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)(.*)(\\s*)(:)(\\s*)(\\d+)(\\s*)(.*)(\\s*)(:)(\\s*)(\\d+)";
 
-            //Compile both patterns
-            Pattern r = Pattern.compile(pattern);
-            Pattern mr = Pattern.compile(pattern2);
+        //Compile both patterns
+        Pattern r = Pattern.compile(pattern);
+        Pattern mr = Pattern.compile(pattern2);
 
-            //Create matcher object to check for matching string
-            Matcher m = r.matcher(line);
-            Matcher m2 = mr.matcher(line);
+        //Create matcher object to check for matching string
+        Matcher m = r.matcher(line);
+        Matcher m2 = mr.matcher(line);
 
-            // depending of the number of arguments provided we fall through
-            //Only runs if there are four players
-            if(m2.find()) {
-                try {
-                    serverAddress = wordsOfCommandLineParameters[0];
-                    portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
-                    players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
+        // depending of the number of arguments provided we fall through
+        //Only runs if there are four players
+        if(m2.find()) {
+            try {
+                serverAddress = wordsOfCommandLineParameters[0];
+                portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
+                players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
 
-                    client = new Client(serverAddress, portNumber);
-                    serverAddress = wordsOfCommandLineParameters[2];
-                    portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
-                    players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
+                client = new Client(serverAddress, portNumber);
+                serverAddress = wordsOfCommandLineParameters[2];
+                portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
+                players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
 
-                    client2 = new Client(serverAddress, portNumber);
-                    serverAddress = wordsOfCommandLineParameters[4];
-                    portNumber = Integer.parseInt(wordsOfCommandLineParameters[5]);
-                    players.add(new Player(3, serverAddress, portNumber, 5, 0, 0));
+                client2 = new Client(serverAddress, portNumber);
+                serverAddress = wordsOfCommandLineParameters[4];
+                portNumber = Integer.parseInt(wordsOfCommandLineParameters[5]);
+                players.add(new Player(3, serverAddress, portNumber, 5, 0, 0));
 
-                    client3 = new Client(serverAddress, portNumber);
-                    serverAddress = wordsOfCommandLineParameters[6];
-                    portNumber = Integer.parseInt(wordsOfCommandLineParameters[7]);
-                    players.add(new Player(4, serverAddress, portNumber, 5, 0, 0));
+                client3 = new Client(serverAddress, portNumber);
+                serverAddress = wordsOfCommandLineParameters[6];
+                portNumber = Integer.parseInt(wordsOfCommandLineParameters[7]);
+                players.add(new Player(4, serverAddress, portNumber, 5, 0, 0));
 
-                    client4 = new Client(serverAddress, portNumber);
-                    clients.add(client);
-                    clients.add(client2);
-                    clients.add(client3);
-                    clients.add(client4);
-                    //Board to use
-                    maze = new Maze(9,9, 4);
-                    // New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
-                    board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0), new Player(3, serverAddress, portNumber, 5, 0, 0), new Player(4, serverAddress, portNumber, 5, 0, 0));
+                client4 = new Client(serverAddress, portNumber);
+                clients.add(client);
+                clients.add(client2);
+                clients.add(client3);
+                clients.add(client4);
+                //Board to use
+                maze = new Maze(9,9, 4);
+                // New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
+                board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0), new Player(3, serverAddress, portNumber, 5, 0, 0), new Player(4, serverAddress, portNumber, 5, 0, 0));
 
 
-                    // Setup player objects time.
-                    // Some of these values will change as they become useful, like starting
-					//positions for each player, etcc.
-                    // public Player(int ID, String name, int port, int wallsLeft, int startingX,
-					//int startingY){
-                    //players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
-                    currentPlayer = players.get(0);
+                // Setup player objects time.
+                // Some of these values will change as they become useful, like starting
+				//positions for each player, etcc.
+                // public Player(int ID, String name, int port, int wallsLeft, int startingX,
+				//int startingY){
+                //players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
+                currentPlayer = players.get(0);
 
-                    // test if we can start the connection to the Server
-                    // if it failed nothing we can do
-                    if(!client.start())
-                        return;
-                    if(!client2.start())
-                        return;
-                    if(!client3.start())
-                        return;
-                    if(!client4.start())
-                        return;
-                } catch(Exception e) {
-                    System.out.println("Invalid port number.");
-                    System.out.println("Usage is: > java Client [username] [portNumber] [serverAddress]");
+                // test if we can start the connection to the Server
+                // if it failed nothing we can do
+                if(!client.start())
                     return;
-                }
-            }
-
-            //Only runs if there are two players
-            else if(m.find()) {
-                try {
-                    serverAddress = wordsOfCommandLineParameters[0];
-                    portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
-                    //
-                    players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
-                    client = new Client(serverAddress, portNumber);
-                    serverAddress = wordsOfCommandLineParameters[2];
-                    portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
-                    //
-                    players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
-                    client2 = new Client(serverAddress, portNumber);
-                    clients.add(client);
-                    clients.add(client2);
-                    //Board to use
-                    maze = new Maze(9,9, 2);
-                    // New board init  --          public QuoridorBoard(Player player1, Player player2) {
-                    board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0));
-
-
-                    // test if we can start the connection to the Server
-                    // if it failed nothing we can do
-                    if(!client.start())
-                        return;
-                    if(!client2.start())
-                        return;
-
-                }
-
-                catch(Exception e) {
-                    System.out.println("Invalid port number.");
-                    System.out.println("Usage is: > java Client [username] [portNumber] [serverAddress]");
+                if(!client2.start())
                     return;
-                }
-            }
-
-            else {
-                    System.out.println("Usage is: > java Client [username] [portNumber] {serverAddress]");
+                if(!client3.start())
                     return;
+                if(!client4.start())
+                    return;
+            } catch(Exception e) {
+                System.out.println("Invalid port number.");
+                System.out.println("Usage is: > java Client [username] [portNumber] [serverAddress]");
+                return;
             }
-            /* Make it so an unexpected exit will shut down everything nicely.
-            Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-                    public void run() {
-                            System.out.println("        ...cleaning up.");
-                            System.exit(0);
-                    }
-            }, "Shutdown-thread"));*/
+        } else if(m.find()) {
+        	// only runs if there are 2 players
+            try {
+                serverAddress = wordsOfCommandLineParameters[0];
+                portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
+                //
+                players.add(0, new Player(1, serverAddress, portNumber, 5, 0, 0));
+                client = new Client(serverAddress, portNumber);
+                serverAddress = wordsOfCommandLineParameters[2];
+                portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
+                //
+                players.add(1, new Player(2, serverAddress, portNumber, 5, 0, 0));
+                client2 = new Client(serverAddress, portNumber);
+                clients.add(client);
+                clients.add(client2);
+                //Board to use
+                maze = new Maze(9,9, 2);
+                // New board init  --          public QuoridorBoard(Player player1, Player player2) {
+                board = new QuoridorBoard(players.get(0), players.get(1));
 
 
-            // wait for messages from user
-            Scanner scan = new Scanner(System.in);
-            // loop forever for message from the user
-            int turn = 0;
-            /*
-                    Main Interaction Loop
-            */
-            //while(true) {
+                // test if we can start the connection to the Server
+                // if it failed nothing we can do
+                if(!client.start())
+                    return;
+                if(!client2.start())
+                    return;
 
-                    /*( This section is for deciding how to represent the the board (text or gui)
-                    if(text_only) {
-                        System.out.println(maze);
-                    }
-		    */
+            }
 
-                    // Test if gui only flag is called.                        
-             if(gui_only) {
+            catch(Exception e) {
+                System.out.println("Invalid port number.");
+                System.out.println("Usage is: > java Client [username] [portNumber] [serverAddress]");
+                return;
+            }
+        }
 
-                        System.out.println("GUI is launching!!");
+        else {
+            System.out.println("Usage is: > java Client [username] [portNumber] {serverAddress]");
+            return;
+        }
+        
+        // wait for messages from user
+        Scanner scan = new Scanner(System.in);
+        // loop forever for message from the user
+        int turn = 0;
+        /*
+                Main Interaction Loop
+        */
+        //while(true) {
 
-                        //We only want to launch the viewer once
-                        //gui_only = false;
-                        
-                        // Launch to open Andrew's Viewer class
-                        // Viewer.launch(Viewer.class);  
-                        
-                        //TODO Launch GUI.
-                        
-                        /**
-                         * How to launch the application thread in order to be
-                         * able to update the player move
-                         */
-                        Thread t = new Thread() {
-                            @Override
-                            public void run() {
-                                javafx.application.Application.launch(Viewer.class);
-                            }
-                        };
-                        t.setDaemon(true);
-                        t.start();
-                        /**
-                         * Called after launching the UI
-                         */
-                        viewer = Viewer.waitForViewerStartUp();
-
-                       
-                        
-                        // Call function from set board
-                        viewer.setBoard(board);
-                        
-                        //viewer.testTheReference();
-                        //System.out.println("I ran the thing.");
-                        viewer.refresh();
-
-                        // Refresh the board state 
-                        // Viewer.refresh();
-                          
-                    }
-                   
-
-		//hello section
-		int temp = 1;
-                for (Client c : clients) {
-
-                    c.sendMessage("HELLO");
-                    System.out.println("Writing HELLO to player" + temp);
-                    temp++;
+                /*( This section is for deciding how to represent the the board (text or gui)
+                if(text_only) {
+                    System.out.println(maze);
                 }
-                // Make thread sleep for a momment before requesting teh next move.
-                try {
-                    Thread.sleep(DELAY);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
+	    */
 
-		//game
-                for(int i = 0 ; i < nameList.size(); i++){
-                    System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
-
-                    //If two players print send server its player number along with opponents name.
-                    if(clients.size() == 2){
-                         clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
-                    }
-                    //If four players send server its player number along with all opponents names
-                    if(clients.size() == 4){
-                         clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
-                    }
- 		}
-
-
-		try {
-                    Thread.sleep(DELAY);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-
-
-
-		while(true){
-
-                    // Test if automated is run
-                    if(!automate){
-                            System.out.print("> ");
-                            // read message from user
-                            String msg = scan.nextLine();
-                            //System.out.println("Recieved this from a server: " + msg);
-                            // String parsing users input, looking for next turn so next move can be requested.
-                            if(msg.equalsIgnoreCase("exit")){
-                                    //for (Client c : clients) {
-                                            //c.disconnect();
-                                    //}
-				//disconnect();
-				cleanUp(clients);
-				//cleanUp(client2);
-                                    System.exit(0);
-                            }else if(msg.equalsIgnoreCase("next")){
-                                    // first thing is send hello to all the servers...
-                                    // Ask for a move from the next player.
-                                    //System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
-
-                                    // This functionality could easily go inside a wrapper method, but just gonna
-				//place move request inside here.
-                                    if(turn == 0){
-					    currentPlayer = players.get(0);
-                                            nextTurn(client,clients.size());
-                                    }else if(turn == 1){
-					    currentPlayer = players.get(1);
-                                            nextTurn(client2,clients.size());
-                                            //client2.sendMessage("MYOUSHU");
-                                    }else if(turn == 2){
-					    currentPlayer = players.get(2);
-                                            nextTurn(client3,clients.size());
-                                            //client3.sendMessage("MYOUSHU");
-                                    }else if(turn == 3){
-					    currentPlayer = players.get(3);
-                                            nextTurn(client4,clients.size());
-                                            //client4.sendMessage("MYOUSHU");
-                                    }else{
-                                            System.out.println("ERROR >> Turn unrecognized.");
-                                    }
-
-                                    // Count value to iterate through players turns each time next is called. Makes
-				//sure to iterate based on number of players.
-                                    if(turn >= players.size()-1){
-                                            turn = 0;
-                                    }else{
-                                            turn++;
-                                    }
-				    if(gui_only){
-		                        // Refreshing the GUI
-        		                viewer.refresh();
-				    }
-        	                    // Gotta check if there is a winner yet!
-                	            if(isWinner()){
-                        	        System.out.println("There is a winner!");
-                                	cleanUp(clients);
-                                	System.exit(0);
-                            	    }
-
-
-                            }else if(msg.equalsIgnoreCase("help")){
-                                    //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
-		    //You can request next turn uring NEXT or quit using EXIT.");
-                                    usage();
-                            }else{
-                                    continue;
-                            }
-                    }else{
-			//System.out.println("	Nope");
+                // Test if gui only flag is called.                        
+        if(gui_only) {
+		
+			System.out.println("GUI is launching!!");
 			
-                            //If automation is on we do . . .
-                            System.out.println("Automating");
-
-                            if(turn == 0){
-
-				    currentPlayer = players.get(0);
-                                    nextTurn(client,clients.size());
-                            }else if(turn == 1){
-
-                                    currentPlayer = players.get(1);
-                                    nextTurn(client2,clients.size());
-                                    //client2.sendMessage("MYOUSHU");
-                            }else if(turn == 2){
-
-				    currentPlayer = players.get(2);
-                                    nextTurn(client3,clients.size());
-                                    //client3.sendMessage("MYOUSHU");
-                            }else if(turn == 3){
-
-				    currentPlayer = players.get(3);
-                                    nextTurn(client4,clients.size());
-                                    //client4.sendMessage("MYOUSHU");
-                            }else{
-                                    System.out.println("ERROR >> Turn unrecognized.");
-                            }
-                            // Count value to iterate through players turns each time next is called. Makes
-			//sure to iterate based on number of players.
-                            if(turn >= players.size()-1){
-                                    turn = 0;
-                            }else{
-                                    turn++;
-                            }
-
-			    if(gui_only){
-			        // Refreshing the GUI
-        	                viewer.refresh();
-		            }
-
-			    // Gotta check if there is a winner yet!
-			    if(isWinner()){
-			        System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
-				//broadcast(clients, "");
-                                cleanUp(clients);
-                                System.exit(0);
+			//We only want to launch the viewer once
+			//gui_only = false;
+			
+			// Launch to open Andrew's Viewer class
+			// Viewer.launch(Viewer.class);  
+			
+			//TODO Launch GUI.
+			
+			/**
+			 * How to launch the application thread in order to be
+			 * able to update the player move
+			 */
+			Thread t = new Thread() {
+			    @Override
+			    public void run() {
+			        javafx.application.Application.launch(Viewer.class);
 			    }
+			};
+			t.setDaemon(true);
+			t.start();
+			/**
+			 * Called after launching the UI
+			 */
+			viewer = Viewer.waitForViewerStartUp();
+			    
+			// Call function from set board
+			viewer.setBoard(board);
+			
+			//viewer.testTheReference();
+			//System.out.println("I ran the thing.");
+			viewer.refresh();
+			
+			// Refresh the board state 
+			// Viewer.refresh();
+		  
+        }
+               
 
-                            // Make thread sleep for a momment before requesting teh next move.
-                            try {
-                                    Thread.sleep(DELAY);
-                            } catch(InterruptedException ex) {
-                                    Thread.currentThread().interrupt();
-                            }
-															
-			    try{
- 		                semaphore.acquire();
-			    }catch(InterruptedException e){
-				System.out.println(e);
-			    }
-															
-                    }
+        //hello section
+        int temp = 1;
+        for (Client c : clients) {
+            c.sendMessage("HELLO");
+            System.out.println("Writing HELLO to player" + temp);
+            temp++;
+        }
+        // Make thread sleep for a momment before requesting teh next move.
+        try {
+            Thread.sleep(DELAY);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+        //game
+        // FIXME why is this a for loop and not for each and why is does it depend on yet another collection that we have to keep synced with all the others
+        for(int i = 0 ; i < nameList.size(); i++){
+            System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
+
+            //If two players print send server its player number along with opponents name.
+            if(clients.size() == 2){
+                 clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
             }
+            //If four players send server its player number along with all opponents names
+            if(clients.size() == 4){
+                 clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
+            }
+        }
+
+
+        try {
+        	Thread.sleep(DELAY);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+
+
+        while(true){
+
+                // Test if automated is run
+            if(!automate) {
+                    System.out.print("> ");
+                    // read message from user
+                    String msg = scan.nextLine();
+                    //System.out.println("Recieved this from a server: " + msg);
+                    // String parsing users input, looking for next turn so next move can be requested.
+                    if(msg.equalsIgnoreCase("exit")){
+                        //for (Client c : clients) {
+                                //c.disconnect();
+                        //}
+						//disconnect();
+						cleanUp(clients);
+						//cleanUp(client2);
+                        System.exit(0);
+                    }else if(msg.equalsIgnoreCase("next")){
+						// first thing is send hello to all the servers...
+						// Ask for a move from the next player.
+						//System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
+						
+						// This functionality could easily go inside a wrapper method, but just gonna
+						//place move request inside here.
+						if(turn == 0){
+							currentPlayer = players.get(0);
+						    nextTurn(client,clients.size());
+						}else if(turn == 1){
+							currentPlayer = players.get(1);
+						    nextTurn(client2,clients.size());
+						    //client2.sendMessage("MYOUSHU");
+						}else if(turn == 2){
+							currentPlayer = players.get(2);
+						    nextTurn(client3,clients.size());
+						    //client3.sendMessage("MYOUSHU");
+						}else if(turn == 3){
+							currentPlayer = players.get(3);
+						    nextTurn(client4,clients.size());
+						    //client4.sendMessage("MYOUSHU");
+						}else{
+						    System.out.println("ERROR >> Turn unrecognized.");
+						}
+						
+						// Count value to iterate through players turns each time next is called. Makes
+						// sure to iterate based on number of players.
+		                if(turn >= players.size()-1){
+		                        turn = 0;
+		                }else{
+		                        turn++;
+		                }
+						if(gui_only){
+				            // Refreshing the GUI
+				            viewer.refresh();
+						}
+			            // Gotta check if there is a winner yet!
+						if(isWinner()){
+						    System.out.println("There is a winner!");
+						    cleanUp(clients);
+							System.exit(0);
+						}
+
+                    } else if(msg.equalsIgnoreCase("help")){
+                        //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
+                    	//You can request next turn uring NEXT or quit using EXIT.");
+                        usage();
+                    }else{
+                        continue;
+                    }
+            } else {
+				//System.out.println("	Nope");
+				
+				//If automation is on we do . . .
+				System.out.println("Automating");
+				
+				if(turn == 0){
+				
+					currentPlayer = players.get(0);
+			        nextTurn(client,clients.size());
+				}else if(turn == 1){
+				
+			        currentPlayer = players.get(1);
+			        nextTurn(client2,clients.size());
+			        //client2.sendMessage("MYOUSHU");
+				}else if(turn == 2){
+				
+					currentPlayer = players.get(2);
+			        nextTurn(client3,clients.size());
+			        //client3.sendMessage("MYOUSHU");
+				}else if(turn == 3){
+				
+					currentPlayer = players.get(3);
+			        nextTurn(client4,clients.size());
+			        //client4.sendMessage("MYOUSHU");
+				}else{
+			        System.out.println("ERROR >> Turn unrecognized.");
+				}
+				// Count value to iterate through players turns each time next is called. Makes
+				//sure to iterate based on number of players.
+	            if(turn >= players.size()-1){
+                    turn = 0;
+	            }else{
+                    turn++;
+	            }
+				
+				if(gui_only){
+				    // Refreshing the GUI
+			        viewer.refresh();
+				}
+				
+				// Gotta check if there is a winner yet!
+				if(isWinner()){
+				    System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
+				    //broadcast(clients, "");
+				    // TODO tell the servers who won
+	                cleanUp(clients);
+	                System.exit(0);
+				}
+				
+	            // Make thread sleep for a moment before requesting the next move.
+	            try {
+                    Thread.sleep(DELAY);
+	            } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+	            }
+															
+				try{
+			        semaphore.acquire();
+				}catch(InterruptedException e){
+					System.out.println(e);
+				}
+													
+            }
+        }
     }
 
     // Basically a simple method that shuts down all the servers.
     public static void cleanUp(ArrayList<Client> clients){
-            System.out.println("  Cleaning up!");
-            for(int i=0; i<clients.size(); i++){
-                    try{
-                            System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
-                            clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
-			clients.get(i).disconnect();
-                    }catch(Exception e){
-                            System.out.print(e);
-                            System.out.println("    Sending to: " + clients.get(i).port);
-                    }
+        System.out.println("  Cleaning up!");
+        // FIXME could be for each loop
+        for(int i=0; i<clients.size(); i++){
+            try{
+                System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
+                clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
+                clients.get(i).disconnect();
+            }catch(Exception e){
+                System.out.print(e);
+                System.out.println("    Sending to: " + clients.get(i).port);
             }
+        }
     }
 
 	public static void broadcast(ArrayList<Client> clients, String text){
+		// FIXME could be for each loop
 		for(int i=0; i<clients.size(); i++){
-	                    try{
-	                            clients.get(i).sendMessage(text);
-	                    }catch(Exception e){
-	                            System.out.print(e);
-	                            System.out.println("    Failure to send " + text + " to " + clients.get(i).port);
-	                    }
-	            }
+            try{
+                clients.get(i).sendMessage(text);
+            }catch(Exception e){
+                System.out.print(e);
+                System.out.println("    Failure to send " + text + " to " + clients.get(i).port);
+            }
+        }
 	}
 
 
@@ -632,14 +622,6 @@ public class Client  {
     }
 
 
-    // Doesn't work yet. place holder really. Will take cocrdinates as parameters and
-    //boot bad players.
-    public static boolean isValidMove(){
-            // all moves are valid here muthahhhhh
-            return true;
-    }
-
-
     //Checks the state of all players and states whether someone has won the match.
     public static boolean isWinner(){
 
@@ -649,23 +631,6 @@ public class Client  {
 		return true;
 	}
 
-	// Loop through players and see if any has reached it's win condition.
-	/*
-	for(int i=0; i<players.size(); i++){
-		if(players.get(i).getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
-			return true;
-		}
-		if(players.get(i).getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
-                            return true;
-		}
-		if(players.get(i).getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
-                            return true;
-		}
-		if(players.get(i).getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
-                            return true;
-		}
-	}
-	*/
 	
 	for (Player p : board.getPlayerSet()) {
 		if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
@@ -699,64 +664,77 @@ public class Client  {
             	//While the thread is still running
                 while(true) {
 
-                    // reads in characters from server
- 		    String msg = IOscannerIn.nextLine();
-		    									
-		    semaphore.release();
-											
- 		    System.out.println("Recieved from Player: " + " msg: " + msg);
+					// reads in characters from server
+					String msg = IOscannerIn.nextLine();
+														
+					semaphore.release();
+													
+					System.out.println("Recieved from Player: " + " msg: " + msg);
+					
+			        // tired of parsing clutter, so removed all.
+			        msg = msg.replace(',', ' ');
+			        msg = msg.replace('(', ' ');
+			        msg = msg.replace(')', ' ');
+			        msg = msg.replace('[', ' ');
+			        msg = msg.replace(']', ' ');
+			        //System.out.println("    Fixed String. " + msg);
+			
+					// splits string into seperat components
+					String[] my_cord = msg.split("\\s+");
+					
+					// It is ID speach.
+					if(msg.contains("IAM")) {
+						System.out.println(my_cord[0] + " " + my_cord[1]);
+					    nameList.add(my_cord[1]);
+					// It is a wall.
+					} else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
+						
+						//maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
+						//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
+						//board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+						if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[2]), Integer.parseInt(my_cord[1]), my_cord[3].charAt(0)) ){
+							System.out.println("IS GOOD!");
+						    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[2]), Integer.parseInt(my_cord[1]), my_cord[3].charAt(0));
+							System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
+							// Gotta broadcast all changes after that.
+							//System.out.println("ERROR 2?");
+						    broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
+						} else {
+						    System.out.println("BAM, KICKED!");
+							board.removePlayer(currentPlayer.getID());
+							broadcast(clients, "GOTE " + currentPlayer.getID());
+							if(isWinner()){
+							    System.out.println("There is a winner!");
+							    // TODO tell the servers who won
+							    cleanUp(clients);
+								System.exit(0);
+							}
+						    
+						}
+					// It is a pawn movement.
+					}else if(msg.contains("TESUJI")) {
+					    if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
+							board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+							broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
+					    } else {
+					    	System.out.println("BAM, KICKED!");
+					        board.removePlayer(currentPlayer.getID());
+					        broadcast(clients, "GOTE " + currentPlayer.getID());
+					        if(isWinner()){
+							    System.out.println("There is a winner!");
+							    // TODO tell the servers who won
+							    cleanUp(clients);
+								System.exit(0);
+							}
+					        
+					
+					    }
+					} else {
+						System.out.println("I didn't quite catch that..");
+					}
 
-                    // tired of parsing clutter, so removed all.
-                    msg = msg.replace(',', ' ');
-                    msg = msg.replace('(', ' ');
-                    msg = msg.replace(')', ' ');
-                    msg = msg.replace('[', ' ');
-                    msg = msg.replace(']', ' ');
-                    //System.out.println("    Fixed String. " + msg);
-
-		    // splits string into seperat components
-                    String[] my_cord = msg.split("\\s+");
-
-		    // It is ID speach.
-		    if(msg.contains("IAM")){
-		    	System.out.println(my_cord[0] + " " + my_cord[1]);
-                	nameList.add(my_cord[1]);
-		    // It is a wall.
-		    }else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
-			//TODO Check if legal..
-                        //maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
-			//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
-                        //board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
-			if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
-				System.out.println("IS GOOD!");
-        	    		board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[2]), Integer.parseInt(my_cord[1]), my_cord[3].charAt(0));
-				System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
-				// Gotta broad cast all changes after that.
-				//System.out.println("ERROR 2?");
-                		broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
-			}else{
-                		System.out.println("BAM, KICKED!");
-				board.removePlayer(currentPlayer.getID());
-				broadcast(clients, "GOTE " + currentPlayer.getID());
-                
-			}
-		    // It is a pawn movement.
-		    }else if(msg.contains("TESUJI")){
-                if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
-    				board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
-    				broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
-                }else{
-                	System.out.println("BAM, KICKED!");
-                    board.removePlayer(currentPlayer.getID());
-                    broadcast(clients, "GOTE " + currentPlayer.getID());
-
-                }
-		    }else{
-		    	System.out.println("I didn't quite catch that..");
-		    }
-
-                }
             }
+        }
     }
     // this is a method to print out a "prompt" for the game, it tells you how to send
     //moves and such.

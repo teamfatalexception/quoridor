@@ -110,18 +110,6 @@ public class ClientTest {
 		assertTrue(Client.isWinner());
     }
 
-    /**
-     * Test of isValidMove method, of class Client.
-     */
-    @Ignore
-    @Test
-    public void testIsValidMove() {
-        System.out.println("isValidMove");
-        boolean expResult = false;
-        boolean result = Client.isValidMove();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    
     
 }

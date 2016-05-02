@@ -129,25 +129,24 @@ public class FEai {
 	    boolean keepgoing = true;
 	    String output = getMoveShortestPath(player, qboard);
 	    while(keepgoing){
-
-                // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
-		System.out.println(""+r);
-		if(r < 4){
-		    output = blockClosestOpponent(player, qboard);
-		}else if(r > 4 && r < 8){
-		    output = getRecordedMove();
-		}else{
-		    output = getMoveShortestPath(player, qboard);
-		}
-
-		// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
-		if(isValid(player, qboard, output)){
-		    keepgoing = false;
-		    System.out.println("        LEGAL MOVE:" + output);
-		}else{
-		    r = ran.nextInt(10);
-		    System.out.println("	ILLEGAL MOVE:" + output);
-		}
+	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
+			System.out.println(""+r);
+			if(r < 4){
+			    output = blockClosestOpponent(player, qboard);
+			}else if(r > 4 && r < 8){
+			    output = getRecordedMove();
+			}else{
+			    output = getMoveShortestPath(player, qboard);
+			}
+	
+			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
+			if(isValid(player, qboard, output)){
+			    keepgoing = false;
+			    System.out.println("        LEGAL MOVE:" + output);
+			}else{
+			    r = ran.nextInt(10);
+			    System.out.println("	ILLEGAL MOVE:" + output);
+			}
 	    }
 	    return output;
 	}
