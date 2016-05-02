@@ -33,8 +33,6 @@ public class QuoridorBoard {
 	
 	HashSet<Player> playerSet;
 	
-	private int numPlayers;
-	
 	private HashSet<Wall> wallSet;
 	private HashSet<Wall> invalidWallSet;
 	
@@ -51,10 +49,6 @@ public class QuoridorBoard {
 		this(player1, player2, null, null);
 	}
 	
-
-	public int getNumPlayers(){
-	    return numPlayers;
-	}
 
 	/**
 	 * Constructor for initializing a 4 player quoridor board.
@@ -106,13 +100,10 @@ public class QuoridorBoard {
 		playerSet.add(player1);
 		playerSet.add(player2);
 		if (player3 != null && player4 != null) {
-			numPlayers = 4;
 			this.getNodeByCoords(0, 4).setPlayer(player3);
 			this.getNodeByCoords(8, 4).setPlayer(player4);
 			playerSet.add(player3);
 			playerSet.add(player4);
-		} else {
-			numPlayers = 2;
 		}
 		// Now the players have been placed on the board.
 		
@@ -356,7 +347,7 @@ public class QuoridorBoard {
 		}
 		p.decrementWalls();
 		
-		Wall placedWall = new Wall(x, y, orientation);
+		Wall placedWall = new Wall(player, x, y, orientation);
 		wallSet.add(placedWall);
 		generateInvalidWalls(placedWall);
 	}

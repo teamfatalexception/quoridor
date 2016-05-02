@@ -3,12 +3,21 @@ package quoridorFE;
 
 
 public class Wall {
+	int player;
 	int x;
 	int y;
 	char orientation;
 	
 	public Wall(int x, int y, char orientation) {
 		super();
+		this.x = x;
+		this.y = y;
+		this.orientation = orientation;
+	}
+	
+	public Wall(int player, int x, int y, char orientation) {
+		super();
+		this.player = player;
 		this.x = x;
 		this.y = y;
 		this.orientation = orientation;

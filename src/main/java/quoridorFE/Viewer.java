@@ -38,7 +38,18 @@ import javafx.stage.Stage;
 
 
 public class Viewer extends Application {
+	/*
+	private static double DEFAULT_TILE_DIMMENSION = 50;
+	private static double DEFAULT_WALL_WIDTH = DEFAULT_TILE_DIMMENSION / 5;
+	private static double DEFAULT_WALL_HEIGHT = (2 * DEFAULT_TILE_DIMMENSION) + DEFAULT_TILE_DIMMENSION;  
+	private static double DEFAULT_TILE_TRANSLATE = DEFAULT_WALL_WIDTH * DEFAULT_TILE_DIMMENSION;
+	*/
+	private static int DEFAULT_WALL_WIDTH = 20; // Used to be 30. Needs to be 15
+	private static int DEFAULT_WALL_HEIGHT = 5 * DEFAULT_WALL_WIDTH;  // Used to be 90. Needs to be 75
 
+	private static int DEFAULT_TILE_TRANSLATE = 3 * DEFAULT_WALL_WIDTH;
+	private static int DEFAULT_TILE_DIMMENSION = 2 * DEFAULT_WALL_WIDTH;
+	
 	public static final CountDownLatch latch = new CountDownLatch(1);
 	public static Viewer viewer = null;
 	private QuoridorBoard board;
@@ -46,15 +57,15 @@ public class Viewer extends Application {
 	private BorderPane theBorderPane;
 	private Pane centerPane;
 	
+	private Text p1Text = null;
+	private Text p2Text = null;
+	private Text p3Text = null;
+	private Text p4Text = null;
+	
+	
 	private ArrayList<Tile> tileList;
 	
-	private static int DEFAULT_WALL_WIDTH = 25; // Used to be 30. Needs to be 15
-	private static int DEFAULT_WALL_HEIGHT = 5 * DEFAULT_WALL_WIDTH;  // Used to be 90. Needs to be 75
-
-	private static int DEFAULT_TILE_TRANSLATE = 3 * DEFAULT_WALL_WIDTH;
-	private static int DEFAULT_TILE_DIMMENSION = 2 * DEFAULT_WALL_WIDTH;
 	
-
 	
 	public Viewer() {
 		viewerStartUp(this);
@@ -109,7 +120,9 @@ public class Viewer extends Application {
             	
             	// This finds the tile and draws a circle on it
             	for (Player p : board.getPlayerSet()) {
-            		getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), board.getNodeByPlayerNumber(p.getID()).getyPos()).placePawn();
+            		Tile t = getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), 
+            								board.getNodeByPlayerNumber(p.getID()).getyPos());
+            		t.placePawn(p.getID());
             	}
             	
             	// This draws the walls
@@ -117,6 +130,12 @@ public class Viewer extends Application {
 					centerPane.getChildren().add(convertWall(w));
 					//System.out.println("Should be drawing: " + w.toString());
 				}
+				
+				// TODO refresh the wall count
+				p1Text.setText("TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+				p2Text.setText("TEST");
+				p3Text.setText("TEST");
+				p4Text.setText("TEST");
 				
             }
 		});
@@ -153,7 +172,15 @@ public class Viewer extends Application {
     		rect.setTranslateX(w.y * (3 * DEFAULT_WALL_WIDTH));
     		
     	}
-    	rect.setFill(Color.RED);
+    	if (w.player == 1) {
+    		rect.setFill(Color.RED);
+    	} else if (w.player == 2) {
+    		rect.setFill(Color.BLUE);
+    	} else if (w.player == 3) {
+    		rect.setFill(Color.GREEN);
+    	} else if (w.player == 4) {
+    		rect.setFill(Color.ORANGE);
+    	}
     	
     	return rect;
     }
@@ -248,7 +275,7 @@ public class Viewer extends Application {
 
 		VBox right = new VBox(50);
 		right.setId("right");
-		right.setPrefWidth(200);
+		//right.setPrefWidth(200);
 		// Set properties for the VBox
 	    right.setStyle("-fx-background-color: #000088;");
 	    
@@ -256,25 +283,25 @@ public class Viewer extends Application {
 
 	    // HBox to display p1's walls
 	    HBox p1 = new HBox(15);
-	    Text p1Text = new Text("PLAYER 1'S WALLS: 0");
+	    p1Text = new Text("PLAYER 1'S WALLS: 0");
 	    p1Text.setId("WallCount");
 	    p1.getChildren().addAll(p1Text);
 
 	    // Displaying p2's walls
 	    HBox p2 = new HBox(15);
-	    Text p2Text = new Text("PLAYER 2'S WALLS: 0");
+	    p2Text = new Text("PLAYER 2'S WALLS: 0");
 	    p2Text.setId("WallCount");
 	    p2.getChildren().addAll(p2Text);
 
 	    // Displaying p3's walls
 	    HBox p3 = new HBox(15);
-	    Text p3Text = new Text("PLAYER 3'S WALLS: 0");
+	    p3Text = new Text("PLAYER 3'S WALLS: 0");
 	    p3Text.setId("WallCount");
 	    p3.getChildren().addAll(p3Text);
 	    
 	    // Displaying p4's walls
 	    HBox p4 = new HBox(15);
-	    Text p4Text = new Text("PLAYER 4'S WALLS: 0");
+	    p4Text = new Text("PLAYER 4'S WALLS: 0");
 	    p4Text.setId("WallCount");
 	    p4.getChildren().addAll(p4Text);
     
@@ -437,7 +464,7 @@ public class Viewer extends Application {
 	    // Set the scene for the stage
 	    theStage.setScene(scene);
 
-		// Make the stage viewable. This is called last in the function
+		// Make the stage viewable.
 		theStage.show();
 		latch.countDown();
 	}
@@ -451,15 +478,16 @@ public class Viewer extends Application {
 		theBorderPane = new BorderPane();
 		tileList = new ArrayList<Tile>();
 
-	    theBorderPane.setTop(drawTop());
+	    //theBorderPane.setTop(drawTop());
 	    //theBorderPane.setBottom(drawBottom());
-	    theBorderPane.setRight(drawRight());
-	    //theBorderPane.setLeft(drawLeft());      // Comment this out and it will draw andrews left from within client
+	    
 	    centerPane = new Pane();
 
-	    centerPane.setPrefSize(DEFAULT_TILE_DIMMENSION * 17, DEFAULT_TILE_DIMMENSION * 17);
+	    centerPane.setPrefSize(DEFAULT_TILE_DIMMENSION * 13, DEFAULT_TILE_DIMMENSION * 13);
 	    
 	    theBorderPane.setCenter(drawCenterWithPane(centerPane));
+	    
+	    //theBorderPane.setRight(drawRight());
 
 	    // Master control for the window size
 	    //theBorderPane.setPrefSize(1000, 600);	// Width X Height
@@ -496,11 +524,11 @@ public class Viewer extends Application {
 			// Create a new rectangle for the grid
 			Rectangle border = new Rectangle (DEFAULT_TILE_DIMMENSION, DEFAULT_TILE_DIMMENSION);
 			
-			// Make the tile transparent (white)
-			border.setFill(Color.GREEN);
+			
+			border.setFill(Color.BLACK);
 
 			// Set the line color of the tiles to black
-			border.setStroke(Color.TRANSPARENT);
+			//border.setStroke(Color.TRANSPARENT);
 
 			getChildren().addAll(border);
 			/*
@@ -536,11 +564,22 @@ public class Viewer extends Application {
 			return theColumn;
 		}
 
-		public void placePawn() {
+		public void placePawn(int player) {
 			circle = new Circle();
 			circle.setCenterX(50.0f);
 			circle.setCenterY(50.0f);
-			circle.setRadius(5.0f);
+			circle.setRadius(DEFAULT_TILE_DIMMENSION * 0.3);
+			
+			if (player == 1) {
+				circle.setFill(Color.RED);
+	    	} else if (player == 2) {
+	    		circle.setFill(Color.BLUE);
+	    	} else if (player == 3) {
+	    		circle.setFill(Color.GREEN);
+	    	} else if (player == 4) {
+	    		circle.setFill(Color.ORANGE);
+	    	}
+			
 			getChildren().add(circle);
 		}
 		
