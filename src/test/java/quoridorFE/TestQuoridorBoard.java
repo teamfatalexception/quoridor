@@ -105,7 +105,7 @@ public class TestQuoridorBoard {
 		testBoard.placeWall(1, 0, 1, 'h');
 		testBoard.placeWall(1, 0, 7, 'h');
 		//testBoard.placeWall(1, 6, 5, 'h'); // fifth used wall, next attempt by player 1 to place wall should end badly
-		assertFalse("isValid() should return false when a player tries to place an 5th wall.", testBoard.isValidMove(1, 3, 4, 'v'));
+		assertFalse("isValid() should return false when a player tries to place an 6th wall.", testBoard.isValidMove(1, 3, 4, 'v'));
 		
 		// test out of bounds wall placements
 		assertFalse("isValid() should return false for any out of bounds wall placement.", testBoard.isValidMove(2, 0, 10, 'h'));
