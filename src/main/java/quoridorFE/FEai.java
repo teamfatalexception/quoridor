@@ -211,20 +211,21 @@ public class FEai {
 	    int[] playerPair = new int[]{0, 1000};
 
 	    // Iterate through all players
-	    for(int i=0; i<qboard.getNumPlayers()+1; i++){
+	    // FIXME this could be a for each loop
+	    for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
 
-		// If it is us or the player has been kicked.
-		if(i == player || qboard.getNodeByPlayerNumber(i) == null){
-		    System.out.println(qboard.getNodeByPlayerNumber(i));
-		}else{
-		    // Check for shortest path.
-		    int temp = shortestPathToWin(i, qboard);
+			// If it is us or the player has been kicked.
+			if(i == player || qboard.getNodeByPlayerNumber(i) == null) {
+			    System.out.println(qboard.getNodeByPlayerNumber(i));
+			} else {
+			    // Check for shortest path.
+			    int temp = shortestPathToWin(i, qboard);
    	            if(temp < playerPair[1]){
-			System.out.println("	New shortest is:" + i + "!");
-			playerPair[0] = i;
-			playerPair[1] = temp;
+					System.out.println("	New shortest is:" + i + "!");
+					playerPair[0] = i;
+					playerPair[1] = temp;
+   	            }
 		    }
-	        }
 	    }
 	    // Now that we have the closest player lets return a blocking wall on him.
 	    return blockPlayer(playerPair[0], qboard);
