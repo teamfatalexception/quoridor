@@ -56,6 +56,7 @@ public class Viewer extends Application {
 	
 	private BorderPane theBorderPane;
 	private Pane centerPane;
+	private Scene mainScene = null;
 	
 	private Text p1Text = null;
 	private Text p2Text = null;
@@ -121,7 +122,7 @@ public class Viewer extends Application {
             	// This finds the tile and draws a circle on it
             	for (Player p : board.getPlayerSet()) {
             		Tile t = getTileByCoords(board.getNodeByPlayerNumber(p.getID()).getxPos(), 
-            								board.getNodeByPlayerNumber(p.getID()).getyPos());
+            								 board.getNodeByPlayerNumber(p.getID()).getyPos());
             		t.placePawn(p.getID());
             	}
             	
@@ -132,11 +133,19 @@ public class Viewer extends Application {
 				}
 				
 				// TODO refresh the wall count
-				p1Text.setText("TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-				p2Text.setText("TEST");
-				p3Text.setText("TEST");
-				p4Text.setText("TEST");
-				
+				for (Player p : board.getPlayerSet()) {
+					
+					if (p.getID() == 1) {
+						p1Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+					} else if (p.getID() == 2) {
+						p2Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+					} else if (p.getID() == 3) {
+						p3Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+					} else if (p.getID() == 4) {
+						p4Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+					}
+					
+				}
             }
 		});
     }
@@ -280,28 +289,29 @@ public class Viewer extends Application {
 	    right.setStyle("-fx-background-color: #000088;");
 	    
 	    right.setSpacing(15);
+	    right.setPadding(new Insets(10));
 
 	    // HBox to display p1's walls
 	    HBox p1 = new HBox(15);
-	    p1Text = new Text("PLAYER 1'S WALLS: 0");
+	    p1Text = new Text("");
 	    p1Text.setId("WallCount");
 	    p1.getChildren().addAll(p1Text);
 
 	    // Displaying p2's walls
 	    HBox p2 = new HBox(15);
-	    p2Text = new Text("PLAYER 2'S WALLS: 0");
+	    p2Text = new Text("");
 	    p2Text.setId("WallCount");
 	    p2.getChildren().addAll(p2Text);
 
 	    // Displaying p3's walls
 	    HBox p3 = new HBox(15);
-	    p3Text = new Text("PLAYER 3'S WALLS: 0");
+	    p3Text = new Text("");
 	    p3Text.setId("WallCount");
 	    p3.getChildren().addAll(p3Text);
 	    
 	    // Displaying p4's walls
 	    HBox p4 = new HBox(15);
-	    p4Text = new Text("PLAYER 4'S WALLS: 0");
+	    p4Text = new Text("");
 	    p4Text.setId("WallCount");
 	    p4.getChildren().addAll(p4Text);
     
@@ -456,13 +466,13 @@ public class Viewer extends Application {
 	    // Set the title of the stage
    	    theStage.setTitle("Quoridor");
 
-	    Scene scene = new Scene(theBorderPane);
+	    mainScene = new Scene(theBorderPane);
 
 	    // Add a stylesheet to the scene
-	    scene.getStylesheets().add("application/ViewerStyle.css");
+	    mainScene.getStylesheets().add("application/ViewerStyle.css");
 	    
 	    // Set the scene for the stage
-	    theStage.setScene(scene);
+	    theStage.setScene(mainScene);
 
 		// Make the stage viewable.
 		theStage.show();
@@ -480,11 +490,12 @@ public class Viewer extends Application {
 
 	    //theBorderPane.setTop(drawTop());
 	    //theBorderPane.setBottom(drawBottom());
+		theBorderPane.setRight(drawRight());
 	    
 	    centerPane = new Pane();
 
+	    centerPane.setMaxSize(DEFAULT_TILE_DIMMENSION * 13, DEFAULT_TILE_DIMMENSION * 13);
 	    centerPane.setPrefSize(DEFAULT_TILE_DIMMENSION * 13, DEFAULT_TILE_DIMMENSION * 13);
-	    
 	    theBorderPane.setCenter(drawCenterWithPane(centerPane));
 	    
 	    //theBorderPane.setRight(drawRight());
