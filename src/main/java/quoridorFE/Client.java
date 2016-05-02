@@ -35,6 +35,7 @@ public class Client  {
 
     // Thread safe semaphore.
     static Semaphore semaphore = new Semaphore(0);
+    public boolean listen_loop = true;
 
     // Bools for our commandline parameter flags.
     public static boolean automate = true;
@@ -406,7 +407,7 @@ public class Client  {
         }
         // Make thread sleep for a momment before requesting teh next move.
         try {
-            Thread.sleep(DELAY);
+            Thread.sleep(100);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -428,7 +429,7 @@ public class Client  {
 
 
         try {
-        	Thread.sleep(DELAY);
+        	Thread.sleep(100);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -449,7 +450,7 @@ public class Client  {
                                 //c.disconnect();
                         //}
 						//disconnect();
-						cleanUp(clients);
+			//cleanUp(clients);
 						//cleanUp(client2);
                         System.exit(0);
                     }else if(msg.equalsIgnoreCase("next")){
@@ -490,11 +491,11 @@ public class Client  {
 				            viewer.refresh();
 						}
 			            // Gotta check if there is a winner yet!
-						if(isWinner()){
+						/*if(isWinner()){
 						    System.out.println("There is a winner!");
 						    cleanUp(clients);
-							System.exit(0);
-						}
+							//System.exit(0);
+						}*/
 
                     } else if(msg.equalsIgnoreCase("help")){
                         //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
@@ -549,8 +550,9 @@ public class Client  {
 				    System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
 				    //broadcast(clients, "");
 				    // TODO tell the servers who won
-	                cleanUp(clients);
-	                System.exit(0);
+	                	    cleanUp(clients);
+	                	    //System.exit(0);
+				    automate = false;
 				}
 				
 	            // Make thread sleep for a moment before requesting the next move.
@@ -559,32 +561,35 @@ public class Client  {
 	            } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
 	            }
-															
+															/*
 				try{
 			        semaphore.acquire();
 				}catch(InterruptedException e){
 					System.out.println(e);
 				}
-													
+													*/
             }
         }
     }
 
+
     // Basically a simple method that shuts down all the servers.
     public static void cleanUp(ArrayList<Client> clients){
         System.out.println("  Cleaning up!");
+	listen_loop = false;
         // FIXME could be for each loop
-        for(int i=0; i<clients.size(); i++){
+        for(int i=0; i<clients.size()-1; i++){
             try{
                 System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
                 clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
-                clients.get(i).disconnect();
+                //clients.get(i).disconnect();
             }catch(Exception e){
                 System.out.print(e);
                 System.out.println("    Sending to: " + clients.get(i).port);
             }
         }
     }
+
 
 	public static void broadcast(ArrayList<Client> clients, String text){
 		// FIXME could be for each loop
@@ -627,10 +632,9 @@ public class Client  {
 
 	//If only one player remains!
 	if(players.size() <= 1){
-		System.out.println("Player x has won!");
+		System.out.println("One player remains, end of game!");
 		return true;
 	}
-
 	
 	for (Player p : board.getPlayerSet()) {
 		if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
@@ -647,7 +651,6 @@ public class Client  {
 		}
 	}
 	
-
 	// If we found nothing then no one has won yet return false.
 	return false;
 }
@@ -662,12 +665,12 @@ public class Client  {
             public void run() {
 
             	//While the thread is still running
-                while(true) {
+                while(listen_loop) {
 
 					// reads in characters from server
 					String msg = IOscannerIn.nextLine();
 														
-					semaphore.release();
+					//semaphore.release();
 													
 					System.out.println("Recieved from Player: " + " msg: " + msg);
 					
@@ -707,7 +710,7 @@ public class Client  {
 							    System.out.println("There is a winner!");
 							    // TODO tell the servers who won
 							    cleanUp(clients);
-								System.exit(0);
+								//System.exit(0);
 							}
 						    
 						}
@@ -724,7 +727,7 @@ public class Client  {
 							    System.out.println("There is a winner!");
 							    // TODO tell the servers who won
 							    cleanUp(clients);
-								System.exit(0);
+								//System.exit(0);
 							}
 					        
 					
