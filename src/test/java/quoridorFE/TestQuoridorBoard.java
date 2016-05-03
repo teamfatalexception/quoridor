@@ -122,6 +122,30 @@ public class TestQuoridorBoard {
 		// test another bad wall case
 		assertFalse("isValidMove() should return false for a wall placementt hat would intersect another wall.", testBoard.isValidMove(1, 0, 7, 'v'));
 	}
+	
+	@Test
+	public void bigFatWallTest() {
+		Player p1 = new Player(1, "test", "test1", 5);
+		Player p2 = new Player(2, "test", "test2", 5);
+		Player p3 = new Player(3, "test", "test3", 5);
+		Player p4 = new Player(4, "test", "test4", 5);
+		QuoridorBoard qboard = new QuoridorBoard(p1, p2, p3, p4);
+		
+		for (int i = 0; i<=7; i++) {
+			for (int j = 0; j<=7; j++) {
+				assertTrue("Wall placed at (" + i + ", " + j + "), 'h' should be valid.", qboard.isValidMove(1, i, j, 'h'));
+				assertTrue("Wall placed at (" + i + ", " + j + "), 'v' should be valid.", qboard.isValidMove(1, i, j, 'v'));
+			}
+		}
+		
+		
+		
+		
+		
+		
+	}
+	
+	
 
 	@Test
 	public void testPlaceWall() {
