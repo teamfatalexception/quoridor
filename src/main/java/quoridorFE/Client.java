@@ -35,7 +35,7 @@ public class Client  {
 
     // Thread safe semaphore.
     static Semaphore semaphore = new Semaphore(0);
-    public boolean listen_loop = true;
+    public static boolean listen_loop = true;
 
     // Bools for our commandline parameter flags.
     public static boolean automate = true;
@@ -522,46 +522,44 @@ public class Client  {
 				}else if(turn == 2){
 				
 					currentPlayer = players.get(2);
-			        nextTurn(client3,clients.size());
+			        	nextTurn(client3,clients.size());
 			        //client3.sendMessage("MYOUSHU");
 				}else if(turn == 3){
 				
 					currentPlayer = players.get(3);
-			        nextTurn(client4,clients.size());
+				        nextTurn(client4,clients.size());
 			        //client4.sendMessage("MYOUSHU");
 				}else{
-			        System.out.println("ERROR >> Turn unrecognized.");
+				        System.out.println("ERROR >> Turn unrecognized.");
 				}
 				// Count value to iterate through players turns each time next is called. Makes
 				//sure to iterate based on number of players.
-	            if(turn >= players.size()-1){
-                    turn = 0;
-	            }else{
-                    turn++;
-	            }
+	            		if(turn >= players.size()-1){
+                    			turn = 0;
+	            		}else{
+                    			turn++;
+	            		}
 				
 				if(gui_only){
-				    // Refreshing the GUI
-			        viewer.refresh();
+				    	// Refreshing the GUI
+			        	viewer.refresh();
 				}
 				
 				// Gotta check if there is a winner yet!
-				if(isWinner()){
-				    System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
-				    //broadcast(clients, "");
-				    // TODO tell the servers who won
-	                	    cleanUp(clients);
-	                	    //System.exit(0);
-				    automate = false;
+		    		if(isWinner()){
+			    		System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
+					//broadcast(clients, "");
+	                	    	cleanUp(clients);
+	                	    	//System.exit(0);
+				    	automate = false;
 				}
 				
-	            // Make thread sleep for a moment before requesting the next move.
-	            try {
-                    Thread.sleep(DELAY);
-	            } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-	            }
-															/*
+	            		// Make thread sleep for a moment before requesting the next move.
+	            		try {
+                    			Thread.sleep(DELAY);
+	            		} catch(InterruptedException ex) {
+                    			Thread.currentThread().interrupt();
+	            		}											/*
 				try{
 			        semaphore.acquire();
 				}catch(InterruptedException e){
@@ -631,7 +629,7 @@ public class Client  {
     public static boolean isWinner(){
 
 	//If only one player remains!
-	if(players.size() <= 1){
+	if(board.getPlayerSet().size() <= 1){
 		System.out.println("One player remains, end of game!");
 		return true;
 	}

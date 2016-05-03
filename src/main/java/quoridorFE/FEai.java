@@ -16,11 +16,11 @@ public class FEai {
 	    "[(4, 4), v]",
 	    "[(4, 6), v]",
 	    "[(4, 8), h]",
-	    "[(6, 8), h]",
+	    "[(6, 8), v]",
             "[(2, 4), v]",
             "[(2, 2), v]",
             "[(7, 4), h]",
-            "[(7, 8), h]",
+            "[(7, 8), v]"
 	};
 	public static int counter = -1;
 
@@ -30,7 +30,12 @@ public class FEai {
 	}
 
 	public static String getRecordedMove(){
-	    counter++;
+	    if(counter >= move.length-1){
+		System.out.println("	Reseting count!");
+		counter = 0;
+	    }else{
+	    	counter++;
+	    }
 	    return move[counter];
 	}
 
@@ -124,16 +129,16 @@ public class FEai {
 	The actual AI move method.
 	**/
 	public static String getMove(int player, QuoridorBoard qboard){
-	    Random ran = new Random(9001);
+	    Random ran = new Random();
 	    int r = ran.nextInt(10);
 	    boolean keepgoing = true;
 	    String output = getMoveShortestPath(player, qboard);
 	    while(keepgoing){
 	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
 			System.out.println(""+r);
-			if(r < 4){
+			if(r < 5){
 			    output = blockClosestOpponent(player, qboard);
-			}else if(r > 4 && r < 8){
+			}else if(r == 6){
 			    output = getRecordedMove();
 			}else{
 			    output = getMoveShortestPath(player, qboard);
@@ -258,19 +263,32 @@ public class FEai {
             int dirX = curX - Integer.parseInt(holder[0]);
 	    int dirY = curY - Integer.parseInt(holder[1]);
 
-	    // Gotta build an offset based on direction.
+	    /* Gotta build an offset based on direction.
 	    if(Integer.parseInt(holder[0]) == -1){
 		holder[0] = ""+(Integer.parseInt(holder[0]) - 1);
 	    }else if(Integer.parseInt(holder[1]) == -1){
                 holder[1] = ""+(Integer.parseInt(holder[1]) - 1);
             }
 
-	    // Do orientation based on their direction they will move.
-	    //if(Math.abs(dirX) == 1 && isValid(player, qboard, ("["+hisMove+", v]") )){
-		//return "[" + hisMove + ", v]";
-	    //}else{
+	     Do orientation based on their direction they will move.
+	    if(Math.abs(dirX) == 1 && isValid(player, qboard, ("["+hisMove+", v]") )){
+		return "[" + hisMove + ", v]";
+	    }else{
   	        return "[" + thisMove + ", h]";
-	    //}
+	    }*/
+
+	    // Now that we know his direction of movement lets try blocking it.
+	    if(dirX == -1){
+		return "[(" + (Integer.parseInt(holder[0]) - 1) + ", " + (Integer.parseInt(holder[1])) + "), h]";
+	    }else if(dirX == 1){
+		return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), h]";
+	    }else if(dirY == -1){
+                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1]) + 1) + "), v]";
+	    }else if(dirY == 1){
+                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), v]";
+	    }else{
+	        return "[" + thisMove + ", h]";
+	    }
 	}
 
 
