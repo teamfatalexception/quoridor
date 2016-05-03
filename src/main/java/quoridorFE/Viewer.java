@@ -177,8 +177,8 @@ public class Viewer extends Application {
     	} else {
     		rect = new Rectangle(DEFAULT_WALL_HEIGHT, DEFAULT_WALL_WIDTH);
     		
-    		rect.setTranslateY((DEFAULT_WALL_WIDTH * 2) + (3 * w.x * DEFAULT_WALL_WIDTH));    
-    		rect.setTranslateX(w.y * (3 * DEFAULT_WALL_WIDTH));
+    		rect.setTranslateX(3 * w.x * DEFAULT_WALL_WIDTH);    
+    		rect.setTranslateY((w.y * DEFAULT_TILE_TRANSLATE) + (2 * DEFAULT_WALL_WIDTH));
     		
     	}
     	if (w.player == 1) {

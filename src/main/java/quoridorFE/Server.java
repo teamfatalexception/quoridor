@@ -264,10 +264,12 @@ public class Server {
 			if(message.contains("h") || message.contains("v")){
 				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
 				board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
+				System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
 			}else{
 				// ..else is a pawn move
 				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
 				board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
+				System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
 			}
 
                         System.out.println("Recieved: " + message);

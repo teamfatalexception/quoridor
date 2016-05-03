@@ -419,7 +419,7 @@ public class QuoridorBoard {
 		currentLocation.setPlayer(null);
 	}
 
-	public void removePlayer(int playerId) {
+	public synchronized void removePlayer(int playerId) {
 		this.getNodeByPlayerNumber(playerId).setPlayer(null); // Remove player from space
 		
 		Player kicked = null;
