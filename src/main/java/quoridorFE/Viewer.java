@@ -286,7 +286,7 @@ public class Viewer extends Application {
 		right.setId("right");
 		//right.setPrefWidth(200);
 		// Set properties for the VBox
-	    right.setStyle("-fx-background-color: #000088;");
+	    right.setStyle("-fx-background-color: #47AFAF;");
 	    
 	    right.setSpacing(15);
 	    right.setPadding(new Insets(10));
@@ -452,6 +452,7 @@ public class Viewer extends Application {
 			} // END FOR
 		} // END FOR 
 		
+		thePane.setStyle("-fx-background-color: #E89F65;");
 		return thePane;
 	}
     
@@ -537,7 +538,7 @@ public class Viewer extends Application {
 			
 			
 			border.setFill(Color.BLACK);
-
+			//border.setStyle("-fx-background-color: #B94629;");
 			// Set the line color of the tiles to black
 			//border.setStroke(Color.TRANSPARENT);
 
