@@ -59,7 +59,7 @@ public class Viewer extends Application {
 	private Scene mainScene = null;
 	
 	private Text p1Text = null;
-	private Text p2Text = null;
+	private Text p2Text = null;	
 	private Text p3Text = null;
 	private Text p4Text = null;
 	
@@ -189,8 +189,7 @@ public class Viewer extends Application {
     		rect.setFill(Color.GREEN);
     	} else if (w.player == 4) {
     		rect.setFill(Color.ORANGE);
-    	}
-    	
+    	} 	
     	return rect;
     }
 
@@ -286,7 +285,7 @@ public class Viewer extends Application {
 		right.setId("right");
 		//right.setPrefWidth(200);
 		// Set properties for the VBox
-	    right.setStyle("-fx-background-color: #47AFAF;");
+	    right.setStyle("-fx-background-color: #E89F65;");
 	    
 	    right.setSpacing(15);
 	    right.setPadding(new Insets(10));
@@ -295,24 +294,28 @@ public class Viewer extends Application {
 	    HBox p1 = new HBox(15);
 	    p1Text = new Text("");
 	    p1Text.setId("WallCount");
+	    p1Text.setStyle("-fx-text-inner-color: RED;");
 	    p1.getChildren().addAll(p1Text);
 
 	    // Displaying p2's walls
 	    HBox p2 = new HBox(15);
 	    p2Text = new Text("");
 	    p2Text.setId("WallCount");
+	    p2Text.setStyle("-fx-text-inner-color: BLUE;");
 	    p2.getChildren().addAll(p2Text);
 
 	    // Displaying p3's walls
 	    HBox p3 = new HBox(15);
 	    p3Text = new Text("");
 	    p3Text.setId("WallCount");
+	    p3Text.setStyle("-fx-text-inner-color: GREEN;");
 	    p3.getChildren().addAll(p3Text);
 	    
 	    // Displaying p4's walls
 	    HBox p4 = new HBox(15);
 	    p4Text = new Text("");
 	    p4Text.setId("WallCount");
+	    p4Text.setStyle("-fx-text-inner-color: ORANGE;");
 	    p4.getChildren().addAll(p4Text);
     
 	    // Vbox buttons holds all of the buttons
@@ -487,6 +490,7 @@ public class Viewer extends Application {
 	public void init() {
 
 		theBorderPane = new BorderPane();
+		theBorderPane.setStyle("-fx-background-color: #b94629;");
 		tileList = new ArrayList<Tile>();
 
 	    //theBorderPane.setTop(drawTop());
