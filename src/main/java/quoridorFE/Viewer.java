@@ -138,12 +138,16 @@ public class Viewer extends Application {
 					
 					if (p.getID() == 1) {
 						p1Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+						p1Text.setFill(Color.RED);
 					} else if (p.getID() == 2) {
 						p2Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+						p2Text.setFill(Color.BLUE);
 					} else if (p.getID() == 3) {
 						p3Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+						p3Text.setFill(Color.GREEN);
 					} else if (p.getID() == 4) {
 						p4Text.setText(p.getName() + " Walls: " + p.wallsLeft());
+						p4Text.setFill(Color.PURPLE);
 					}
 					
 				}
@@ -189,7 +193,7 @@ public class Viewer extends Application {
     	} else if (w.player == 3) {
     		rect.setFill(Color.GREEN);
     	} else if (w.player == 4) {
-    		rect.setFill(Color.ORANGE);
+    		rect.setFill(Color.PURPLE);
     	} 	
     	return rect;
     }
@@ -316,7 +320,7 @@ public class Viewer extends Application {
 	    HBox p4 = new HBox(15);
 	    p4Text = new Text("");
 	    p4Text.setId("WallCount");
-	    p4Text.setStyle("-fx-text-inner-color: ORANGE;");
+	    p4Text.setStyle("-fx-text-inner-color: PURPLE;");
 	    p4.getChildren().addAll(p4Text);
     
 	    // Vbox buttons holds all of the buttons
@@ -597,18 +601,22 @@ public class Viewer extends Application {
 			if (player == 1) {
 				circle.setFill(Color.RED);
 				playerNumberText.setText("1");
+				playerNumberText.setFill(Color.WHITE);
 				stack.getChildren().addAll(circle,playerNumberText);
 	    	} else if (player == 2) {
 	    		circle.setFill(Color.BLUE);
 	    		playerNumberText.setText("2");
+	    		playerNumberText.setFill(Color.WHITE);
 	    		stack.getChildren().addAll(circle,playerNumberText);
 	    	} else if (player == 3) {
 	    		circle.setFill(Color.GREEN);
 	    		playerNumberText.setText("3");
+	    		playerNumberText.setFill(Color.WHITE);
 	    		stack.getChildren().addAll(circle,playerNumberText);
 	    	} else if (player == 4) {
-	    		circle.setFill(Color.ORANGE);
+	    		circle.setFill(Color.PURPLE);
 	    		playerNumberText.setText("4");
+	    		playerNumberText.setFill(Color.WHITE);
 	    		stack.getChildren().addAll(circle,playerNumberText);
 	    	}
 			
