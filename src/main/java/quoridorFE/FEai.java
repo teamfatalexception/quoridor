@@ -106,7 +106,7 @@ public class FEai {
 		    x = Integer.parseInt("" + attempt.charAt(2));
 		    y = Integer.parseInt("" + attempt.charAt(5));
 		    or = attempt.charAt(9);
-                    if (qboard.isValidMove(player, x, y, or) ) {
+                    if (qboard.isValidMove(player, x, y, or)) {
                         // we found a good move
 	                return true;
                     }
@@ -124,6 +124,24 @@ public class FEai {
 	}
 	
 	
+	/* Copying team morty's AI concept
+	public static String getMove2(int player, QuoridorBoard qboard){
+	    //iterate through other players.
+	    String move = getMoveShortestPath(player, qboard);
+	    for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
+		//if their length is shorter than ours, block them.
+  	        if(shortestPathToWin(i, qboard) < shortestPathToWin(player, qboard) && i != player){
+		    move = blockPlayer(i, qboard);
+	        }
+	    }
+	    //if(isValid(player, qboard, move)){
+	 	return move;
+	    //}else{
+		//return getRecordedMove();
+	    //}
+	    //return move
+	}*/
+
 	
 	/**
 	The actual AI move method.
@@ -136,21 +154,24 @@ public class FEai {
 	    while(keepgoing){
 	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
 			System.out.println(""+r);
-			if(r < 5){
+			if(r < 3){
 			    output = blockClosestOpponent(player, qboard);
-			}else if(r == 6){
+			}else if(r == 4){
 			    output = getRecordedMove();
-			}else{
-			    output = getMoveShortestPath(player, qboard);
-			}
-	
+			}//else{
+			    //output = getMoveShortestPath(player, qboard);
+			    //<Up>output = blockPlayer(output, qboard);
+			//}
 			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
-			if(isValid(player, qboard, output)){
+			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(""+output.charAt(2)),  Integer.parseInt(""+output.charAt(5)), output.charAt(9))){
 			    keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
+			}else if(qboard.isValidMove(player, Integer.parseInt(""+output.charAt(1)),  Integer.parseInt(""+output.charAt(4)))){
+			    keepgoing = false;
+                            System.out.println("        LEGAL MOVE:" + output);
 			}else{
 			    r = ran.nextInt(10);
-			    System.out.println("	ILLEGAL MOVE:" + output);
+			    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
 			}
 	    }
 	    return output;
@@ -225,12 +246,12 @@ public class FEai {
 			} else {
 			    // Check for shortest path.
 			    int temp = shortestPathToWin(i, qboard);
-   	            if(temp < playerPair[1]){
-					System.out.println("	New shortest is:" + i + "!");
-					playerPair[0] = i;
-					playerPair[1] = temp;
-   	            }
-		    }
+   	            	    if(temp < playerPair[1]){
+				System.out.println("	New shortest is:" + i + "!");
+				playerPair[0] = i;
+				playerPair[1] = temp;
+   	            	    }
+		        }
 	    }
 	    // Now that we have the closest player lets return a blocking wall on him.
 	    return blockPlayer(playerPair[0], qboard);
@@ -279,13 +300,13 @@ public class FEai {
 
 	    // Now that we know his direction of movement lets try blocking it.
 	    if(dirX == -1){
-		return "[(" + (Integer.parseInt(holder[0]) - 1) + ", " + (Integer.parseInt(holder[1])) + "), h]";
+		return "[(" + (Integer.parseInt(holder[0]) - 1) + ", " + (Integer.parseInt(holder[1])) + "), v]";
 	    }else if(dirX == 1){
-		return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), h]";
+		return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), v]";
 	    }else if(dirY == -1){
-                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1]) + 1) + "), v]";
+                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1]) + 1) + "), h]";
 	    }else if(dirY == 1){
-                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), v]";
+                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), h]";
 	    }else{
 	        return "[" + thisMove + ", h]";
 	    }

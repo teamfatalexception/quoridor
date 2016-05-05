@@ -111,7 +111,7 @@ public class TestAi {
 		assertEquals( "[(4, 2), h]", blockingWall);
 	}
 	
-	@Ignore
+	@Test
 	public void testBlockClosestPlayer4(){
                 // Build testboard
                 QuoridorBoard testBoard = new QuoridorBoard(new Player(1, "TST", "test1", 5), 
@@ -122,6 +122,6 @@ public class TestAi {
                 testBoard.movePawnUnchecked(3, 3, 4);
                 FEai testAI = new FEai();
                 String blockingWall = testAI.blockClosestOpponent(1, testBoard);// Asking for a move
-		assertEquals("[(2, 4), v]", blockingWall);
+		assertEquals("[(3, 4), v]", blockingWall);
 	}
 }

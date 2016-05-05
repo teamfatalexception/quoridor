@@ -92,9 +92,11 @@ public class ClientTest {
     * Test of isWinner method, of class Client.
     **/
     @Test
-    public void testIsWinner(){
-    	System.out.println("No or one players!");
-		assertTrue(Client.isWinner());
+    public void testIsWinner0(){
+	Client.board = new QuoridorBoard(new Player(1, "localhost", 8888, 5, 0, 0), new Player(2, "localhost", 9999, 5, 0, 0));
+	Client.board.removePlayer(1);
+    	System.out.println("Player two should be only remaining, thus winner!");
+	assertTrue(Client.isWinner());
     }
 
     @Test
