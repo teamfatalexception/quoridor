@@ -13,14 +13,14 @@ public class FEai {
 
 	// Some global variables.
 	public static String move[] = {
-	    "[(4, 4), v]",
+	    //"[(4, 4), v]",
 	    "[(4, 6), v]",
-	    "[(4, 8), h]",
-	    "[(6, 8), v]",
+	    "[(4, 5), h]",
+	    "[(6, 2), v]",
             "[(2, 4), v]",
             "[(2, 2), v]",
             "[(7, 4), h]",
-            "[(7, 8), v]"
+            "[(7, 7), v]"
 	};
 	public static int counter = -1;
 
@@ -98,6 +98,7 @@ public class FEai {
 	public static boolean isValid(int player, QuoridorBoard qboard, String attempt){
 
 		// Gotta check if it's a wall or a move.
+		boolean verdict = false;
 		int x, y;
 		char or;
 		if(attempt.contains("v") || attempt.contains("h")){
@@ -108,7 +109,7 @@ public class FEai {
 		    or = attempt.charAt(9);
                     if (qboard.isValidMove(player, x, y, or)) {
                         // we found a good move
-	                return true;
+	                verdict = true;
                     }
 		}else{
 
@@ -117,10 +118,15 @@ public class FEai {
 	     	    y = Integer.parseInt(""+attempt.charAt(4));
                     if (qboard.isValidMove(player, x, y) ) {
                         // we found a good move
-                        return true;
+                        verdict = true;
                     }
 		}
-		return false;
+
+	        // HArdcoded checking.
+		if(x > 7  || y > 7){
+			verdict = false;
+		}
+		return verdict;
 	}
 	
 	
@@ -154,10 +160,11 @@ public class FEai {
 	    while(keepgoing){
 	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
 			System.out.println(""+r);
-			if(r < 3){
+			output = getMoveShortestPath(player, qboard);
+			if(r < 4){
 			    output = blockClosestOpponent(player, qboard);
-			}else if(r == 4){
-			    output = getRecordedMove();
+			//}else if(r == 4){
+			    //output = getRecordedMove();
 			}//else{
 			    //output = getMoveShortestPath(player, qboard);
 			    //<Up>output = blockPlayer(output, qboard);
@@ -176,6 +183,7 @@ public class FEai {
 			    keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
 			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[0]), Integer.parseInt(my_cord[1]))){
+			//if(isValid(player, qboard, output)){
 			    keepgoing = false;
                             System.out.println("        LEGAL MOVE:" + output);
 			}else{
