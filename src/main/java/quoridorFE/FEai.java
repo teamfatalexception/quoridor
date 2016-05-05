@@ -163,10 +163,19 @@ public class FEai {
 			    //<Up>output = blockPlayer(output, qboard);
 			//}
 			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
-			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(""+output.charAt(2)),  Integer.parseInt(""+output.charAt(5)), output.charAt(9))){
+			String msg = "";
+                        msg = output.replace(',', ' ');
+                        msg = msg.replace('(', ' ');
+                        msg = msg.replace(')', ' ');
+                        msg = msg.replace('[', ' ');
+                        msg = msg.replace(']', ' ');
+			String[] my_cord = msg.trim().split("\\s+");
+			System.out.println("	MSG:" + msg);
+
+			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[0]), Integer.parseInt(my_cord[1]), my_cord[2].charAt(0))){
 			    keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
-			}else if(qboard.isValidMove(player, Integer.parseInt(""+output.charAt(1)),  Integer.parseInt(""+output.charAt(4)))){
+			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[0]), Integer.parseInt(my_cord[1]))){
 			    keepgoing = false;
                             System.out.println("        LEGAL MOVE:" + output);
 			}else{
