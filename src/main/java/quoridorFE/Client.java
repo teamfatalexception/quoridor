@@ -626,32 +626,32 @@ public class Client  {
 
 
     //Checks the state of all players and states whether someone has won the match.
-    public static boolean isWinner(){
+    public static boolean isWinner() {
 
-	//If only one player remains!
-	if(board.getPlayerSet().size() <= 1){
-		System.out.println("One player remains, end of game!");
-		return true;
-	}
-	
-	for (Player p : board.getPlayerSet()) {
-		if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
+		//If only one player remains!
+		if(board.getPlayerSet().size() <= 1){
+			System.out.println("One player remains, end of game!");
 			return true;
 		}
-		if(p.getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
-            return true;
+		
+		for (Player p : board.getPlayerSet()) {
+			if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
+				return true;
+			}
+			if(p.getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
+	            return true;
+			}
+			if(p.getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
+	            return true;
+			}
+			if(p.getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
+	            return true;
+			}
 		}
-		if(p.getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
-            return true;
-		}
-		if(p.getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
-            return true;
-		}
+		
+		// If we found nothing then no one has won yet return false.
+		return false;
 	}
-	
-	// If we found nothing then no one has won yet return false.
-	return false;
-}
 
 
 

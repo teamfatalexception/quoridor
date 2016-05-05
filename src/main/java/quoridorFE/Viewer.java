@@ -107,7 +107,7 @@ public class Viewer extends Application {
     /**
      *  Called to update the state of the board based by the Server.
     **/
-    public void refresh(){
+    public synchronized void refresh(){
 		// Need to change states here, placeholder stub mainly.
 		System.out.println("REFRESHING");
 		Platform.runLater(new Runnable() {
