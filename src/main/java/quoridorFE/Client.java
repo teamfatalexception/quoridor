@@ -247,22 +247,22 @@ public class Client  {
             try {
                 serverAddress = wordsOfCommandLineParameters[0];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
-                players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
+                players.add(0, new Player(1, "", portNumber, 5, 0, 0));
 
                 client = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[2];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
-                players.add(new Player(2, serverAddress, portNumber, 5, 0, 0));
+                players.add(1, new Player(2, "", portNumber, 5, 0, 0));
 
                 client2 = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[4];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[5]);
-                players.add(new Player(3, serverAddress, portNumber, 5, 0, 0));
+                players.add(2, new Player(3, "", portNumber, 5, 0, 0));
 
                 client3 = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[6];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[7]);
-                players.add(new Player(4, serverAddress, portNumber, 5, 0, 0));
+                players.add(3, new Player(4, "", portNumber, 5, 0, 0));
 
                 client4 = new Client(serverAddress, portNumber);
                 clients.add(client);
@@ -272,7 +272,7 @@ public class Client  {
                 //Board to use
                 maze = new Maze(9,9, 4);
                 // New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
-                board = new QuoridorBoard(new Player(1, serverAddress, portNumber, 5, 0, 0), new Player(2, serverAddress, portNumber, 5, 0, 0), new Player(3, serverAddress, portNumber, 5, 0, 0), new Player(4, serverAddress, portNumber, 5, 0, 0));
+                board = new QuoridorBoard(players.get(0), players.get(1), players.get(2), players.get(3));
 
 
                 // Setup player objects time.
@@ -304,12 +304,12 @@ public class Client  {
                 serverAddress = wordsOfCommandLineParameters[0];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
                 //
-                players.add(0, new Player(1, serverAddress, portNumber, 5, 0, 0));
+                players.add(0, new Player(1, "", portNumber, 5, 0, 0));
                 client = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[2];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
                 //
-                players.add(1, new Player(2, serverAddress, portNumber, 5, 0, 0));
+                players.add(1, new Player(2, "", portNumber, 5, 0, 0));
                 client2 = new Client(serverAddress, portNumber);
                 clients.add(client);
                 clients.add(client2);
@@ -664,6 +664,22 @@ public class Client  {
 
             	//While the thread is still running
                 while(listen_loop) {
+		    
+		    if(nameList.size() == 2 && players.size() == 2){
+			players.get(0).setName(nameList.get(0));
+			players.get(1).setName(nameList.get(1));
+		    }
+		    
+		    if(nameList.size() == 4 && players.size() == 4){
+			players.get(0).setName(nameList.get(0));
+			players.get(1).setName(nameList.get(1));
+			players.get(2).setName(nameList.get(2));
+			players.get(3).setName(nameList.get(3));
+
+		    }
+		    
+
+		    
 
 					// reads in characters from server
 					String msg = IOscannerIn.nextLine();
