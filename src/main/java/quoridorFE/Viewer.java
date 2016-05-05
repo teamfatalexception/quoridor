@@ -29,6 +29,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.scene.text.TextBoundsType;
 
 /**
 * BEFORE YOU START
@@ -524,6 +525,8 @@ public class Viewer extends Application {
 		int theColumn;
 		
 		private Circle circle;
+		private Text playerNumberText;
+		private StackPane stack;
 
 		public Tile(int row, int column) {
 
@@ -582,25 +585,38 @@ public class Viewer extends Application {
 
 		public void placePawn(int player) {
 			circle = new Circle();
+			playerNumberText = new Text();
+			playerNumberText.setBoundsType(TextBoundsType.VISUAL); 
+			stack = new StackPane();
+
+
 			circle.setCenterX(50.0f);
 			circle.setCenterY(50.0f);
 			circle.setRadius(DEFAULT_TILE_DIMMENSION * 0.3);
 			
 			if (player == 1) {
 				circle.setFill(Color.RED);
+				playerNumberText.setText("1");
+				stack.getChildren().addAll(circle,playerNumberText);
 	    	} else if (player == 2) {
 	    		circle.setFill(Color.BLUE);
+	    		playerNumberText.setText("2");
+	    		stack.getChildren().addAll(circle,playerNumberText);
 	    	} else if (player == 3) {
 	    		circle.setFill(Color.GREEN);
+	    		playerNumberText.setText("3");
+	    		stack.getChildren().addAll(circle,playerNumberText);
 	    	} else if (player == 4) {
 	    		circle.setFill(Color.ORANGE);
+	    		playerNumberText.setText("4");
+	    		stack.getChildren().addAll(circle,playerNumberText);
 	    	}
 			
-			getChildren().add(circle);
+			getChildren().add(stack);
 		}
 		
 		public void removePawn() {
-			getChildren().remove(circle);
+			getChildren().remove(stack);
 		}
 	}
 
