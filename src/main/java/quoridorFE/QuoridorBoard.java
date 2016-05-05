@@ -208,7 +208,7 @@ public class QuoridorBoard {
 		BoardNode source = this.getNodeByPlayerNumber(player);
 		BoardNode target = this.getNodeByCoords(x, y);
 		
-		if (source.equals(target)) return false; 		// source and destination are the same
+		if (source.getxPos() == target.getxPos() && source.getyPos() == target.getyPos()) return false; 		// source and destination are the same
 		if (source.getPlayer() == null) return false; 	// there is no player at this location.
 		if (target.getPlayer() != null) return false; 	// you can't move your pawn to the same place as an opponents
 		

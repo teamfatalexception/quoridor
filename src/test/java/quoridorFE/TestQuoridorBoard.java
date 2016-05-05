@@ -68,6 +68,8 @@ public class TestQuoridorBoard {
 		assertTrue("Expected isValidMove() to return true.", testBoard.isValidMove(1, 4, 1));
 		assertTrue("Expected isValidMove() to return true.", testBoard.isValidMove(1, 5, 0));
 		
+		assertFalse("trying to move to where i already am.", testBoard.isValidMove(1, 4, 0));
+		
 		testBoard.placeWall(1, 4, 0, 'h'); // Put a wall in the way then try to move over it.
 		assertFalse("Expected isValidMove() to return false.", testBoard.isValidMove(1, 4, 1));
 		

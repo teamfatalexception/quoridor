@@ -233,63 +233,61 @@ public class Server {
 				
                             playerId = Integer.parseInt(sc[1]);
                             // If two players.
-			    if(sc.length == 4){
-				board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
-			        System.out.println("Two players locked in!");
-			    } else {// is four player
-				board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
-				System.out.println("Four players locked in!");
-			    }
+						    if(sc.length == 4){
+							board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
+						        System.out.println("Two players locked in!");
+						    } else {// is four player
+							board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
+							System.out.println("Four players locked in!");
+						    }
                         }
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         //System.out.println("I will give you a move, give me a god damned second..");
 				
-			answer = "TESUJI " + FEai.getMove(playerId, board);
-                        //answer = "TESUJI " + FEai.getShitMove(playerId, board);
+                    	answer = "TESUJI " + FEai.getMoveShortestPath(playerId, board);
                         System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
+						// tired of parsing clutter, so removed all.
+						message = message.replace(',', ' ');
+						message = message.replace('(', ' ');
+						message = message.replace(')', ' ');
+						message = message.replace('[', ' ');
+						message = message.replace(']', ' ');
+						//System.out.println("	Fixed String. " + message);
+			
+						// Split message, parse out what we want and update the local board.
+						String[] sc = message.split("\\s+");
+						// Is a wall move
+						if(message.contains("h") || message.contains("v")){
+							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
+							board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
+							System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
+						}else{
+							// ..else is a pawn move
+							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
+							board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
+							System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
+						}
 
-			// tired of parsing clutter, so removed all.
-			message = message.replace(',', ' ');
-			message = message.replace('(', ' ');
-			message = message.replace(')', ' ');
-			message = message.replace('[', ' ');
-			message = message.replace(']', ' ');
-			//System.out.println("	Fixed String. " + message);
-
-			// Split message, parse out what we want and update the local board.
-			String[] sc = message.split("\\s+");
-			// Is a wall move
-			if(message.contains("h") || message.contains("v")){
-				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
-				board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
-				System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
-			}else{
-				// ..else is a pawn move
-				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
-				board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
-				System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
-			}
-
-                        System.out.println("Recieved: " + message);
+                        //System.out.println("Recieved: " + message);
 
                     } else if(message.contains("GOTE")){ // Someone made and illegal move and is now gone.
-			
-                        System.out.println("Recieved: " + message);
+                    	
+                        //System.out.println("Recieved: " + message);
                     } else if(message.contains("KIKASHI")){ // Game is over and someone won.
-                        System.out.println("Recieved: " + message);
+                        //System.out.println("Recieved: " + message);
                         break;
                     }
                 }
                 // remove myself from the arrayList containing the list of the
                 // connected Clients
-		System.out.println("	Exiting.");
+                System.out.println("	Exiting.");
                 remove(id);
-		System.out.print(".");
+                System.out.print(".");
                 close();
-		System.out.print(".");
-		System.exit(0);
+				System.out.print(".");
+				System.exit(0);
             }
 
             // try to close everything

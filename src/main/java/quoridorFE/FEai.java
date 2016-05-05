@@ -17,10 +17,10 @@ public class FEai {
 	    "[(4, 6), v]",
 	    "[(4, 8), h]",
 	    "[(6, 8), v]",
-            "[(2, 4), v]",
-            "[(2, 2), v]",
-            "[(7, 4), h]",
-            "[(7, 8), v]"
+        "[(2, 4), v]",
+        "[(2, 2), v]",
+        "[(7, 4), h]",
+        "[(7, 8), v]"
 	};
 	public static int counter = -1;
 
@@ -72,12 +72,14 @@ public class FEai {
 		
 		// Now I've gotta get the first node on the path that isn't my current pawn position
 		// and that isn't occupied by another pawn
-		BoardNode attempt = edgeList.get(0).getTarget();
+		BoardNode attempt = null;
 		
-		for (edgeFE e : edgeList) {
-			attempt = e.getTarget();
-			if (qboard.isValidMove(player, attempt.getxPos(), attempt.getyPos())) {
+		for (BoardNode b : nodesOnThePath) {
+			
+			System.out.println("attempt: " + b.toString());
+			if (qboard.isValidMove(player, b.getxPos(), b.getyPos())) {
 				// we found a good move
+				attempt = b;
 				break;
 			}
 		}
@@ -106,19 +108,19 @@ public class FEai {
 		    x = Integer.parseInt("" + attempt.charAt(2));
 		    y = Integer.parseInt("" + attempt.charAt(5));
 		    or = attempt.charAt(9);
-                    if (qboard.isValidMove(player, x, y, or)) {
-                        // we found a good move
-	                return true;
-                    }
+            if (qboard.isValidMove(player, x, y, or)) {
+                // we found a good move
+            return true;
+            }
 		}else{
 
 		    // It is a pawn move.
 		    x = Integer.parseInt(""+attempt.charAt(1));
-	     	    y = Integer.parseInt(""+attempt.charAt(4));
-                    if (qboard.isValidMove(player, x, y) ) {
-                        // we found a good move
-                        return true;
-                    }
+	     	y = Integer.parseInt(""+attempt.charAt(4));
+            if (qboard.isValidMove(player, x, y) ) {
+                // we found a good move
+                return true;
+            }
 		}
 		return false;
 	}
@@ -164,18 +166,18 @@ public class FEai {
 			//}
 			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
 			String msg = "";
-                        msg = output.replace(',', ' ');
-                        msg = msg.replace('(', ' ');
-                        msg = msg.replace(')', ' ');
-                        msg = msg.replace('[', ' ');
-                        msg = msg.replace(']', ' ');
-			String[] my_cord = msg.trim().split("\\s+");
+            msg = output.replace(',', ' ');
+            msg = msg.replace('(', ' ');
+            msg = msg.replace(')', ' ');
+            msg = msg.replace('[', ' ');
+            msg = msg.replace(']', ' ');
+			String[] my_cord = msg.split("\\s+");
 			System.out.println("	MSG:" + msg);
 
-			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[0]), Integer.parseInt(my_cord[1]), my_cord[2].charAt(0))){
+			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
 			    keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
-			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[0]), Integer.parseInt(my_cord[1]))){
+			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
 			    keepgoing = false;
                             System.out.println("        LEGAL MOVE:" + output);
 			}else{
@@ -279,18 +281,18 @@ public class FEai {
 	    // parse out everything that is not a number into a nice array
 	    String hisMove = thisMove;
 	    hisMove = hisMove.replace(',', ' ');
-            hisMove = hisMove.replace('(', ' ');
-            hisMove = hisMove.replace(')', ' ');
-            hisMove = hisMove.replace('[', ' ');
-            hisMove = hisMove.replace(']', ' ');
+        hisMove = hisMove.replace('(', ' ');
+        hisMove = hisMove.replace(')', ' ');
+        hisMove = hisMove.replace('[', ' ');
+        hisMove = hisMove.replace(']', ' ');
 	    String[] holder = hisMove.trim().split("\\s++");
 
 	    // Get his current space
-            int curX = qboard.getNodeByPlayerNumber(player).getxPos();
-            int curY = qboard.getNodeByPlayerNumber(player).getyPos();
+        int curX = qboard.getNodeByPlayerNumber(player).getxPos();
+        int curY = qboard.getNodeByPlayerNumber(player).getyPos();
 
 	    // figure out what direction he is moving.
-            int dirX = curX - Integer.parseInt(holder[0]);
+        int dirX = curX - Integer.parseInt(holder[0]);
 	    int dirY = curY - Integer.parseInt(holder[1]);
 
 	    /* Gotta build an offset based on direction.
@@ -309,13 +311,13 @@ public class FEai {
 
 	    // Now that we know his direction of movement lets try blocking it.
 	    if(dirX == -1){
-		return "[(" + (Integer.parseInt(holder[0]) - 1) + ", " + (Integer.parseInt(holder[1])) + "), v]";
+	    	return "[(" + (Integer.parseInt(holder[0]) - 1) + ", " + (Integer.parseInt(holder[1])) + "), v]";
 	    }else if(dirX == 1){
-		return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), v]";
+	    	return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), v]";
 	    }else if(dirY == -1){
-                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1]) + 1) + "), h]";
+            return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1]) + 1) + "), h]";
 	    }else if(dirY == 1){
-                return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), h]";
+            return "[(" + (Integer.parseInt(holder[0])) + ", " + (Integer.parseInt(holder[1])) +"), h]";
 	    }else{
 	        return "[" + thisMove + ", h]";
 	    }
