@@ -40,6 +40,10 @@ public class Player {
 		return name;
 	}
 
+        public void setName(String newName){
+	    this.name = newName;
+        }
+
 	public int wallsLeft(){
 		return wallsLeft;
 	}
