@@ -161,41 +161,47 @@ public class FEai {
 	    Random ran = new Random();
 	    int r = ran.nextInt(10);
 	    boolean keepgoing = true;
-	    String output = getMoveShortestPath(player, qboard);
+	    String output = ""; //= getMoveShortestPath(player, qboard);
+	    int count = 0;
 	    while(keepgoing){
 	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
 			System.out.println(""+r);
-			output = getMoveShortestPath(player, qboard);
-			if(r < 4){
-			    output = blockClosestOpponent(player, qboard);
-			//}else if(r == 4){
-			    //output = getRecordedMove();
-			}//else{
-			    //output = getMoveShortestPath(player, qboard);
-			    //<Up>output = blockPlayer(output, qboard);
-			//}
-			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
-			String msg = "";
-            msg = output.replace(',', ' ');
-            msg = msg.replace('(', ' ');
-            msg = msg.replace(')', ' ');
-            msg = msg.replace('[', ' ');
-            msg = msg.replace(']', ' ');
-			String[] my_cord = msg.split("\\s+");
-			System.out.println("	MSG:" + msg);
-
-			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
-			    keepgoing = false;
-			    System.out.println("        LEGAL MOVE:" + output);
-
-			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
-
-			    keepgoing = false;
-                            System.out.println("        LEGAL MOVE:" + output);
+			if(count > 5){
+				output = getMoveShortestPath(player, qboard);
+				keepgoing = false;
 			}else{
-			    r = ran.nextInt(10);
-			    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
-			}
+				count++;
+				output = getMoveShortestPath(player, qboard);
+				if(r < 4){
+				    output = blockClosestOpponent(player, qboard);
+				//}else if(r == 4){
+				    //output = getRecordedMove();
+				}//else{
+				    //output = getMoveShortestPath(player, qboard);
+				    //<Up>output = blockPlayer(output, qboard);
+				//}
+				// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
+				String msg = "";
+        		        msg = output.replace(',', ' ');
+        		    	msg = msg.replace('(', ' ');
+        		    	msg = msg.replace(')', ' ');
+        		    	msg = msg.replace('[', ' ');
+        		   	msg = msg.replace(']', ' ');
+				String[] my_cord = msg.split("\\s+");
+				System.out.println("	MSG:" + msg);
+
+				if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
+				    keepgoing = false;
+				    System.out.println("        LEGAL MOVE:" + output);
+				}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
+
+				    keepgoing = false;
+                        	    System.out.println("        LEGAL MOVE:" + output);
+				}else{
+				    r = ran.nextInt(10);
+				    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
+				}
+	    		}
 	    }
 	    return output;
 	}
