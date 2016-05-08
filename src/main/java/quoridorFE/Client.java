@@ -546,12 +546,13 @@ public class Client  {
 				}
 				
 				// Gotta check if there is a winner yet!
-		    		if(isWinner()){
-			    		System.out.println("There is a winner! Player #" + currentPlayer.getID() + " has won!");
+				int temp1 = isWinner();
+		    		if(temp1 != 0){
+			    		System.out.println("There is a winner! Player #" + temp1 + " has won!");
 					//broadcast(clients, "");
 	                	    	cleanUp(clients);
 	                	    	//System.exit(0);
-				    	automate = false;
+				    	//automate = false;
 				}
 				
 	            		// Make thread sleep for a moment before requesting the next move.
@@ -575,6 +576,7 @@ public class Client  {
     public static void cleanUp(ArrayList<Client> clients){
         System.out.println("  Cleaning up!");
 	listen_loop = false;
+	automate = false;
         // FIXME could be for each loop
         for(int i=0; i<clients.size()-1; i++){
             try{
@@ -625,32 +627,32 @@ public class Client  {
     }
 
 
-    //Checks the state of all players and states whether someone has won the match.
-    public static boolean isWinner() {
+    //Checks the state of all players and states whether someone has won the match. Returns the player number of teh victor!
+    public static int isWinner() {
 
 		//If only one player remains!
 		if(board.getPlayerSet().size() <= 1){
 			System.out.println("One player remains, end of game!");
-			return true;
+			return 1;
 		}
 		
 		for (Player p : board.getPlayerSet()) {
 			if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
-				return true;
+				return 1;
 			}
 			if(p.getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
-	            return true;
+	            		return 2;
 			}
 			if(p.getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
-	            return true;
+	            		return 3;
 			}
 			if(p.getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
-	            return true;
+	            		return 4;
 			}
 		}
 		
 		// If we found nothing then no one has won yet return false.
-		return false;
+		return 0;
 	}
 
 
@@ -704,7 +706,7 @@ public class Client  {
 						System.out.println(my_cord[0] + " " + my_cord[1]);
 					    nameList.add(my_cord[1]);
 					// It is a wall.
-					} else if(msg.contains("TESUJI") && (msg.contains("v") || msg.contains("h") )){
+					} else if(msg.contains("TESUJI") && (msg.toLowerCase().contains("v") || msg.toLowerCase().contains("h") )){
 						
 						//maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
 						//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
@@ -720,8 +722,9 @@ public class Client  {
 						    System.out.println("BAM, KICKED!");
 							board.removePlayer(currentPlayer.getID());
 							broadcast(clients, "GOTE " + currentPlayer.getID());
-							if(isWinner()){
-							    System.out.println("There is a winner!");
+							int temp2 = isWinner();
+							if(temp2 != 0){
+							    System.out.println("Player #" + temp2 + " has won!");
 							    // TODO tell the servers who won
 							    cleanUp(clients);
 								//System.exit(0);
@@ -737,8 +740,9 @@ public class Client  {
 					    	System.out.println("BAM, KICKED!");
 					        board.removePlayer(currentPlayer.getID());
 					        broadcast(clients, "GOTE " + currentPlayer.getID());
-					        if(isWinner()){
-							    System.out.println("There is a winner!");
+						int temp3 = isWinner();
+					        if(temp3 != 0){
+							    System.out.println("Player #" + temp3 + " has won!");
 							    // TODO tell the servers who won
 							    cleanUp(clients);
 								//System.exit(0);

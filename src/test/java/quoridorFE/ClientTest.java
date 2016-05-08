@@ -96,7 +96,7 @@ public class ClientTest {
 	Client.board = new QuoridorBoard(new Player(1, "localhost", 8888, 5, 0, 0), new Player(2, "localhost", 9999, 5, 0, 0));
 	Client.board.removePlayer(1);
     	System.out.println("Player two should be only remaining, thus winner!");
-	assertTrue(Client.isWinner());
+	assertTrue(Client.isWinner() != 0);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class ClientTest {
 			Client.board.movePawn(1, 5, i);
 		}
 		System.out.println(Client.board.getNodeByPlayerNumber(1).getxPos() + "  " + Client.board.getNodeByPlayerNumber(1).getyPos());
-		assertTrue(Client.isWinner());
+		assertTrue(Client.isWinner() != 0);
     }
 
     
