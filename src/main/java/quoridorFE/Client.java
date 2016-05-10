@@ -657,7 +657,10 @@ public class Client  {
 		return 0;
 	}
 
+// use somthing like this to fix the concurrency issue...
+//    public syncronized boolean lock() {
 
+//    }
 
     /*
      * a class that waits for the message from the server and append them to the JTextArea
@@ -666,9 +669,14 @@ public class Client  {
     class ListenFromServer extends Thread {
             public void run() {
 
+
+
             	//While the thread is still running
                 while(listen_loop) {
-		    
+//TODO cap all this code with an if statement calling a sycronized global method to aquire a lock based on expected turn order!
+// i think the syncronized method should go in the main client class 
+// somthing like this...
+// if(lock()){
 		    if(nameList.size() == 2 && players.size() == 2){
 			players.get(0).setName(nameList.get(0));
 			players.get(1).setName(nameList.get(1));
