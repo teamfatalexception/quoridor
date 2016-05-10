@@ -697,8 +697,11 @@ public class Client  {
 					String msg = IOscannerIn.nextLine();
 														
 					//semaphore.release();
-													
-					System.out.println("Recieved from Player: " + " msg: " + msg);
+
+//TODO fix this print statement!													
+					System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
+	// this println below works ... but we need the one above! 
+                    //System.out.println("Recieved from Player: " + " msg: " + msg);
 					
 			        // tired of parsing clutter, so removed all.
 			        msg = msg.replace(',', ' ');

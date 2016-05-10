@@ -41,7 +41,7 @@ fi
 if [[ count -eq 2 ]]; then
         echo Starting up two Servers on $port1 and $port2
 
-	gnome-terminal --geometry=150x50 --tab --title="Server 1" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1" --tab --title="Server 2" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2" --tab --title="Viewer" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --gui --delay 3000"
+	gnome-terminal --geometry=150x50 --tab --title="Server 1" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port1" --tab --title="Server 2" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Server --port $port2" --tab --title="Viewer" -e "java -cp build/libs/quoridorFE.jar quoridorFE.Client localhost:$port1 localhost:$port2 --gui --delay 1000"
 
 	echo Happy Hacking~
 else
