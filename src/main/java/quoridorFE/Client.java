@@ -34,7 +34,8 @@ public class Client  {
     public static Maze maze;
 
     // Thread safe semaphore.
-    static Semaphore semaphore = new Semaphore(0);
+    static Semaphore semaphore = new Semaphore(1);
+    static Semaphore boardLock = new Semaphore(1);
     public static boolean listen_loop = true;
 
     // Bools for our commandline parameter flags.
@@ -620,6 +621,13 @@ public class Client  {
         // Then we listen on the socket for the reply. TESUJI <move string>
         //String message = (String) sInput.readObject();
 
+ 	try{
+	    semaphore.acquire();
+	    System.out.println("    Semaphore acquired: "+semaphore);
+        }catch(InterruptedException e){
+            System.out.println(e);
+        }
+	//System.out.println("	Semaphore Acquired!");
         // Next we check it's legality. Will impliment after.
         //String broadcast = "ATARI";
         // This check is going to ban players who make bad moves!
@@ -673,6 +681,7 @@ public class Client  {
     class ListenFromServer extends Thread {
             public void run() {
             	//While the thread is still running
+		String msg = "";
                 while(listen_loop) {
 //TODO cap all this code with an if statement calling a sycronized global method to aquire a lock based on expected turn order!
 // i think the syncronized method should go in the main client class 
@@ -688,15 +697,20 @@ public class Client  {
 						players.get(1).setName(nameList.get(1));
 						players.get(2).setName(nameList.get(2));
 						players.get(3).setName(nameList.get(3));
-				    }
-		    
+		    }
+		 
 
 		    
 
+				//if( IOscannerIn.hasNextLine()){
 					// reads in characters from server
-					String msg = IOscannerIn.nextLine();
-														
+					msg = IOscannerIn.nextLine();
+					// concurrency stuff									
 					//semaphore.release();
+				//	System.out.println("	semaphore:" + semaphore);
+				//}else{
+				//	System.out.println("	has no line!");
+				//}*/
 
 					//TODO fix this print statement!													
 					//System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
@@ -720,35 +734,58 @@ public class Client  {
 					    nameList.add(my_cord[1]);
 					// It is a wall.
 					} else if(msg.contains("TESUJI") && (msg.toLowerCase().contains("v") || msg.toLowerCase().contains("h") )){
-						
+						semaphore.release();
+						System.out.println("	Semaphore realsesd: " + semaphore);
+						 try{
+					            boardLock.acquire();
+        					    System.out.println("    boardLocked!"+boardLock);
+        					    //semaphore.acquire();
+        					}catch(InterruptedException e){
+        					    System.out.println(e);
+        					}
+
+						//boardLock.acquire();
 						//maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
 						//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
 						//board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 						if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
-							System.out.println("IS GOOD!");
+						    System.out.println("IS GOOD!");
 						    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
-							System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
+						    System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
 							// Gotta broadcast all changes after that.
 							//System.out.println("ERROR 2?");
 						    broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
-						} else {
+						}else{
 						    System.out.println("BAM, KICKED!");
-							board.removePlayer(currentPlayer.getID());
-							broadcast(clients, "GOTE " + currentPlayer.getID());
-							int temp2 = isWinner();
-							if(temp2 != 0){
-							    System.out.println("Player #" + temp2 + " has won!");
-							    // TODO tell the servers who won
-							    cleanUp(clients);
-								//System.exit(0);
-							}
+						    board.removePlayer(currentPlayer.getID());
+						    broadcast(clients, "GOTE " + currentPlayer.getID());
+						    int temp2 = isWinner();
+						    if(temp2 != 0){
+						        System.out.println("Player #" + temp2 + " has won!");
+						        // TODO tell the servers who won
+						        cleanUp(clients);
+						        //System.exit(0);
+						    }
 						    
 						}
 					// It is a pawn movement.
+						boardLock.release();
+						System.out.println("	boardUNlocked" + boardLock);
 					}else if(msg.contains("TESUJI")) {
+						semaphore.release();
+						System.out.println("    Semaphore realsesd: " + semaphore);
+						 try{
+        					    boardLock.acquire();
+        					    System.out.println("    boardLocked"+boardLock);
+        					    //semaphore.acquire();
+        					}catch(InterruptedException e){
+        					    System.out.println(e);
+        					}
+
+					    //boardLock.acquire();
 					    if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
-							board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
-							broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
+						board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+						broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
 					    } else {
 					    	System.out.println("BAM, KICKED!");
 					        board.removePlayer(currentPlayer.getID());
@@ -759,10 +796,10 @@ public class Client  {
 							    // TODO tell the servers who won
 							    cleanUp(clients);
 								//System.exit(0);
-							}
-					        
-					
+						}
 					    }
+					    boardLock.release();
+					    System.out.println("    boardLocked"+boardLock);
 					} else {
 						System.out.println("I didn't quite catch that..");
 					}
@@ -796,6 +833,19 @@ public class Client  {
 
     }
 
+
+  /* Semapore functionality
+  private boolean signal = false;
+
+  public synchronized void take() {
+    this.signal = true;
+    this.notify();
+  }
+
+  public synchronized void release() throws InterruptedException{
+    while(!this.signal) wait();
+    this.signal = false;
+  }*/
     
     
     /** Protocol

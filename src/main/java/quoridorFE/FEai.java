@@ -110,29 +110,24 @@ public class FEai {
 		int x, y;
 		char or;
 		if(attempt.contains("v") || attempt.contains("h")){
-
 		    //Then it is a wall.
 		    x = Integer.parseInt("" + attempt.charAt(2));
 		    y = Integer.parseInt("" + attempt.charAt(5));
 		    or = attempt.charAt(9);
-            if (qboard.isValidMove(player, x, y, or)) {
-                // we found a good move
-            return true;
-            }
-
+            	    if (qboard.isValidMove(player, x, y, or)) {
+                	// we found a good move
+            		return true;
+            	    }
 		}else{
-
 		    // It is a pawn move.
 		    x = Integer.parseInt(""+attempt.charAt(1));
-	     	y = Integer.parseInt(""+attempt.charAt(4));
-            if (qboard.isValidMove(player, x, y) ) {
-                // we found a good move
-                return true;
-            }
-
+	     	    y = Integer.parseInt(""+attempt.charAt(4));
+            	    if (qboard.isValidMove(player, x, y) ) {
+                	// we found a good move
+                	return true;
+            	    }
 		}
-
-	        // HArdcoded checking.
+	        // Hardcoded checking.
 		if(x > 7  || y > 7){
 			verdict = false;
 		}
