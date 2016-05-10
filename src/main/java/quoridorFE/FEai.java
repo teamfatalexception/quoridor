@@ -362,4 +362,21 @@ public class FEai {
 	    }
 	    return shortest;
 	}
+	
+	// Returns a wall that would create a tunnel to win for the given player
+	// otherwise returns null
+	public static String tunnelWall(int player, QuoridorBoard board){
+	    return null;
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
