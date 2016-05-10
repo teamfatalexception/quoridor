@@ -25,13 +25,9 @@ public class Client  {
     private PrintWriter IOscannerOut;
     private Socket socket;
 
-    // if I use a GUI or not
-    private ClientGUI cg;
-
     // the server and the port
     private String server;
     private int port;
-    public static Maze maze;
 
     // Thread safe semaphore.
     static Semaphore semaphore = new Semaphore(1);
@@ -66,9 +62,8 @@ public class Client  {
     Client(String server, int port,ClientGUI cg) {
             this.server = server;
             this.port = port;
-            this.maze = maze;
             // save if we are in GUI mode or not
-            this.cg = cg;
+            //this.cg = cg;
     }
 
     /*
@@ -81,12 +76,12 @@ public class Client  {
             }
 
             catch(Exception ec) {
-                    display("Error connectiong to server:" + ec);
+                   // display("Error connectiong to server:" + ec);
                     return false;
             }
 
             String msg = "Connection accepted " + socket.getInetAddress() + ":" + socket.getPort();
-            display(msg);
+            //display(msg);
             /* Creating both Data Stream */
             try
             {
@@ -94,7 +89,7 @@ public class Client  {
                     IOscannerOut = new PrintWriter(socket.getOutputStream(), true);
             }
             catch (IOException eIO) {
-                    display("Exception creating new Input/output Streams: " + eIO);
+                   // display("Exception creating new Input/output Streams: " + eIO);
                     return false;
             }
 
@@ -104,16 +99,7 @@ public class Client  {
             return true;
     }
 
-    /*
-     * To send a message to the console or the GUI
-     */
-    private void display(String msg) {
-            if(cg == null)
-                    System.out.println(msg);      // println in console mode
-            else
-                    cg.append(msg + "\n");                // append to the ClientGUI JTextArea (or whatever)
-    }
-
+  
     /*
      * To send a message to the server
      */
@@ -149,8 +135,8 @@ public class Client  {
             catch(Exception e) {} 
 
             // inform the GUI
-            if(cg != null)
-                    cg.connectionFailed();
+            //if(cg != null)
+                 //   cg.connectionFailed();
 
     }
     /*
@@ -173,8 +159,7 @@ public class Client  {
     
     public static void main(String[] args) throws ClassNotFoundException, IOException {
 
-        //Board to use
-        Maze maze;
+        
         //Line to be used for regex
         String line = "";
         //Loop through commands and add them to line
@@ -270,8 +255,7 @@ public class Client  {
                 clients.add(client2);
                 clients.add(client3);
                 clients.add(client4);
-                //Board to use
-                maze = new Maze(9,9, 4);
+                
                 // New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
                 board = new QuoridorBoard(players.get(0), players.get(1), players.get(2), players.get(3));
 
@@ -314,8 +298,7 @@ public class Client  {
                 client2 = new Client(serverAddress, portNumber);
                 clients.add(client);
                 clients.add(client2);
-                //Board to use
-                maze = new Maze(9,9, 2);
+                
                 // New board init  --          public QuoridorBoard(Player player1, Player player2) {
                 board = new QuoridorBoard(players.get(0), players.get(1));
 
@@ -345,18 +328,7 @@ public class Client  {
         Scanner scan = new Scanner(System.in);
         // loop forever for message from the user
         int turn = 0;
-        /*
-                Main Interaction Loop
-        */
-        //while(true) {
-
-                /*( This section is for deciding how to represent the the board (text or gui)
-                if(text_only) {
-                    System.out.println(maze);
-                }
-	    */
-
-                // Test if gui only flag is called.                        
+                             
         if(gui_only) {
 		
 			System.out.println("GUI is launching!!");
@@ -406,14 +378,15 @@ public class Client  {
             System.out.println("Writing HELLO to player" + temp);
             temp++;
         }
-        // Make thread sleep for a momment before requesting teh next move.
+        // Make thread sleep for a moment before requesting the next move.
         try {
             Thread.sleep(100);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
 
-        //game
+        // GAME
+        
         // FIXME why is this a for loop and not for each and why is does it depend on yet another collection that we have to keep synced with all the others
         for(int i = 0 ; i < nameList.size(); i++){
             System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
@@ -441,6 +414,7 @@ public class Client  {
 
                 // Test if automated is run
             if(!automate) {
+            	/*
                 System.out.print("> ");
                 // read message from user
                 String msg = scan.nextLine();
@@ -496,7 +470,7 @@ public class Client  {
 					    System.out.println("There is a winner!");
 					    cleanUp(clients);
 						//System.exit(0);
-					}*/
+					}
 
                 } else if(msg.equalsIgnoreCase("help")){
                     //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
@@ -505,6 +479,7 @@ public class Client  {
                 }else{
                     continue;
                 }
+                */
             } else {
 				//System.out.println("	Nope");
 				
@@ -514,35 +489,53 @@ public class Client  {
 				long START = System.currentTimeMillis();
 
 				if(turn == 0){
-				
-					currentPlayer = players.get(0);
-			        nextTurn(client,clients.size());
+					if (players.get(0) == null) {
+						turn++;
+						System.out.println("we got a null at players.get(0)");
+					} else {
+						currentPlayer = players.get(0);
+				        nextTurn(client,clients.size());
+				        turn++;
+					}
 				}else if(turn == 1){
-				
-			        currentPlayer = players.get(1);
-			        nextTurn(client2,clients.size());
-			        //client2.sendMessage("MYOUSHU");
+					if (players.get(1) == null) {
+						turn++;
+						System.out.println("we got a null at players.get(1)");
+					} else {
+				        currentPlayer = players.get(1);
+				        nextTurn(client2,clients.size());
+				        turn++;
+			        }
 				}else if(turn == 2){
-				
-					currentPlayer = players.get(2);
-			        nextTurn(client3,clients.size());
-			        //client3.sendMessage("MYOUSHU");
+					if (players.get(2) == null) {
+						turn++;
+						System.out.println("we got a null at players.get(2)");
+					} else {
+				        currentPlayer = players.get(2);
+				        nextTurn(client3,clients.size());
+				        turn++;
+			        }
 				}else if(turn == 3){
-				
-					currentPlayer = players.get(3);
-				    nextTurn(client4,clients.size());
-			        //client4.sendMessage("MYOUSHU");
+					if (players.get(3) == null) {
+						turn = 0;
+						System.out.println("we got a null at players.get(3)");
+					} else {
+				        currentPlayer = players.get(3);
+				        nextTurn(client4,clients.size());
+				        turn = 0;
+			        }
 				}else{
 			        System.out.println("ERROR >> Turn unrecognized.");
 				}
 				// Count value to iterate through players turns each time next is called. Makes
 				//sure to iterate based on number of players.
-            		if(turn >= players.size()-1){
-                		turn = 0;
-            		}else{
-                		turn++;
-            		}
-				
+				/*
+        		if(turn >= players.size()-1){
+            		turn = 0;
+        		}else{
+            		turn++;
+        		}
+				*/
 				if(gui_only){
 			    	// Refreshing the GUI
 		        	viewer.refresh();
@@ -560,9 +553,9 @@ public class Client  {
 				long END = System.currentTimeMillis();
         		// Make thread sleep for a moment before requesting the next move.
         		try {
-            			Thread.sleep(DELAY - (END - START));
+            		Thread.sleep(DELAY - (END - START));
         		} catch(InterruptedException ex) {
-            			Thread.currentThread().interrupt();
+            		Thread.currentThread().interrupt();
         		}											/*
 				try{
 			        semaphore.acquire();
@@ -578,11 +571,11 @@ public class Client  {
     // Basically a simple method that shuts down all the servers.
     public static void cleanUp(ArrayList<Client> clients){
         System.out.println("  Cleaning up!");
-	listen_loop = false;
-	automate = false;
+        listen_loop = false;
+        automate = false;
         // FIXME could be for each loop
         for(int i=0; i<clients.size(); i++){
-	    if(clients.get(i) != null){
+		    if(clients.get(i) != null){
             	try{
                     System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
                     clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
@@ -591,9 +584,9 @@ public class Client  {
                     System.out.print(e);
                     System.out.println("    Sending to: " + clients.get(i).port);
             	}
-	    }else{
-		System.out.println("Player not found.. skipping.");
-	    }
+		    }else{
+		    	System.out.println("Player not found.. skipping.");
+		    }
         }
     }
 
@@ -621,18 +614,18 @@ public class Client  {
         // Then we listen on the socket for the reply. TESUJI <move string>
         //String message = (String) sInput.readObject();
 
- 	try{
-	    semaphore.acquire();
-	    System.out.println("    Semaphore acquired: "+semaphore);
+        try{
+		    semaphore.acquire();
+		    System.out.println("    Semaphore acquired: "+semaphore);
         }catch(InterruptedException e){
             System.out.println(e);
         }
-	//System.out.println("	Semaphore Acquired!");
+        //System.out.println("	Semaphore Acquired!");
         // Next we check it's legality. Will impliment after.
         //String broadcast = "ATARI";
         // This check is going to ban players who make bad moves!
         //if(!isValidMove()){
-            // GOTE is protocol for BAN THAT FUCKER
+            // GOTE is protocol for BAN 
             //broadcast = "GOTE" + currentClient;
         //}
         // Then if it fails we boot the player, if it passes we broadcast and update our board.
@@ -641,7 +634,7 @@ public class Client  {
     }
 
 
-    //Checks the state of all players and states whether someone has won the match. Returns the player number of teh victor!
+    //Checks the state of all players and states whether someone has won the match. Returns the player number of the victor!
     public static int isWinner() {
 
 		//If only one player remains!
@@ -655,13 +648,13 @@ public class Client  {
 				return 1;
 			}
 			if(p.getID() == 2 && board.getNodeByPlayerNumber(2).getyPos() == 0){
-	            		return 2;
+        		return 2;
 			}
 			if(p.getID() == 3 && board.getNodeByPlayerNumber(3).getxPos() == 8){
-	            		return 3;
+        		return 3;
 			}
 			if(p.getID() == 4 && board.getNodeByPlayerNumber(4).getxPos() == 0){
-	            		return 4;
+    			return 4;
 			}
 		}
 		
@@ -669,140 +662,140 @@ public class Client  {
 		return 0;
 	}
 
-// use somthing like this to fix the concurrency issue...
-//    public syncronized boolean lock() {
-
-//    }
 
     /*
      * a class that waits for the message from the server and append them to the JTextArea
      * if we have a GUI or simply System.out.println() if in console mode
      */
     class ListenFromServer extends Thread {
-            public void run() {
-            	//While the thread is still running
-		String msg = "";
-                while(listen_loop) {
-//TODO cap all this code with an if statement calling a sycronized global method to aquire a lock based on expected turn order!
-// i think the syncronized method should go in the main client class 
-// somthing like this...
-// if(lock()){
-				    if(nameList.size() == 2 && players.size() == 2){
-						players.get(0).setName(nameList.get(0));
-						players.get(1).setName(nameList.get(1));
-				    }
-				    
-				    if(nameList.size() == 4 && players.size() == 4){
-						players.get(0).setName(nameList.get(0));
-						players.get(1).setName(nameList.get(1));
-						players.get(2).setName(nameList.get(2));
-						players.get(3).setName(nameList.get(3));
-		    }
-		 
+        public void run() {
+        	//While the thread is still running
+        	String msg = "";
+            while(listen_loop) {
+			//TODO cap all this code with an if statement calling a sycronized global method to aquire a lock based on expected turn order!
+			// i think the syncronized method should go in the main client class 
+			// somthing like this...
+			// if(lock()){
+            	
+            	//FIXME this sets the names of the players
+			    if(nameList.size() == 2 && players.size() == 2){
+					players.get(0).setName(nameList.get(0));
+					players.get(1).setName(nameList.get(1));
+			    }
+			    
+			    if(nameList.size() == 4 && players.size() == 4){
+					players.get(0).setName(nameList.get(0));
+					players.get(1).setName(nameList.get(1));
+					players.get(2).setName(nameList.get(2));
+					players.get(3).setName(nameList.get(3));
+			    }
+	 
 
-		    
+	    
 
-				//if( IOscannerIn.hasNextLine()){
-					// reads in characters from server
-					msg = IOscannerIn.nextLine();
-					// concurrency stuff									
-					//semaphore.release();
+			    //if( IOscannerIn.hasNextLine()){
+				// reads in characters from server
+				msg = IOscannerIn.nextLine();
+				// concurrency stuff									
+				//semaphore.release();
 				//	System.out.println("	semaphore:" + semaphore);
 				//}else{
 				//	System.out.println("	has no line!");
 				//}*/
 
-					//TODO fix this print statement!													
-					//System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
-					// this println below works ... but we need the one above! 
-                    System.out.println("Recieved from Player: " + " msg: " + msg);
-					
-			        // tired of parsing clutter, so removed all.
-			        msg = msg.replace(',', ' ');
-			        msg = msg.replace('(', ' ');
-			        msg = msg.replace(')', ' ');
-			        msg = msg.replace('[', ' ');
-			        msg = msg.replace(']', ' ');
-			        //System.out.println("    Fixed String. " + msg);
-			
-					// splits string into seperat components
-					String[] my_cord = msg.split("\\s+");
-					
-					// It is ID speach.
-					if(msg.contains("IAM")) {
-						System.out.println(my_cord[0] + " " + my_cord[1]);
-					    nameList.add(my_cord[1]);
-					// It is a wall.
-					} else if(msg.contains("TESUJI") && (msg.toLowerCase().contains("v") || msg.toLowerCase().contains("h") )){
-						semaphore.release();
-						System.out.println("	Semaphore realsesd: " + semaphore);
-						 try{
-					            boardLock.acquire();
-        					    System.out.println("    boardLocked!"+boardLock);
-        					    //semaphore.acquire();
-        					}catch(InterruptedException e){
-        					    System.out.println(e);
-        					}
-
-						//boardLock.acquire();
-						//maze.placeWall(Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[3]), my_cord[6]);
-						//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
-						//board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
-						if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
-						    System.out.println("IS GOOD!");
-						    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
-						    System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
-							// Gotta broadcast all changes after that.
-							//System.out.println("ERROR 2?");
-						    broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
-						}else{
-						    System.out.println("BAM, KICKED!");
-						    board.removePlayer(currentPlayer.getID());
-						    broadcast(clients, "GOTE " + currentPlayer.getID());
-						    int temp2 = isWinner();
-						    if(temp2 != 0){
-						        System.out.println("Player #" + temp2 + " has won!");
-						        // TODO tell the servers who won
-						        cleanUp(clients);
-						        //System.exit(0);
-						    }
-						    
-						}
-					// It is a pawn movement.
-						boardLock.release();
-						System.out.println("	boardUNlocked" + boardLock);
-					}else if(msg.contains("TESUJI")) {
-						semaphore.release();
-						System.out.println("    Semaphore realsesd: " + semaphore);
-						 try{
-        					    boardLock.acquire();
-        					    System.out.println("    boardLocked"+boardLock);
-        					    //semaphore.acquire();
-        					}catch(InterruptedException e){
-        					    System.out.println(e);
-        					}
-
-					    //boardLock.acquire();
-					    if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2])) ){
-						board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
-						broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
-					    } else {
-					    	System.out.println("BAM, KICKED!");
-					        board.removePlayer(currentPlayer.getID());
-					        broadcast(clients, "GOTE " + currentPlayer.getID());
-						int temp3 = isWinner();
-					        if(temp3 != 0){
-							    System.out.println("Player #" + temp3 + " has won!");
-							    // TODO tell the servers who won
-							    cleanUp(clients);
-								//System.exit(0);
-						}
-					    }
-					    boardLock.release();
-					    System.out.println("    boardLocked"+boardLock);
-					} else {
-						System.out.println("I didn't quite catch that..");
+				//TODO fix this print statement!													
+				//System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
+				// this println below works ... but we need the one above! 
+                System.out.println("Recieved from Player: " + " msg: " + msg);
+				
+		        // tired of parsing clutter, so removed all.
+		        msg = msg.replace(',', ' ');
+		        msg = msg.replace('(', ' ');
+		        msg = msg.replace(')', ' ');
+		        msg = msg.replace('[', ' ');
+		        msg = msg.replace(']', ' ');
+		        //System.out.println("    Fixed String. " + msg);
+		
+				// splits string into seperat components
+				String[] my_cord = msg.split("\\s+");
+				
+				// It is ID peach.
+				if(msg.contains("IAM")) {
+					System.out.println(my_cord[0] + " " + my_cord[1]);
+					//FIXME this is where things are added to nameList
+				    nameList.add(my_cord[1]);
+				// It is a wall.
+				} else if(msg.contains("TESUJI") && (msg.toLowerCase().contains("v") || msg.toLowerCase().contains("h") )){
+					semaphore.release();
+					System.out.println("	Semaphore released: " + semaphore);
+					try{
+			            boardLock.acquire();
+					    System.out.println("    boardLocked!"+boardLock);
+					    //semaphore.acquire();
+					}catch(InterruptedException e){
+					    System.out.println(e);
 					}
+
+					
+					//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
+					if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
+					    System.out.println("IS GOOD!");
+					    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
+					    System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
+						// Gotta broadcast all changes after that.
+						//System.out.println("ERROR 2?");
+					    broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
+					}else{
+					    System.out.println("BAM, KICKED!");
+					    board.removePlayer(currentPlayer.getID());
+					    players.add(currentPlayer.getID() -1, null);
+					    broadcast(clients, "GOTE " + currentPlayer.getID());
+					    int temp2 = isWinner();
+					    if(temp2 != 0){
+					        System.out.println("Player #" + temp2 + " has won!");
+					        // TODO tell the servers who won
+					        cleanUp(clients);
+					        //System.exit(0);
+					    }
+					    
+					}
+					
+					boardLock.release();
+					System.out.println("	boardUnlocked" + boardLock);
+				}else if(msg.contains("TESUJI")) {
+					// It is a pawn movement.
+					semaphore.release();
+					System.out.println("    Semaphore released: " + semaphore);
+					try {
+					    boardLock.acquire();
+					    System.out.println("    boardLocked"+boardLock);
+					    //semaphore.acquire();
+					} catch(InterruptedException e){
+					    System.out.println(e);
+					}
+
+					
+				    if (board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))) {
+				    	board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
+				    	broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
+				    } else {
+				    	System.out.println("BAM, KICKED!");
+				        board.removePlayer(currentPlayer.getID());
+				        broadcast(clients, "GOTE " + currentPlayer.getID());
+						int winner = isWinner();
+				        if(winner != 0){
+						    System.out.println("Player #" + winner + " has won!");
+						    // TODO tell the servers who won
+						    cleanUp(clients);
+							//System.exit(0);
+				        }
+				    }
+					
+				    boardLock.release();
+				    System.out.println("    boardLocked"+boardLock);
+				} else {
+					System.out.println("I didn't quite catch that..");
+				}
 
             }
         }
