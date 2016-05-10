@@ -417,11 +417,11 @@ public class Client  {
         for(int i = 0 ; i < nameList.size(); i++){
             System.out.print(" " + (i+1) + " " + nameList.get(i) + " ");
 
-            //If two players print send server its player number along with opponents name.
+            //If two players, print send server its player number along with opponents name.
             if(clients.size() == 2){
                  clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1));
             }
-            //If four players send server its player number along with all opponents names
+            //If four players, send server its player number along with all opponents names
             if(clients.size() == 4){
                  clients.get(i).sendMessage("GAME " + (i+1) + " " + nameList.get(0) + " " + nameList.get(1) + " " + nameList.get(2) + " " + nameList.get(3));
             }
@@ -440,70 +440,70 @@ public class Client  {
 
                 // Test if automated is run
             if(!automate) {
-                    System.out.print("> ");
-                    // read message from user
-                    String msg = scan.nextLine();
-                    //System.out.println("Recieved this from a server: " + msg);
-                    // String parsing users input, looking for next turn so next move can be requested.
-                    if(msg.equalsIgnoreCase("exit")){
-                        //for (Client c : clients) {
-                                //c.disconnect();
-                        //}
-						//disconnect();
-			//cleanUp(clients);
-						//cleanUp(client2);
-                        System.exit(0);
-                    }else if(msg.equalsIgnoreCase("next")){
-						// first thing is send hello to all the servers...
-						// Ask for a move from the next player.
-						//System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
-						
-						// This functionality could easily go inside a wrapper method, but just gonna
-						//place move request inside here.
-						if(turn == 0){
-							currentPlayer = players.get(0);
-						    nextTurn(client,clients.size());
-						}else if(turn == 1){
-							currentPlayer = players.get(1);
-						    nextTurn(client2,clients.size());
-						    //client2.sendMessage("MYOUSHU");
-						}else if(turn == 2){
-							currentPlayer = players.get(2);
-						    nextTurn(client3,clients.size());
-						    //client3.sendMessage("MYOUSHU");
-						}else if(turn == 3){
-							currentPlayer = players.get(3);
-						    nextTurn(client4,clients.size());
-						    //client4.sendMessage("MYOUSHU");
-						}else{
-						    System.out.println("ERROR >> Turn unrecognized.");
-						}
-						
-						// Count value to iterate through players turns each time next is called. Makes
-						// sure to iterate based on number of players.
-		                if(turn >= players.size()-1){
-		                        turn = 0;
-		                }else{
-		                        turn++;
-		                }
-						if(gui_only){
-				            // Refreshing the GUI
-				            viewer.refresh();
-						}
-			            // Gotta check if there is a winner yet!
-						/*if(isWinner()){
-						    System.out.println("There is a winner!");
-						    cleanUp(clients);
-							//System.exit(0);
-						}*/
+                System.out.print("> ");
+                // read message from user
+                String msg = scan.nextLine();
+                //System.out.println("Recieved this from a server: " + msg);
+                // String parsing users input, looking for next turn so next move can be requested.
+                if(msg.equalsIgnoreCase("exit")){
+                    //for (Client c : clients) {
+                            //c.disconnect();
+                    //}
+					//disconnect();
+                	//cleanUp(clients);
+					//cleanUp(client2);
+                    System.exit(0);
+                }else if(msg.equalsIgnoreCase("next")){
+					// first thing is send hello to all the servers...
+					// Ask for a move from the next player.
+					//System.out.println("        >> Functionality not yet complete!\n" + "        It is player " + turn + "'s turn.");
+					
+					// This functionality could easily go inside a wrapper method, but just gonna
+					//place move request inside here.
+					if(turn == 0){
+						currentPlayer = players.get(0);
+					    nextTurn(client,clients.size());
+					}else if(turn == 1){
+						currentPlayer = players.get(1);
+					    nextTurn(client2,clients.size());
+					    //client2.sendMessage("MYOUSHU");
+					}else if(turn == 2){
+						currentPlayer = players.get(2);
+					    nextTurn(client3,clients.size());
+					    //client3.sendMessage("MYOUSHU");
+					}else if(turn == 3){
+						currentPlayer = players.get(3);
+					    nextTurn(client4,clients.size());
+					    //client4.sendMessage("MYOUSHU");
+					}else{
+					    System.out.println("ERROR >> Turn unrecognized.");
+					}
+					
+					// Count value to iterate through players turns each time next is called. Makes
+					// sure to iterate based on number of players.
+	                if(turn >= players.size()-1){
+	                        turn = 0;
+	                }else{
+	                        turn++;
+	                }
+					if(gui_only){
+			            // Refreshing the GUI
+			            viewer.refresh();
+					}
+		            // Gotta check if there is a winner yet!
+					/*if(isWinner()){
+					    System.out.println("There is a winner!");
+					    cleanUp(clients);
+						//System.exit(0);
+					}*/
 
-                    } else if(msg.equalsIgnoreCase("help")){
-                        //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
-                    	//You can request next turn uring NEXT or quit using EXIT.");
-                        usage();
-                    }else{
-                        continue;
-                    }
+                } else if(msg.equalsIgnoreCase("help")){
+                    //System.out.println("        This is the Viewer for a multi-AI played Quoridor game.
+                	//You can request next turn uring NEXT or quit using EXIT.");
+                    usage();
+                }else{
+                    continue;
+                }
             } else {
 				//System.out.println("	Nope");
 				
@@ -524,45 +524,45 @@ public class Client  {
 				}else if(turn == 2){
 				
 					currentPlayer = players.get(2);
-			        	nextTurn(client3,clients.size());
+			        nextTurn(client3,clients.size());
 			        //client3.sendMessage("MYOUSHU");
 				}else if(turn == 3){
 				
 					currentPlayer = players.get(3);
-				        nextTurn(client4,clients.size());
+				    nextTurn(client4,clients.size());
 			        //client4.sendMessage("MYOUSHU");
 				}else{
-				        System.out.println("ERROR >> Turn unrecognized.");
+			        System.out.println("ERROR >> Turn unrecognized.");
 				}
 				// Count value to iterate through players turns each time next is called. Makes
 				//sure to iterate based on number of players.
-	            		if(turn >= players.size()-1){
-                    			turn = 0;
-	            		}else{
-                    			turn++;
-	            		}
+            		if(turn >= players.size()-1){
+                		turn = 0;
+            		}else{
+                		turn++;
+            		}
 				
 				if(gui_only){
-				    	// Refreshing the GUI
-			        	viewer.refresh();
+			    	// Refreshing the GUI
+		        	viewer.refresh();
 				}
 				
 				// Gotta check if there is a winner yet!
 				int temp1 = isWinner();
-		    		if(temp1 != 0){
-			    		System.out.println("There is a winner! Player #" + temp1 + " has won!");
-					//broadcast(clients, "");
-	                	    	cleanUp(clients);
-	                	    	//System.exit(0);
-				    	//automate = false;
-				}
+	    		if(temp1 != 0){
+		    		System.out.println("There is a winner! Player #" + temp1 + " has won!");
+				//broadcast(clients, "");
+        	    	cleanUp(clients);
+        	    	//System.exit(0);
+			    	//automate = false;
+	    		}
 				long END = System.currentTimeMillis();
-	            		// Make thread sleep for a moment before requesting the next move.
-	            		try {
-                    			Thread.sleep(DELAY - (END - START));
-	            		} catch(InterruptedException ex) {
-                    			Thread.currentThread().interrupt();
-	            		}											/*
+        		// Make thread sleep for a moment before requesting the next move.
+        		try {
+            			Thread.sleep(DELAY - (END - START));
+        		} catch(InterruptedException ex) {
+            			Thread.currentThread().interrupt();
+        		}											/*
 				try{
 			        semaphore.acquire();
 				}catch(InterruptedException e){
@@ -672,27 +672,23 @@ public class Client  {
      */
     class ListenFromServer extends Thread {
             public void run() {
-
-
-
             	//While the thread is still running
                 while(listen_loop) {
 //TODO cap all this code with an if statement calling a sycronized global method to aquire a lock based on expected turn order!
 // i think the syncronized method should go in the main client class 
 // somthing like this...
 // if(lock()){
-		    if(nameList.size() == 2 && players.size() == 2){
-			players.get(0).setName(nameList.get(0));
-			players.get(1).setName(nameList.get(1));
-		    }
-		    
-		    if(nameList.size() == 4 && players.size() == 4){
-			players.get(0).setName(nameList.get(0));
-			players.get(1).setName(nameList.get(1));
-			players.get(2).setName(nameList.get(2));
-			players.get(3).setName(nameList.get(3));
-
-		    }
+				    if(nameList.size() == 2 && players.size() == 2){
+						players.get(0).setName(nameList.get(0));
+						players.get(1).setName(nameList.get(1));
+				    }
+				    
+				    if(nameList.size() == 4 && players.size() == 4){
+						players.get(0).setName(nameList.get(0));
+						players.get(1).setName(nameList.get(1));
+						players.get(2).setName(nameList.get(2));
+						players.get(3).setName(nameList.get(3));
+				    }
 		    
 
 		    
@@ -702,10 +698,10 @@ public class Client  {
 														
 					//semaphore.release();
 
-//TODO fix this print statement!													
-					System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
-	// this println below works ... but we need the one above! 
-                    //System.out.println("Recieved from Player: " + " msg: " + msg);
+					//TODO fix this print statement!													
+					//System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
+					// this println below works ... but we need the one above! 
+                    System.out.println("Recieved from Player: " + " msg: " + msg);
 					
 			        // tired of parsing clutter, so removed all.
 			        msg = msg.replace(',', ' ');
