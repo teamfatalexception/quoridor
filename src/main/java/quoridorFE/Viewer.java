@@ -475,7 +475,7 @@ public class Viewer extends Application {
 	    // Set the title of the stage
    	    theStage.setTitle("Quoridor");
 
-	    mainScene = new Scene(theBorderPane);
+	    mainScene = new Scene(theBorderPane, 1000, 600);
 
 	    // Add a stylesheet to the scene
 	    mainScene.getStylesheets().add("application/ViewerStyle.css");
@@ -483,8 +483,12 @@ public class Viewer extends Application {
 	    // Set the scene for the stage
 	    theStage.setScene(mainScene);
 
+	    // Do not allow the stage to be resizable
+		// theStage.setResizable(false);
+
 		// Make the stage viewable.
 		theStage.show();
+
 		latch.countDown();
 	}
 
