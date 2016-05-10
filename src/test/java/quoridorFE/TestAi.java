@@ -133,13 +133,13 @@ public class TestAi {
 		new Player(1, "TST", "test1", 10), 
 		new Player(2, "TST", "test2", 10));
 	    // move player 2 to (7, 8)
-	    testBoard.movePlayerUnchecked(2, 7, 8);
+	    testBoard.movePawnUnchecked(2, 7, 8);
 	    
 	    //Place Walls up the rightmost column
-	    testBoard.placeWall(1, 6, 7, v);
-	    testBoard.placeWall(1, 6, 5, v);
-	    testBoard.placeWall(1, 6, 3, v);
-	    testBoard.placeWall(1, 6, 1, v);
+	    testBoard.placeWall(1, 6, 7, 'v');
+	    testBoard.placeWall(1, 6, 5, 'v');
+	    testBoard.placeWall(1, 6, 3, 'v');
+	    testBoard.placeWall(1, 6, 1, 'v');
 	    
 	    FEai testAI = new FEai();
 	    String testTunnelWall = testAI.tunnelWall(2, testBoard);
