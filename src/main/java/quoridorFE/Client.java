@@ -509,7 +509,9 @@ public class Client  {
 				
 				//If automation is on we do . . .
 				System.out.println("Automating");
-				
+                // We want the turn time to be fixed so delay - start == new delay
+				long START = System.currentTimeMillis();
+
 				if(turn == 0){
 				
 					currentPlayer = players.get(0);
@@ -554,10 +556,10 @@ public class Client  {
 	                	    	//System.exit(0);
 				    	//automate = false;
 				}
-				
+				long END = System.currentTimeMillis();
 	            		// Make thread sleep for a moment before requesting the next move.
 	            		try {
-                    			Thread.sleep(DELAY);
+                    			Thread.sleep(DELAY - (END - START));
 	            		} catch(InterruptedException ex) {
                     			Thread.currentThread().interrupt();
 	            		}											/*
