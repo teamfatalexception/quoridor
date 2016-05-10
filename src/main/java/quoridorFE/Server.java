@@ -23,6 +23,8 @@ public class Server {
     // the name of the machine to be used
     private String machineName;
 
+    private static FEai AI = new FEai();
+
 	private QuoridorBoard board;
 
     /*
@@ -49,7 +51,7 @@ public class Server {
                 display("Server waiting for Clients on port " + port + ".");
 
                 Socket socket = serverSocket.accept();          // accept connection
-            	System.out.println("	MADE IT");
+            	//System.out.println("	MADE IT");
                 // if I was asked to stop
                 if(!keepGoing)
                     break;
@@ -232,7 +234,7 @@ public class Server {
                             //TODO find a way of communicating overall number of players to server
 				
                             playerId = Integer.parseInt(sc[1]);
-                            // If two players.
+                            // If two playersg.
 						    if(sc.length == 4){
 							board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
 						        System.out.println("Two players locked in!");
@@ -244,7 +246,7 @@ public class Server {
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         //System.out.println("I will give you a move, give me a god damned second..");
 				
-                    	answer = "TESUJI " + FEai.getMove(playerId, board);
+                    	answer = "TESUJI " + AI.getMove(playerId, board);
                         System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.

@@ -11,6 +11,10 @@ import org.jgrapht.alg.DijkstraShortestPath;
 
 public class FEai {
 
+
+        public static Random ran = new Random();
+        public static int seed = ran.nextInt(1000);
+
 	// Some global variables.
 	public static String move[] = {
 	    //"[(4, 4), v]",
@@ -27,6 +31,7 @@ public class FEai {
 
 
 	public FEai() {
+	    System.out.println("	This AI's seed value:" + seed);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -158,7 +163,7 @@ public class FEai {
 	The actual AI move method.
 	**/
 	public static String getMove(int player, QuoridorBoard qboard){
-	    Random ran = new Random();
+	    ran = new Random(seed);
 	    int r = ran.nextInt(10);
 	    boolean keepgoing = true;
 	    String output = ""; //= getMoveShortestPath(player, qboard);

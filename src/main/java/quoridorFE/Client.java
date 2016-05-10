@@ -580,15 +580,19 @@ public class Client  {
 	listen_loop = false;
 	automate = false;
         // FIXME could be for each loop
-        for(int i=0; i<clients.size()-1; i++){
-            try{
-                System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
-                clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
-                //clients.get(i).disconnect();
-            }catch(Exception e){
-                System.out.print(e);
-                System.out.println("    Sending to: " + clients.get(i).port);
-            }
+        for(int i=0; i<clients.size(); i++){
+	    if(clients.get(i) != null){
+            	try{
+                    System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
+                    clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
+                    //clients.get(i).disconnect();
+            	}catch(Exception e){
+                    System.out.print(e);
+                    System.out.println("    Sending to: " + clients.get(i).port);
+            	}
+	    }else{
+		System.out.println("Player not found.. skipping.");
+	    }
         }
     }
 
