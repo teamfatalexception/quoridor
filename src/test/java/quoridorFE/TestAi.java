@@ -3,6 +3,7 @@ package quoridorFE;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Ignore;
+import java.util.*;
 
 public class TestAi {
 
@@ -136,16 +137,40 @@ public class TestAi {
 	    testBoard.movePawnUnchecked(2, 7, 8);
 	    
 	    //Place Walls up the rightmost column
-	    testBoard.placeWall(1, 6, 7, 'v');
-	    testBoard.placeWall(1, 6, 5, 'v');
-	    testBoard.placeWall(1, 6, 3, 'v');
-	    testBoard.placeWall(1, 6, 1, 'v');
+	    testBoard.placeWall(1, 0, 7, 'v');
+	    testBoard.placeWall(1, 2, 7, 'v');
+	    testBoard.placeWall(1, 4, 7, 'v');
+	    testBoard.placeWall(1, 7, 7, 'v');
 	    
 	    FEai testAI = new FEai();
 	    String testTunnelWall = testAI.tunnelWall(2, testBoard);
 	    
 	    // Wall returned should be 7, 7 h
-	    assertEquals("[(7, 7), h]", testTunnelWall);
+	    assertEquals("The wall returned was is wrong", "[(7, 7), h]", testTunnelWall);
+	}
+	
+	@Test
+	public void testAvailableWinningNodes() {
+	    
+	    // Build TestBoard
+	    QuoridorBoard testBoard = new QuoridorBoard(
+		new Player(1, "TST", "test1", 10), 
+		new Player(2, "TST", "test2", 10));
+	    // move player 2 to (7, 8)
+	    testBoard.movePawnUnchecked(2, 7, 8);
+	    
+	    //Place Walls up the rightmost column
+	    testBoard.placeWall(1, 0, 7, 'v');
+	    testBoard.placeWall(1, 2, 7, 'v');
+	    testBoard.placeWall(1, 4, 7, 'v');
+	    testBoard.placeWall(1, 7, 7, 'v');	
+	    
+	    testBoard.placeWall(1, 7, 7, 'h');	
+	    FEai testAI = new FEai();
+	    
+	    ArrayList<BoardNode> winningNodes = FEai.availableWinningNodes(
+		testBoard.getNodeByPlayerNumber(2), testBoard);
+	    assertEquals("Not Working Correctly", winningNodes, 1);
 	}
 		
 	
