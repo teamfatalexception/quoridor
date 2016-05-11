@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class Client  {
 
     // Declared list of current players, 2 or 4 long until people start gettting kicked.
-    private static ArrayList<Player> players = new ArrayList<Player>();
+    private static Player[] players = new Player[4];
     private static Player currentPlayer;
 
     // for I/O
@@ -233,22 +233,22 @@ public class Client  {
             try {
                 serverAddress = wordsOfCommandLineParameters[0];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
-                players.add(0, new Player(1, "", portNumber, 5, 0, 0));
+                players[0] =  new Player(1, "", portNumber, 5, 0, 0);
 
                 client = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[2];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
-                players.add(1, new Player(2, "", portNumber, 5, 0, 0));
+                players[1] = new Player(2, "", portNumber, 5, 0, 0);
 
                 client2 = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[4];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[5]);
-                players.add(2, new Player(3, "", portNumber, 5, 0, 0));
+                players[2] = new Player(3, "", portNumber, 5, 0, 0);
 
                 client3 = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[6];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[7]);
-                players.add(3, new Player(4, "", portNumber, 5, 0, 0));
+                players[3] = new Player(4, "", portNumber, 5, 0, 0);
 
                 client4 = new Client(serverAddress, portNumber);
                 clients.add(client);
@@ -257,7 +257,7 @@ public class Client  {
                 clients.add(client4);
                 
                 // New quoridor board init  --          public QuoridorBoard(Player player1, Player player2, Player player3, Player player4) 
-                board = new QuoridorBoard(players.get(0), players.get(1), players.get(2), players.get(3));
+                board = new QuoridorBoard(players[0], players[1], players[2], players[3]);
 
 
                 // Setup player objects time.
@@ -266,7 +266,7 @@ public class Client  {
                 // public Player(int ID, String name, int port, int wallsLeft, int startingX,
 				//int startingY){
                 //players.add(new Player(1, serverAddress, portNumber, 5, 0, 0));
-                currentPlayer = players.get(0);
+                currentPlayer = players[0];
 
                 // test if we can start the connection to the Server
                 // if it failed nothing we can do
@@ -289,18 +289,18 @@ public class Client  {
                 serverAddress = wordsOfCommandLineParameters[0];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
                 //
-                players.add(0, new Player(1, "", portNumber, 5, 0, 0));
+                players[0] = new Player(1, "", portNumber, 5, 0, 0);
                 client = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[2];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
                 //
-                players.add(1, new Player(2, "", portNumber, 5, 0, 0));
+                players[1] =  new Player(2, "", portNumber, 5, 0, 0);
                 client2 = new Client(serverAddress, portNumber);
                 clients.add(client);
                 clients.add(client2);
                 
                 // New board init  --          public QuoridorBoard(Player player1, Player player2) {
-                board = new QuoridorBoard(players.get(0), players.get(1));
+                board = new QuoridorBoard(players[0], players[1]);
 
 
                 // test if we can start the connection to the Server
@@ -489,38 +489,38 @@ public class Client  {
 				long START = System.currentTimeMillis();
 
 				if(turn == 0){
-					if (players.get(0) == null) {
+					if (players[0] == null) {
 						turn++;
 						System.out.println("we got a null at players.get(0)");
 					} else {
-						currentPlayer = players.get(0);
+					    currentPlayer = players[0];
 				        nextTurn(client,clients.size());
 				        turn++;
 					}
 				}else if(turn == 1){
-					if (players.get(1) == null) {
+					if (players[1] == null) {
 						turn++;
 						System.out.println("we got a null at players.get(1)");
 					} else {
-				        currentPlayer = players.get(1);
+				        currentPlayer = players[1];
 				        nextTurn(client2,clients.size());
 				        turn++;
 			        }
 				}else if(turn == 2){
-					if (players.get(2) == null) {
+					if (players[2] == null) {
 						turn++;
 						System.out.println("we got a null at players.get(2)");
 					} else {
-				        currentPlayer = players.get(2);
+				        currentPlayer = players[2];
 				        nextTurn(client3,clients.size());
 				        turn++;
 			        }
 				}else if(turn == 3){
-					if (players.get(3) == null) {
+					if (players[3] == null) {
 						turn = 0;
 						System.out.println("we got a null at players.get(3)");
 					} else {
-				        currentPlayer = players.get(3);
+				        currentPlayer = players[3];
 				        nextTurn(client4,clients.size());
 				        turn = 0;
 			        }
@@ -593,14 +593,14 @@ public class Client  {
 
 	public static void broadcast(ArrayList<Client> clients, String text){
 		// FIXME could be for each loop
-		for(int i=0; i<clients.size(); i++){
-            try{
-                clients.get(i).sendMessage(text);
-            }catch(Exception e){
-                System.out.print(e);
-                System.out.println("    Failure to send " + text + " to " + clients.get(i).port);
+	    for(int i=0; i<clients.size(); i++){
+                try{
+                    clients.get(i).sendMessage(text);
+                }catch(Exception e){
+                    System.out.print(e);
+                    System.out.println("    Failure to send " + text + " to " + clients.get(i).port);
+                }
             }
-        }
 	}
 
 
@@ -638,11 +638,11 @@ public class Client  {
     public static int isWinner() {
 
 		//If only one player remains!
-		if(board.getPlayerSet().size() <= 1){
+		/*if(board.getPlayerSet().size() <= 1){
 			System.out.println("One player remains, end of game!");
 			return 1;
 		}
-		
+		*/
 		for (Player p : board.getPlayerSet()) {
 			if(p.getID() == 1 && board.getNodeByPlayerNumber(1).getyPos() == 8){
 				return 1;
@@ -678,16 +678,16 @@ public class Client  {
 			// if(lock()){
             	
             	//FIXME this sets the names of the players
-			    if(nameList.size() == 2 && players.size() == 2){
-					players.get(0).setName(nameList.get(0));
-					players.get(1).setName(nameList.get(1));
+			    if(nameList.size() == 2 && players.length == 2){
+					players[0].setName(nameList.get(0));
+					players[1].setName(nameList.get(1));
 			    }
 			    
-			    if(nameList.size() == 4 && players.size() == 4){
-					players.get(0).setName(nameList.get(0));
-					players.get(1).setName(nameList.get(1));
-					players.get(2).setName(nameList.get(2));
-					players.get(3).setName(nameList.get(3));
+			    if(nameList.size() == 4 && players.length == 4){
+					players[0].setName(nameList.get(0));
+					players[1].setName(nameList.get(1));
+					players[2].setName(nameList.get(2));
+					players[3].setName(nameList.get(3));
 			    }
 	 
 
@@ -706,7 +706,7 @@ public class Client  {
 				//TODO fix this print statement!													
 				//System.out.println("Recieved from Player: " + currentPlayer.getID() + " msg: " + msg);
 				// this println below works ... but we need the one above! 
-                System.out.println("Recieved from Player: " + " msg: " + msg);
+				System.out.println("Recieved from Player: " + currentPlayer.getID()+ " msg: " + msg);
 				
 		        // tired of parsing clutter, so removed all.
 		        msg = msg.replace(',', ' ');
@@ -738,6 +738,7 @@ public class Client  {
 
 					
 					//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
+					if(players[currentPlayer.getID()-1] != null){
 					if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
 					    System.out.println("IS GOOD!");
 					    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
@@ -747,8 +748,9 @@ public class Client  {
 					    broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
 					}else{
 					    System.out.println("BAM, KICKED!");
+					    System.out.println("current Player is " + currentPlayer.getID());
 					    board.removePlayer(currentPlayer.getID());
-					    players.add(currentPlayer.getID() -1, null);
+					    players[currentPlayer.getID() -1] = null;
 					    broadcast(clients, "GOTE " + currentPlayer.getID());
 					    int temp2 = isWinner();
 					    if(temp2 != 0){
@@ -757,9 +759,9 @@ public class Client  {
 					        cleanUp(clients);
 					        //System.exit(0);
 					    }
-					    
-					}
 					
+					}
+					}
 					boardLock.release();
 					System.out.println("	boardUnlocked" + boardLock);
 				}else if(msg.contains("TESUJI")) {
@@ -774,12 +776,13 @@ public class Client  {
 					    System.out.println(e);
 					}
 
-					
+				  if(players[currentPlayer.getID()-1] != null){
 				    if (board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))) {
 				    	board.movePawn(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]));
 				    	broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
 				    } else {
 				    	System.out.println("BAM, KICKED!");
+					System.out.println("current Player is " + currentPlayer.getID());
 				        board.removePlayer(currentPlayer.getID());
 				        broadcast(clients, "GOTE " + currentPlayer.getID());
 						int winner = isWinner();
@@ -790,7 +793,7 @@ public class Client  {
 							//System.exit(0);
 				        }
 				    }
-					
+				  }
 				    boardLock.release();
 				    System.out.println("    boardLocked"+boardLock);
 				} else {
