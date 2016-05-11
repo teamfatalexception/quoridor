@@ -193,6 +193,17 @@ public class QuoridorBoard {
 	public synchronized HashSet<Wall> getWallSet() {
 		return this.wallSet;
 	}
+	
+	
+		/**
+	 * Allows access to the set of invalid walls
+	 * 
+	 * @return A HashSet containing all the invalid walls of the given board
+	 * @see Wall
+	 */
+	public synchronized HashSet<Wall> getInvalidWallSet() {
+		return this.invalidWallSet;
+	}
 
 	/**
 	 * Checks to see if the proposed pawn move is a valid move.
@@ -434,8 +445,11 @@ public class QuoridorBoard {
 		}
 	}
 	
-		// Method to return a copy of a given board
+	// TO DO: Add this method to the javadocs
+	
+	// Method to return a copy of a given board
 	public QuoridorBoard clone() {
+	
 	    // Generate a blank board
 	    QuoridorBoard clonedBoard = new QuoridorBoard(null, null);
 	    // Add fields of this board to clonedBoard
