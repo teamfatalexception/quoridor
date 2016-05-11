@@ -361,16 +361,48 @@ public class FEai {
 	// Returns a wall that would create a tunnel to win for the given player
 	// otherwise returns null
 	public static String tunnelWall(int player, QuoridorBoard board){
+	
 	    QuoridorBoard testBoard;
+	    HashSet<Wall> invalidWalls = board.getInvalidWallSet();
+	    
 	    // Loop through every possible wall placement
 	    for(int i = 0; i < 8; i++){
-		
 		for(int j = 0; j < 8; j++){
 		
+		    // Testing the vertical orientation of the current wall
 		    Wall test = new Wall(player, i, j, 'v');
-		    testBoard = board.clone();
-		}
-	    }
+		    // if test is a valid wall
+		    if(!invalidWalls.contains(test)){
+			testBoard = board.clone();
+			testBoard.placeWallUnchecked(player, i, j, 'v');
+			
+			// If we've reduced the number of winning nodes to one
+			if(generateWinningNodeList(player, testBoard).size() == 1)
+			    // return string representation of the wall
+			    return ("[(" + i + ", " + j + "), " + 'v' + "]");
+		    }
+		    
+		    // Testing the horizontal orientation of the current wall
+		    test = new Wall(player, i, j, 'h');
+		    // if test is a valid wall
+		    if(!invalidWalls.contains(test)){
+			testBoard = board.clone();
+			testBoard.placeWallUnchecked(player, i, j, 'h');
+			
+			// If we've reduced the number of winning nodes to one
+			if(generateWinningNodeList(player, testBoard).size() == 1){
+			    // return string representation of the wall
+			    System.out.println("[(" + i + ", " + j + "), " + 'h');
+			    return ("[(" + i + ", " + j + "), " + 'h' + "]");
+			}
+		    }
+		    
+		}// end of j loop
+	    }// end of i loop
+	    return null;
+	}
+	
+	public static ArrayList<BoardNode> availableWinningNodes(BoardNode player, QuoridorBoard qboard) {
 	    return null;
 	}
 	
