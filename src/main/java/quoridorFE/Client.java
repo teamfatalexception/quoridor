@@ -266,12 +266,12 @@ public class Client  {
                 serverAddress = wordsOfCommandLineParameters[0];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[1]);
                 //
-                players.add(0, new Player(1, "", portNumber, 5, 0, 0));
+                players.add(0, new Player(1, "", portNumber, 10, 0, 0));
                 client = new Client(serverAddress, portNumber);
                 serverAddress = wordsOfCommandLineParameters[2];
                 portNumber = Integer.parseInt(wordsOfCommandLineParameters[3]);
                 //
-                players.add(1, new Player(2, "", portNumber, 5, 0, 0));
+                players.add(1, new Player(2, "", portNumber, 10, 0, 0));
                 client2 = new Client(serverAddress, portNumber);
                 clients.add(client);
                 clients.add(client2);
@@ -406,12 +406,13 @@ public class Client  {
             // We want the turn time to be fixed so delay - start == new delay
 			long START = System.currentTimeMillis();
 
+			// This bit makes sure the iterator wraps around after everyone has made a move
 			if (!whosTurnIsIt.hasNext()) {
 				whosTurnIsIt = turnList.listIterator(turnList.indexOf(turnList.getFirst()));
 			}
 			
+			// This next block keeps currentPlayer 
 			currentPlayer = whosTurnIsIt.next();
-			
 			if (currentPlayer.getID() == 1) {
 				nextTurn(client);
 			} else if (currentPlayer.getID() == 2) {
@@ -422,64 +423,6 @@ public class Client  {
 				nextTurn(client4);
 			}
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			/*
-			if(turn == 0){
-				if (players.get(0) == null) {
-					turn++;
-					System.out.println("we got a null at players.get(0)");
-				} else {
-					currentPlayer = players.get(0);
-			        nextTurn(client);
-			        turn++;
-				}
-			}else if(turn == 1){
-				if (players.get(1) == null) {
-					turn++;
-					System.out.println("we got a null at players.get(1)");
-				} else {
-			        currentPlayer = players.get(1);
-			        nextTurn(client2);
-			        turn++;
-		        }
-			}else if(turn == 2){
-				if (players.get(2) == null) {
-					turn++;
-					System.out.println("we got a null at players.get(2)");
-				} else {
-			        currentPlayer = players.get(2);
-			        nextTurn(client3);
-			        turn++;
-		        }
-			}else if(turn == 3){
-				if (players.get(3) == null) {
-					turn = 0;
-					System.out.println("we got a null at players.get(3)");
-				} else {
-			        currentPlayer = players.get(3);
-			        nextTurn(client4);
-			        turn = 0;
-		        }
-			}else{
-		        System.out.println("ERROR >> Turn unrecognized.");
-			}
-			*/
-			// Count value to iterate through players turns each time next is called. Makes
-			//sure to iterate based on number of players.
-			/*
-    		if(turn >= players.size()-1){
-        		turn = 0;
-    		}else{
-        		turn++;
-    		}
-			*/
 			if(gui_only){
 		    	// Refreshing the GUI
 	        	viewer.refresh();
