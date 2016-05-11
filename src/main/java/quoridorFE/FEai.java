@@ -361,6 +361,15 @@ public class FEai {
 	// Returns a wall that would create a tunnel to win for the given player
 	// otherwise returns null
 	public static String tunnelWall(int player, QuoridorBoard board){
+	    //Quoridor testBoard;
+	    // Loop through every possible wall placement
+	    for(int i = 0; i < 8; i++){
+		
+		for(int j = 0; j < 8; j++){
+		
+		    Wall test = new Wall(player, i, j, 'v');
+		}
+	    }
 	    return null;
 	}
 	

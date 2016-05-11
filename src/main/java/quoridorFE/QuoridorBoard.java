@@ -118,6 +118,7 @@ public class QuoridorBoard {
 		}
 		*/
 	}
+	
 
 	/**
 	 * Retrieves the BoardNode that corresponds to the given position on the board.
@@ -433,6 +434,9 @@ public class QuoridorBoard {
 		}
 	}
 	
-	
+		// Method to return a copy of a given board
+	public QuoridorBoard clone() {
+	    return null;
+	}
 	
 }
