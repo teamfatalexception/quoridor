@@ -436,7 +436,23 @@ public class QuoridorBoard {
 	
 		// Method to return a copy of a given board
 	public QuoridorBoard clone() {
-	    return null;
+	    // Generate a blank board
+	    QuoridorBoard clonedBoard = new QuoridorBoard(null, null);
+	    // Add fields of this board to clonedBoard
+	    clonedBoard.board = this.board;
+	    clonedBoard.playerSet = this.playerSet;
+	    clonedBoard.wallSet = this.wallSet;
+	    clonedBoard.invalidWallSet = this.invalidWallSet;
+	    return clonedBoard;
 	}
 	
 }
+
+
+
+
+
+
+
+
+
