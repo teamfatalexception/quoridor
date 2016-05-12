@@ -1,7 +1,7 @@
 package quoridorFE;
 
 // PLayer object for storing and managing player information.
-public class Player {
+public class Player implements Comparable<Player>{
 
 	// Private fields
 	private int ID;  // Which number player he is.
@@ -71,4 +71,12 @@ public class Player {
 	public void setY(int v){
 		Y = v;
 	}
+
+	@Override
+	public int compareTo(Player p) {
+		return this.ID - p.ID;
+	}
+
+
+
 }

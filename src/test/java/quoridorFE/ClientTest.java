@@ -83,7 +83,7 @@ public class ClientTest {
         System.out.println("nextTurn");
         Client currentClient = null;
         int size = 0;
-        Client.nextTurn(currentClient, size);
+        Client.nextTurn(currentClient);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
