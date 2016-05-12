@@ -134,19 +134,20 @@ public class TestAi {
 		new Player(1, "TST", "test1", 10), 
 		new Player(2, "TST", "test2", 10));
 	    // move player 2 to (7, 8)
-	    testBoard.movePawnUnchecked(2, 7, 8);
+	    testBoard.movePawnUnchecked(2, 8, 7);
 	    
 	    //Place Walls up the rightmost column
-	    testBoard.placeWall(1, 0, 7, 'v');
-	    testBoard.placeWall(1, 2, 7, 'v');
-	    testBoard.placeWall(1, 4, 7, 'v');
-	    testBoard.placeWall(1, 7, 7, 'v');
+	    testBoard.placeWall(1, 7, 0, 'v');
+	    testBoard.placeWall(1, 7, 2, 'v');
+	    testBoard.placeWall(1, 7, 4, 'v');
+	    testBoard.placeWall(1, 7, 6, 'v');
+	    
 	    
 	    FEai testAI = new FEai();
 	    String testTunnelWall = testAI.tunnelWall(2, testBoard);
 	    
 	    // Wall returned should be 7, 7 h
-	    assertEquals("The wall returned was is wrong", "[(7, 7), h]", testTunnelWall);
+	    assertEquals("The wall returned is incorrect", "[(7, 7), h]", testTunnelWall);
 	}
 	
 	@Test
@@ -157,20 +158,20 @@ public class TestAi {
 		new Player(1, "TST", "test1", 10), 
 		new Player(2, "TST", "test2", 10));
 	    // move player 2 to (7, 8)
-	    testBoard.movePawnUnchecked(2, 7, 8);
+	    testBoard.movePawnUnchecked(2, 8, 7);
 	    
 	    //Place Walls up the rightmost column
-	    testBoard.placeWall(1, 0, 7, 'v');
-	    testBoard.placeWall(1, 2, 7, 'v');
-	    testBoard.placeWall(1, 4, 7, 'v');
-	    testBoard.placeWall(1, 7, 7, 'v');	
+	    testBoard.placeWall(1, 7, 0, 'v');
+	    testBoard.placeWall(1, 7, 2, 'v');
+	    testBoard.placeWall(1, 7, 4, 'v');
+	    testBoard.placeWall(1, 7, 6, 'v');	
 	    
-	    testBoard.placeWall(1, 7, 7, 'h');	
+	    testBoard.placeWallUnchecked(1, 7, 7, 'h');	
 	    FEai testAI = new FEai();
 	    
-	    ArrayList<BoardNode> winningNodes = FEai.availableWinningNodes(
+	    HashSet<BoardNode> winningNodes = FEai.availableWinningNodes(
 		testBoard.getNodeByPlayerNumber(2), testBoard);
-	    assertEquals("Not Working Correctly", winningNodes, 1);
+	    assertEquals("Not Working Correctly", 1, winningNodes.size());
 	}
 		
 	

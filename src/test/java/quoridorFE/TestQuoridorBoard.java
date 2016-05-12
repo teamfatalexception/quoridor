@@ -195,6 +195,19 @@ public class TestQuoridorBoard {
 	    assertEquals("Board was not cloned correctly", testBoard.getNodeByPlayerNumber(1), clonedTestBoard.getNodeByPlayerNumber(1));
 	}
 	
+	@Test
+	public void testRemoveWall() {
+	
+	    Player p1 = new Player(1, "test1", 6666, 10, 4, 0);
+	    QuoridorBoard testBoard = new QuoridorBoard(p1, 	
+				      new Player(2, "test2", 6667, 10, 4, 8));
+	    HashSet<Wall> wall1 = testBoard.getWallSet();
+	    testBoard.placeWall(1, 0, 0, 'v');
+	    Wall w = new Wall(0, 0, 'v');
+	    testBoard.removeWall(p1, w);
+	    assertEquals("removeWall() is not working correctly", wall1, testBoard.getWallSet() );
+	}
+	
 	
 	
 	

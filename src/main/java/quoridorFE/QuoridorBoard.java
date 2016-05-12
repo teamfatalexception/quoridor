@@ -460,6 +460,71 @@ public class QuoridorBoard {
 	    return clonedBoard;
 	}
 	
+	// Removes a wall with the given parameters
+	public void removeWall(Player player, int x, int y, char orientation) {
+	    Wall w = new Wall(x, y, orientation);
+	    //if Board doesn't contain wall, leave
+	    if (!this.wallSet.contains(w))
+		return;
+		
+	    if (orientation == 'h'){
+		BoardNode firstSource = this.getNodeByCoords(x, y);
+		BoardNode firstTarget = this.getNodeByCoords(x, y+1);
+		BoardNode secondSource = this.getNodeByCoords(x+1, y);
+		BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+		this.board.addEdge(firstSource, firstTarget);
+		this.board.addEdge(secondSource, secondTarget);
+	    }
+	    else{
+		BoardNode firstSource = this.getNodeByCoords(x, y);
+		BoardNode firstTarget = this.getNodeByCoords(x+1, y);
+		BoardNode secondSource = this.getNodeByCoords(x, y+1);
+		BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+		this.board.addEdge(firstSource, firstTarget);
+		this.board.addEdge(secondSource, secondTarget);
+	    }
+	   //player.incrementWalls();
+	   Wall removedWall = new Wall(player.getID(), x, y, orientation);
+	   wallSet.remove(removedWall);
+	    
+	    /* Updating invalidWallSet
+	    if (removedWall.orientation == 'h') {
+		invalidWallSet.remove(new Wall(removedWall.x, removedWall.y, 'v')); 
+		if (removedWall.x > 0) invalidWallSet.remove(new Wall(removedWall.x - 1, removedWall.y, 'h'));			
+		if (removedWall.x < 7) invalidWallSet.remove(new Wall(removedWall.x + 1, removedWall.y, 'h'));
+	} else {
+		invalidWallSet.add(new Wall(removedWall.x, removedWall.y, 'h'));
+		if (removedWall.y > 0) invalidWallSet.remove(new Wall(removedWall.x, removedWall.y - 1, 'v'));
+		if (removedWall.y < 7) invalidWallSet.remove(new Wall(removedWall.x, removedWall.y + 1, 'v'));
+		}	*/    
+	}
+	
+	// Can be called with either a wall or the x, y and orientation
+	public void removeWall(Player p, Wall w){
+	    removeWall(p, w.x, w.y, w.orientation);
+	}
+	
+	
+	public void placeTestWall(int x, int y, char orientation) {
+	    	if (orientation == 'v') {
+			BoardNode firstSource = this.getNodeByCoords(x, y);
+			BoardNode firstTarget = this.getNodeByCoords(x+1, y);
+			BoardNode secondSource = this.getNodeByCoords(x, y+1);
+			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+			this.board.removeEdge(firstSource, firstTarget);
+			this.board.removeEdge(secondSource, secondTarget);
+		} else {
+			BoardNode firstSource = this.getNodeByCoords(x, y);
+			BoardNode firstTarget = this.getNodeByCoords(x, y+1);
+			BoardNode secondSource = this.getNodeByCoords(x+1, y);
+			BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+			this.board.removeEdge(firstSource, firstTarget);
+			this.board.removeEdge(secondSource, secondTarget);
+		}
+		Wall placedWall = new Wall(1, x, y, orientation);
+		wallSet.add(placedWall);
+	}
+	
 }
 
 
