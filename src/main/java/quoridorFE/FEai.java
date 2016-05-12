@@ -366,34 +366,35 @@ public class FEai {
 	    HashSet<Wall> invalidWalls = board.getInvalidWallSet();
 	    
 	    // Loop through every possible wall placement
-	    for(int i = 0; i < 8; i++){
-		for(int j = 0; j < 8; j++){
+	    for(int i = 0; i < 9; i++){
+		for(int j = 0; j < 9; j++){
 		
+		    // Testing the horizontal orientation of the current wall
+		    Wall test = new Wall(player, i, j, 'h');
+		    // if test is a valid wall
+		    if(!invalidWalls.contains(test)){
+			testBoard = board.clone();
+			testBoard.placeWallUnchecked(player, i, j, 'h');
+			
+			HashSet<BoardNode> eli = availableWinningNodes(testBoard.getNodeByPlayerNumber(player), testBoard);
+			// If we've reduced the number of winning nodes to one
+			if(eli.size() == 1){
+			    // return string representation of the wall
+			    return ("[(" + i + ", " + j + "), " + 'v' + "]");
+			}
+		    }
+		    
 		    // Testing the vertical orientation of the current wall
-		    Wall test = new Wall(player, i, j, 'v');
+		    test = new Wall(player, i, j, 'v');
 		    // if test is a valid wall
 		    if(!invalidWalls.contains(test)){
 			testBoard = board.clone();
 			testBoard.placeWallUnchecked(player, i, j, 'v');
 			
 			// If we've reduced the number of winning nodes to one
-			if(generateWinningNodeList(player, testBoard).size() == 1)
+			if(availableWinningNodes(testBoard.getNodeByPlayerNumber(player), testBoard).size() == 1){
 			    // return string representation of the wall
 			    return ("[(" + i + ", " + j + "), " + 'v' + "]");
-		    }
-		    
-		    // Testing the horizontal orientation of the current wall
-		    test = new Wall(player, i, j, 'h');
-		    // if test is a valid wall
-		    if(!invalidWalls.contains(test)){
-			testBoard = board.clone();
-			testBoard.placeWallUnchecked(player, i, j, 'h');
-			
-			// If we've reduced the number of winning nodes to one
-			if(generateWinningNodeList(player, testBoard).size() == 1){
-			    // return string representation of the wall
-			    System.out.println("[(" + i + ", " + j + "), " + 'h');
-			    return ("[(" + i + ", " + j + "), " + 'h' + "]");
 			}
 		    }
 		    
@@ -402,8 +403,19 @@ public class FEai {
 	    return null;
 	}
 	
-	public static ArrayList<BoardNode> availableWinningNodes(BoardNode player, QuoridorBoard qboard) {
-	    return null;
+	// Returns a list of the winning nodes that
+	public static HashSet<BoardNode> availableWinningNodes(BoardNode player, QuoridorBoard qboard) {
+	
+	    ArrayList<BoardNode> winningNodes = generateWinningNodeList(player.getPlayer().getID(), qboard);
+	    HashSet<BoardNode> availableWinningNodes = new HashSet<BoardNode>();
+
+	    for(BoardNode e: winningNodes){
+		UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
+		if( (new DijkstraShortestPath<BoardNode, edgeFE>
+		(board, player, e).getPathLength()) != Double.POSITIVE_INFINITY)
+		    availableWinningNodes.add(e);
+	    }
+	    return availableWinningNodes;
 	}
 	
 	

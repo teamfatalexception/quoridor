@@ -460,6 +460,10 @@ public class QuoridorBoard {
 	    return clonedBoard;
 	}
 	
+	public void removeWall(int x, int y, char orientation) {
+	
+	}
+	
 }
 
 
