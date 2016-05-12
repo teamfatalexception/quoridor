@@ -367,7 +367,7 @@ public class Client  {
         }
         // Make thread sleep for a moment before requesting the next move.
         try {
-            Thread.sleep(100);
+            Thread.sleep(DELAY);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -497,6 +497,7 @@ public class Client  {
     public static void nextTurn(Client currentClient) throws ClassNotFoundException, IOException {
         // First we request a move from the server.
         currentClient.sendMessage("MYOUSHU");
+        System.out.println("Sending MYOUSHU to Player: " + currentPlayer.getID());
         // Then we listen on the socket for the reply. TESUJI <move string>
         //String message = (String) sInput.readObject();
 
