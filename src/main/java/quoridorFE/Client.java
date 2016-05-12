@@ -41,6 +41,7 @@ public class Client  {
     // Bools for our commandline parameter flags.
     public static boolean text_only = false;
     public static boolean gui_only = false;
+    public static boolean automate = true;
     public static int DELAY = 500;
     // This is our EVERYTHING, the board that will hold the players, walls and their board states.
     public static QuoridorBoard board;
@@ -367,7 +368,7 @@ public class Client  {
         }
         // Make thread sleep for a moment before requesting the next move.
         try {
-            Thread.sleep(DELAY);
+            Thread.sleep(100);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -397,7 +398,7 @@ public class Client  {
 
 
 
-        while(true) {
+        while(automate) {
         
 			//System.out.println("	Nope");
 			
@@ -425,32 +426,24 @@ public class Client  {
 			
 			if(gui_only){
 		    	// Refreshing the GUI
-	        	viewer.refresh();
+	        	    viewer.refresh();
 			}
-			
 			// Gotta check if there is a winner yet!
 			int temp1 = isWinner();
-    		if(temp1 != 0){
-	    		System.out.println("There is a winner! Player #" + temp1 + " has won!");
-			//broadcast(clients, "");
-    	    	cleanUp(clients);
-    	    	//System.exit(0);
-		    	
-    		}
+    			if(temp1 != 0){
+	    		    System.out.println("There is a winner! Player #" + temp1 + " has won!");
+			    //broadcast(clients, "");
+    	    	            cleanUp(clients);
+    	    		    //System.exit(0);
+		    	    //Now have to wait for player to end game.
+    		        }
 			long END = System.currentTimeMillis();
     		// Make thread sleep for a moment before requesting the next move.
     		try {
         		Thread.sleep(DELAY - (END - START));
     		} catch(InterruptedException ex) {
         		Thread.currentThread().interrupt();
-    		}											/*
-			try{
-		        semaphore.acquire();
-			}catch(InterruptedException e){
-				System.out.println(e);
-			}
-												*/
-            
+    		}										
         }
     }
 
@@ -459,9 +452,10 @@ public class Client  {
     public static void cleanUp(ArrayList<Client> clients){
         System.out.println("  Cleaning up!");
         listen_loop = false;
+	//automate = false;
         // FIXME could be for each loop
         for(int i=0; i<clients.size(); i++){
-		    if(clients.get(i) != null){
+	    if(clients.get(i) != null){
             	try{
                     System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
                     clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
@@ -470,9 +464,9 @@ public class Client  {
                     System.out.print(e);
                     System.out.println("    Sending to: " + clients.get(i).port);
             	}
-		    }else{
-		    	System.out.println("Player not found.. skipping.");
-		    }
+	    }else{
+	    	System.out.println("Player not found.. skipping.");
+	    }
         }
     }
 
@@ -502,8 +496,8 @@ public class Client  {
         //String message = (String) sInput.readObject();
 
         try{
-		    semaphore.acquire();
-		    System.out.println("    Semaphore acquired: "+semaphore);
+	    semaphore.acquire();
+	    //System.out.println("    Semaphore acquired: "+semaphore);
         }catch(InterruptedException e){
             System.out.println(e);
         }
@@ -603,10 +597,10 @@ public class Client  {
 				// It is a wall.
 				} else if(msg.contains("TESUJI") && (msg.toLowerCase().contains("v") || msg.toLowerCase().contains("h") )){
 					semaphore.release();
-					System.out.println("	Semaphore released: " + semaphore);
+					//System.out.println("	Semaphore released: " + semaphore);
 					try{
 			            boardLock.acquire();
-					    System.out.println("    boardLocked!"+boardLock);
+					    //System.out.println("    boardLocked!"+boardLock);
 					    //semaphore.acquire();
 					}catch(InterruptedException e){
 					    System.out.println(e);
@@ -615,7 +609,7 @@ public class Client  {
 					
 					//System.out.println("ERROR 1? " + Arrays.toString(my_cord));
 					if(board.isValidMove(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0)) ){
-					    System.out.println("IS GOOD!");
+					    //System.out.println("IS GOOD!");
 					    board.placeWall(currentPlayer.getID(), Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0));
 					    System.out.println(currentPlayer.getID() + " " +  Integer.parseInt(my_cord[1]) + " " +  Integer.parseInt(my_cord[2]) + " " +  my_cord[3].charAt(0));
 						// Gotta broadcast all changes after that.
@@ -657,14 +651,14 @@ public class Client  {
 					}
 					
 					boardLock.release();
-					System.out.println("	boardUnlocked" + boardLock);
+					//System.out.println("	boardUnlocked" + boardLock);
 				}else if(msg.contains("TESUJI")) {
 					// It is a pawn movement.
 					semaphore.release();
-					System.out.println("    Semaphore released: " + semaphore);
+					//System.out.println("    Semaphore released: " + semaphore);
 					try {
 					    boardLock.acquire();
-					    System.out.println("    boardLocked"+boardLock);
+					    //System.out.println("    boardLocked"+boardLock);
 					    //semaphore.acquire();
 					} catch(InterruptedException e){
 					    System.out.println(e);
@@ -696,7 +690,7 @@ public class Client  {
 						    whosTurnIsIt = turnList.listIterator(turnList.indexOf(nextPlayer));
 					    }
 				        broadcast(clients, "GOTE " + currentPlayer.getID());
-						int winner = isWinner();
+					int winner = isWinner();
 				        if(winner != 0){
 						    System.out.println("Player #" + winner + " has won!");
 						    // TODO tell the servers who won
@@ -706,7 +700,7 @@ public class Client  {
 				    }
 					
 				    boardLock.release();
-				    System.out.println("    boardLocked"+boardLock);
+				    //System.out.println("    boardLocked"+boardLock);
 				} else {
 					System.out.println("I didn't quite catch that..");
 				}

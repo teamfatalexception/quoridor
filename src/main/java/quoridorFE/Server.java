@@ -205,6 +205,7 @@ public class Server {
                 // im going to add a boolean to toggle the spin
                 boolean helloSpin = true;
                 boolean gameSpin = true;
+		//String[] sc;
                 // to loop until LOGOUT
                 //boolean keepGoing = true;
                 while(keepGoing) {
@@ -213,11 +214,19 @@ public class Server {
                     // writeMsg once at the bottom.
                     String answer = "";
                     // read a String
-                              
-				    String message = IOscannerIn.nextLine();
- 
-                                // the message part of the ChatMessage
-				    System.out.println("Recieved: " + message);
+		    String message = IOscannerIn.nextLine();
+                    // the message part of the ChatMessage
+		    System.out.println("Recieved: " + message);
+		    String msg = message;
+                    msg = msg.replace(',', ' ');
+                    msg = msg.replace('(', ' ');
+                    msg = msg.replace(')', ' ');
+                    msg = msg.replace('[', ' ');
+                    msg = msg.replace(']', ' ');
+                    //System.out.println("  Fixed String. " + message);
+                    // Split message, parse out what we want and update the local board.
+                    String[] sc = msg.split("\\s+");
+
                     if (helloSpin) {
                         if(message.equalsIgnoreCase("HELLO")) {
                             // Flip the hello toggle and build the IAM message
@@ -227,56 +236,57 @@ public class Server {
                             writeMsg(answer);
                         }
                     } else if (gameSpin) {
-                    	String[] sc = message.split("\\s+");
+                    	//String[] sc = message.split("\\s+");
                		//GAME <p> <name1> <name2> [<name3> <name4>]
-                    	if (sc[0].equalsIgnoreCase("GAME")) {
+                    	if (message.contains("GAME")) {
                             gameSpin = false;
-                            //TODO find a way of communicating overall number of players to server
-				
+                            //TODO find a way of communicating overall number of players to server	
                             playerId = Integer.parseInt(sc[1]);
                             // If two playersg.
-						    if(sc.length == 4){
-							board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
-						        System.out.println("Two players locked in!");
-						    } else {// is four player
-							board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
-							System.out.println("Four players locked in!");
-						    }
+			    if(sc.length == 4){
+			        board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
+			        System.out.println("Two players locked in!");
+			    } else {// is four player
+			        board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
+			        System.out.println("Four players locked in!");
+			    }
                         }
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         //System.out.println("I will give you a move, give me a god damned second..");
-				
-                    	answer = "TESUJI " + AI.getMove(playerId, board);
+			// If we are fighting two players..	
+			if(board.getPlayerSet().size() <= 2){
+                    	    answer = "TESUJI " + AI.getMove(playerId, board);
+			}else{
+			// If we are fighting four players..
+			    answer = "TESUJI " + AI.getMove2(playerId, board);
+			}
                         System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
-						// tired of parsing clutter, so removed all.
-						message = message.replace(',', ' ');
-						message = message.replace('(', ' ');
-						message = message.replace(')', ' ');
-						message = message.replace('[', ' ');
-						message = message.replace(']', ' ');
-						//System.out.println("	Fixed String. " + message);
-			
-						// Split message, parse out what we want and update the local board.
-						String[] sc = message.split("\\s+");
-						// Is a wall move
-						if(message.contains("h") || message.contains("v")){
-							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
-							board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
-							System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
-						}else{
-							// ..else is a pawn move
-							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
-							board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
-							System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
-						}
-
+			/* tired of parsing clutter, so removed all.
+			message = message.replace(',', ' ');
+			message = message.replace('(', ' ');
+			message = message.replace(')', ' ');
+			message = message.replace('[', ' ');
+			message = message.replace(']', ' ');
+			//System.out.println("	Fixed String. " + message);*/
+			// Split message, parse out what we want and update the local board.
+			//String[] sc = message.split("\\s+");
+			// Is a wall move
+			if(message.toLowerCase().contains("h") || message.toLowerCase().contains("v")){
+				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
+				board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
+				System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
+			}else{
+				// ..else is a pawn move
+				// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
+				board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
+				System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
+			}
                         //System.out.println("Recieved: " + message);
-
                     } else if(message.contains("GOTE")){ // Someone made and illegal move and is now gone.
-                    	
-                        //System.out.println("Recieved: " + message);
+			board.removePlayer(Integer.parseInt(sc[1]));       	
+                        System.out.println("Player kicked: " + sc[1]);
                     } else if(message.contains("KIKASHI")){ // Game is over and someone won.
                         //System.out.println("Recieved: " + message);
                         break;
@@ -284,12 +294,13 @@ public class Server {
                 }
                 // remove myself from the arrayList containing the list of the
                 // connected Clients
-                System.out.println("	Exiting.");
+                //System.out.println("Player #" + sc[1] + " has won!");
+		System.out.println("	Exiting.");
                 remove(id);
                 System.out.print(".");
                 close();
-				System.out.print(".");
-				System.exit(0);
+		System.out.print(".");
+		System.exit(0);
             }
 
             // try to close everything

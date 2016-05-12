@@ -13,7 +13,7 @@ public class FEai {
 
 
         public static Random ran = new Random();
-        public static int seed = ran.nextInt(1000);
+        //public static int seed = ran.nextInt(1000);
 
 	// Some global variables.
 	public static String move[] = {
@@ -31,8 +31,8 @@ public class FEai {
 
 
 	public FEai() {
-	    System.out.println("	This AI's seed value:" + seed);
-		// TODO Auto-generated constructor stub
+	    //System.out.println("	This AI's seed value:" + seed);
+	    // TODO Auto-generated constructor stub
 	}
 
 	public static String getRecordedMove(){
@@ -135,73 +135,76 @@ public class FEai {
 	}
 	
 	
-	/* Copying team morty's AI concept
+	// Copying team morty's AI concept, good against four players?
 	public static String getMove2(int player, QuoridorBoard qboard){
 	    //iterate through other players.
-	    String move = getMoveShortestPath(player, qboard);
+	    int shortestPlayer = 0;
+	    String move;// = getMoveShortestPath(player, qboard);
 	    for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
 		//if their length is shorter than ours, block them.
-  	        if(shortestPathToWin(i, qboard) < shortestPathToWin(player, qboard) && i != player){
-		    move = blockPlayer(i, qboard);
+  	        if(shortestPathToWin(i, qboard) <= shortestPathToWin(player, qboard) && i != player){
+		    //move = blockPlayer(i, qboard);
+		    shortestPlayer = i;
 	        }
 	    }
-	    //if(isValid(player, qboard, move)){
-	 	return move;
-	    //}else{
-		//return getRecordedMove();
-	    //}
-	    //return move
-	}*/
+	    if(shortestPlayer != 0){
+		move = blockPlayer(shortestPlayer, qboard);
+		if(isValid(player, qboard, move)){
+		    return move;
+		}
+	    }
+	    return getMoveShortestPath(player, qboard);
+	}//*/
 
 	
 	/**
-	The actual AI move method.
+	The actual AI move method. Good against two players.
 	**/
 	public static String getMove(int player, QuoridorBoard qboard){
-	    ran = new Random(seed);
-	    int r = ran.nextInt(10);
+	    //ran = new Random(seed);
+	    int weight = 10;
+	    // SMART - If we are going to win, just move to win.
+	    if(shortestPathToWin(player, qboard) <= 1 && isValid(player, qboard, getMoveShortestPath(player, qboard))){
+		return getMoveShortestPath(player, qboard);
+	    }
+	    int r = ran.nextInt(100);
 	    boolean keepgoing = true;
 	    String output = ""; //= getMoveShortestPath(player, qboard);
 	    int count = 0;
 	    while(keepgoing){
 	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
-			System.out.println(""+r);
-			if(count > 5){
-				output = getMoveShortestPath(player, qboard);
-				keepgoing = false;
+		//System.out.println(""+r);
+		if(count > 5){
+			output = getMoveShortestPath(player, qboard);
+			keepgoing = false;
+		}else{
+			count++;
+			output = getMoveShortestPath(player, qboard);
+			if(r > (weight * (shortestPathToWin(player, qboard) + 1))){
+			    output = blockClosestOpponent(player, qboard);   
+			}
+			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
+			String msg = "";
+        	        msg = output.replace(',', ' ');
+        	    	msg = msg.replace('(', ' ');
+        	    	msg = msg.replace(')', ' ');
+        	    	msg = msg.replace('[', ' ');
+        	   	msg = msg.replace(']', ' ');
+			String[] my_cord = msg.split("\\s+");
+			System.out.println("	MSG:" + msg);
+
+			// Checking if it is illegal.
+			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
+			    keepgoing = false;
+			    System.out.println("        LEGAL MOVE:" + output);
+			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
+			    keepgoing = false;
+                       	    System.out.println("        LEGAL MOVE:" + output);
 			}else{
-				count++;
-				output = getMoveShortestPath(player, qboard);
-				if(r < 4){
-				    output = blockClosestOpponent(player, qboard);
-				//}else if(r == 4){
-				    //output = getRecordedMove();
-				}//else{
-				    //output = getMoveShortestPath(player, qboard);
-				    //<Up>output = blockPlayer(output, qboard);
-				//}
-				// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
-				String msg = "";
-        		        msg = output.replace(',', ' ');
-        		    	msg = msg.replace('(', ' ');
-        		    	msg = msg.replace(')', ' ');
-        		    	msg = msg.replace('[', ' ');
-        		   	msg = msg.replace(']', ' ');
-				String[] my_cord = msg.split("\\s+");
-				System.out.println("	MSG:" + msg);
-
-				if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
-				    keepgoing = false;
-				    System.out.println("        LEGAL MOVE:" + output);
-				}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
-
-				    keepgoing = false;
-                        	    System.out.println("        LEGAL MOVE:" + output);
-				}else{
-				    r = ran.nextInt(10);
-				    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
-				}
-	    		}
+			    r = ran.nextInt(10);
+			    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
+			}
+    		}
 	    }
 	    return output;
 	}
@@ -268,7 +271,6 @@ public class FEai {
 	    // Iterate through all players
 	    // FIXME this could be a for each loop
 	    for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
-
 			// If it is us or the player has been kicked.
 			if(i == player || qboard.getNodeByPlayerNumber(i) == null) {
 			    System.out.println(qboard.getNodeByPlayerNumber(i));
