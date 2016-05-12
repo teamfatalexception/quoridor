@@ -59,6 +59,10 @@ public class Player {
 	public void decrementWalls(){
 		wallsLeft--;
 	}
+	
+	public void incrementWalls(){
+		wallsLeft++;
+	}
 
 	public void setX(int v){
 		X = v;

@@ -140,7 +140,7 @@ public class TestAi {
 	    testBoard.placeWall(1, 7, 0, 'v');
 	    testBoard.placeWall(1, 7, 2, 'v');
 	    testBoard.placeWall(1, 7, 4, 'v');
-	    testBoard.placeWall(1, 7, 6, 'v');	
+	    testBoard.placeWall(1, 7, 6, 'v');
 	    
 	    
 	    FEai testAI = new FEai();

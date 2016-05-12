@@ -362,45 +362,55 @@ public class FEai {
 	// otherwise returns null
 	public static String tunnelWall(int player, QuoridorBoard board){
 	
-	    QuoridorBoard testBoard;
+	    String eli = "";
+	
 	    HashSet<Wall> invalidWalls = board.getInvalidWallSet();
-	    
+	    HashSet<Wall> originalWalls = board.getWallSet();
+	    for(Wall e: originalWalls)
+		eli += e.x + " " + e.y + " " + e.orientation + "\n";	   
+	    Player p = board.getNodeByPlayerNumber(player).getPlayer();
+
+	    String testString = "";
+	    Wall test;
 	    // Loop through every possible wall placement
-	    for(int i = 0; i < 9; i++){
-		for(int j = 0; j < 9; j++){
+	    for(int i = 0; i < 8; i++){
+		for(int j = 0; j < 8; j++){
 		
 		    // Testing the horizontal orientation of the current wall
-		    Wall test = new Wall(player, i, j, 'h');
-		    // if test is a valid wall
-		    if(!invalidWalls.contains(test)){
-			testBoard = board.clone();
-			testBoard.placeWallUnchecked(player, i, j, 'h');
+		    test = new Wall(player, i, j, 'h');
+		    
+		    // if test is a valid wall & it's not an original wall
+		    if(!invalidWalls.contains(test) && !originalWalls.contains(test)){
+			//board.placeWallUnchecked(player, i, j, 'h');		// place the wall
+			board.placeTestWall(i, j, 'h');
 			
-			HashSet<BoardNode> eli = availableWinningNodes(testBoard.getNodeByPlayerNumber(player), testBoard);
 			// If we've reduced the number of winning nodes to one
-			if(eli.size() == 1){
+			if(availableWinningNodes(board.getNodeByPlayerNumber(player), board).size() == 1){
+			    board.removeWall(p, test);	// remove the wall
 			    // return string representation of the wall
-			    return ("[(" + i + ", " + j + "), " + 'v' + "]");
+			    return "[(" + i + ", " + j + "), " + 'h' + "]";
 			}
+			    board.removeWall(p, test);// remove the wall
 		    }
 		    
 		    // Testing the vertical orientation of the current wall
 		    test = new Wall(player, i, j, 'v');
-		    // if test is a valid wall
-		    if(!invalidWalls.contains(test)){
-			testBoard = board.clone();
-			testBoard.placeWallUnchecked(player, i, j, 'v');
+		    // if test is a valid wall and it's not an original wall
+		    if(!invalidWalls.contains(test) && !originalWalls.contains(test)){
+			//board.placeWallUnchecked(player, i, j, 'v');	// place the wall
+			board.placeTestWall(i, j, 'v');
 			
 			// If we've reduced the number of winning nodes to one
-			if(availableWinningNodes(testBoard.getNodeByPlayerNumber(player), testBoard).size() == 1){
+			if(availableWinningNodes(board.getNodeByPlayerNumber(player), board).size() == 1){
+			    board.removeWall(p, test);				// remove the wall
 			    // return string representation of the wall
-			    return ("[(" + i + ", " + j + "), " + 'v' + "]");
+			    return "[(" + i + ", " + j + "), " + 'v' + "]";
 			}
+			    board.removeWall(p, test);					// remove the wall
 		    }
-		    
 		}// end of j loop
-	    }// end of i loop
-	    return null;
+	    }// end of i loop 
+	    return eli;
 	}
 	
 	// Returns a list of the winning nodes that
