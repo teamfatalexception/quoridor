@@ -96,6 +96,7 @@ public class FEai {
 		// Currently, prints out all the path lengths from player to all other nodes on the board
 		/*ArrayList<int[]> pathChart = getPaths
 		    (qboard.getNodeByPlayerNumber(player), qboard);*/
+		System.out.println("	reststr:" + retStr);
 		return retStr;
 	}
 	
@@ -169,7 +170,7 @@ public class FEai {
 		return getMoveShortestPath(player, qboard);
 	    }
 	    // SMART - If we can place a wall that will let us walk to victory lets place it!
-	    String tunnel = tunnelWall(player, qboard);
+	    //String tunnel = tunnelWall(player, qboard);
 	    /*if(tunnel != ""){
 		System.out.println("Tunnel:"+tunnel);
 		if(isValid(player, qboard, tunnel)){
@@ -189,6 +190,7 @@ public class FEai {
 		if(count > 5){
 			output = getMoveShortestPath(player, qboard);
 			keepgoing = false;
+			System.out.println("	I've had it with these god damned snakes on this god damned plane.");
 		}else{
 			count++;
 			output = getMoveShortestPath(player, qboard);
@@ -203,17 +205,19 @@ public class FEai {
         	    	msg = msg.replace('[', ' ');
         	   	msg = msg.replace(']', ' ');
 			String[] my_cord = msg.split("\\s+");
-			System.out.println("	MSG:" + msg);
+			System.out.println("	Handing to isValid" + msg);
 
 			// Checking if it is illegal.
 			if(output.toLowerCase().contains("v") || output.toLowerCase().contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
-			    //keepgoing = false;
+			    keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
-			    return output;
-			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
-			    //keepgoing = false;
-                       	    System.out.println("        LEGAL MOVE:" + output);
-			    return output;
+			    //return output;
+			}else if(!(output.toLowerCase().contains("v") || output.toLowerCase().contains("h"))){
+			    if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
+			    	keepgoing = false;
+                       	    	System.out.println("        LEGAL MOVE:" + output);
+			    	//return output;
+			    }
 			}else{
 			    r = ran.nextInt(10);
 			    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
@@ -280,14 +284,14 @@ public class FEai {
 
 	    //UndirectedGraph<BoardNode, edgeFE> board = qboard.board;
 	    // shortest guys player number paired with his shortest path to win.
-	    int[] playerPair = new int[]{0, 1000};
+	    int[] playerPair = new int[]{1, 1000};
 
 	    // Iterate through all players
 	    // FIXME this could be a for each loop
-	    for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
+	    for(int i=1; i<qboard.getPlayerSet().size()+1; i++){
 			// If it is us or the player has been kicked.
 			if(i == player || qboard.getNodeByPlayerNumber(i) == null) {
-			    System.out.println(qboard.getNodeByPlayerNumber(i));
+			    //System.out.println(qboard.getNodeByPlayerNumber(i));
 			} else {
 			    // Check for shortest path.
 			    int temp = shortestPathToWin(i, qboard);
@@ -299,7 +303,10 @@ public class FEai {
 		        }
 	    }
 	    // Now that we have the closest player lets return a blocking wall on him.
-	    return blockPlayer(playerPair[0], qboard);
+	    
+	    String temp = blockPlayer(playerPair[0], qboard);
+	    System.out.println("temp"+temp);
+	    return temp;
 	}
 	
 	

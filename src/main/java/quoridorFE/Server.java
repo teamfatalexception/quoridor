@@ -244,17 +244,17 @@ public class Server {
                             //TODO find a way of communicating overall number of players to server	
                             playerId = Integer.parseInt(sc[1]);
                             // If two playersg.
-						    if(sc.length == 4){
-						        board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
-						        System.out.println("Two players locked in!");
-						    } else {// is four player
-						        board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
-						        System.out.println("Four players locked in!");
-						    }
-						    /**
+				if(sc.length == 4){
+					board = new QuoridorBoard(new Player(1, sc[2], 0000, 10, 4, 0), new Player(2, sc[3], 0000, 10, 4, 8));
+					System.out.println("Two players locked in!");
+				} else {// is four player
+				        board = new QuoridorBoard(new Player(1, sc[2], 0000, 5, 4, 0), new Player(2, sc[3], 0000, 5, 4, 8), new Player(3, sc[4], 0000, 5, 0, 4), new Player(4, sc[5], 0000, 5, 8, 4));
+				        System.out.println("Four players locked in!");
+				}
+				/**
 							 * How to launch the application thread in order to be
 							 * able to update the player move
-							 */
+							 
 							Thread t = new Thread() {
 							    @Override
 							    public void run() {
@@ -265,7 +265,7 @@ public class Server {
 							t.start();
 							/**
 							 * Called after launching the UI
-							 */
+							 
 							viewer = Viewer.waitForViewerStartUp();
 							    
 							// Call function from set board
@@ -277,7 +277,15 @@ public class Server {
 							
 							// Refresh the board state 
 							// Viewer.refresh();
-                        }
+                        */
+				}
+			/*
+		        try {
+               		    Thread.sleep(100);
+        		} catch(InterruptedException ex) {
+        		    Thread.currentThread().interrupt();
+        		}*/
+
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         System.out.println("I will give you a move, give me a god damned second..");
 			// If we are fighting two players..	
@@ -299,19 +307,19 @@ public class Server {
 						if(message.toLowerCase().contains("h") || message.toLowerCase().contains("v")){
 							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
 							board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
-							viewer.refresh();
+							//viewer.refresh();
 							System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
 						}else{
 							// ..else is a pawn move
 							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
 							board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
-							viewer.refresh();
+							//viewer.refresh();
 							System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
 						}
                         //System.out.println("Recieved: " + message);
                     } else if(message.contains("GOTE")){ // Someone made and illegal move and is now gone.
                     	board.removePlayer(Integer.parseInt(sc[1]));
-                    	viewer.refresh();
+                    	//viewer.refresh();
                         System.out.println("Player kicked: " + sc[1]);
                     } else if(message.contains("KIKASHI")){ // Game is over and someone won.
                         //System.out.println("Recieved: " + message);
