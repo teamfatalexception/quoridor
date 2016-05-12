@@ -461,7 +461,26 @@ public class QuoridorBoard {
 	}
 	
 	public void removeWall(int x, int y, char orientation) {
-	
+	    Wall w = new Wall(x, y, orientation);
+	    //if Board doesn't contain wall, leave
+	    if (!this.wallSet.contains(w))
+		return;
+	    if (orientation == 'h'){
+		BoardNode firstSource = this.getNodeByCoords(x, y);
+		BoardNode firstTarget = this.getNodeByCoords(x, y+1);
+		BoardNode secondSource = this.getNodeByCoords(x+1, y);
+		BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+		this.board.addEdge(firstSource, firstTarget);
+		this.board.addEdge(secondSource, secondTarget);
+	    }
+	    else{
+		BoardNode firstSource = this.getNodeByCoords(x, y);
+		BoardNode firstTarget = this.getNodeByCoords(x+1, y);
+		BoardNode secondSource = this.getNodeByCoords(x, y+1);
+		BoardNode secondTarget = this.getNodeByCoords(x+1, y+1);
+		this.board.addEdge(firstSource, firstTarget);
+		this.board.addEdge(secondSource, secondTarget);
+	    }
 	}
 	
 }
