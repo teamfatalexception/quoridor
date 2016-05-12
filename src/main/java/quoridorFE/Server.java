@@ -252,14 +252,14 @@ public class Server {
 			    }
                         }
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
-                        //System.out.println("I will give you a move, give me a god damned second..");
+                        System.out.println("I will give you a move, give me a god damned second..");
 			// If we are fighting two players..	
-			if(board.getPlayerSet().size() <= 2){
-                    	    answer = "TESUJI " + AI.getMove(playerId, board);
-			}else{
+			//if(board.getPlayerSet().size() <= 2){
+                    	answer = "TESUJI " + AI.getMove(playerId, board);
+			//}else{
 			// If we are fighting four players..
-			    answer = "TESUJI " + AI.getMove2(playerId, board);
-			}
+			    //answer = "TESUJI " + AI.getMove2(playerId, board);
+			//}
                         System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.

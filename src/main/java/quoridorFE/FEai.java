@@ -13,6 +13,7 @@ public class FEai {
 
 
         public static Random ran = new Random();
+	public static int weight = 10;
         //public static int seed = ran.nextInt(1000);
 
 	// Some global variables.
@@ -162,11 +163,22 @@ public class FEai {
 	**/
 	public static String getMove(int player, QuoridorBoard qboard){
 	    //ran = new Random(seed);
-	    int weight = 10;
+	    //int weight = 10;
 	    // SMART - If we are going to win, just move to win.
 	    if(shortestPathToWin(player, qboard) <= 1 && isValid(player, qboard, getMoveShortestPath(player, qboard))){
 		return getMoveShortestPath(player, qboard);
 	    }
+	    // SMART - If we can place a wall that will let us walk to victory lets place it!
+	    String tunnel = tunnelWall(player, qboard);
+	    /*if(tunnel != ""){
+		System.out.println("Tunnel:"+tunnel);
+		if(isValid(player, qboard, tunnel)){
+		    System.out.println("Time to Tunnel to Victory, for the emporeur!");
+		    // Make it so we will only do shortest path from then on.
+		    weight = 9001;
+		    return tunnel;
+		}
+	    }*/
 	    int r = ran.nextInt(100);
 	    boolean keepgoing = true;
 	    String output = ""; //= getMoveShortestPath(player, qboard);
@@ -181,7 +193,7 @@ public class FEai {
 			count++;
 			output = getMoveShortestPath(player, qboard);
 			if(r > (weight * (shortestPathToWin(player, qboard) + 1))){
-			    output = blockClosestOpponent(player, qboard);   
+			   output = blockClosestOpponent(player, qboard);   
 			}
 			// Check if it's valid, if it isn't we will contiue to search for the next legal move we can make.
 			String msg = "";
@@ -194,12 +206,14 @@ public class FEai {
 			System.out.println("	MSG:" + msg);
 
 			// Checking if it is illegal.
-			if(output.contains("v") || output.contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
-			    keepgoing = false;
+			if(output.toLowerCase().contains("v") || output.toLowerCase().contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
+			    //keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
+			    return output;
 			}else if(qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]))){
-			    keepgoing = false;
+			    //keepgoing = false;
                        	    System.out.println("        LEGAL MOVE:" + output);
+			    return output;
 			}else{
 			    r = ran.nextInt(10);
 			    System.out.println("	ILLEGAL MOVE:" + output + "	NUM:" + r);			  
