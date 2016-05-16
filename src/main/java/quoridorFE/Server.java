@@ -27,8 +27,8 @@ public class Server {
 
     public static String[] name = {"stinkyDog", "perfectPath", "mirrorMove"};
 
-	private QuoridorBoard board;
-	public static Viewer viewer = null;
+    private QuoridorBoard board;
+    public static Viewer viewer = null;
 
     /*
      *  server constructor that receive the port to listen to for connection as parameter
@@ -230,10 +230,16 @@ public class Server {
 
                 if (helloSpin) {
                     if(message.equalsIgnoreCase("HELLO")) {
+			Date date = new Date();
                         // Flip the hello toggle and build the IAM message
                         helloSpin = false;
-                        //answer = "IAM " + PLAYERNAME;
-                        answer = "IAM fex:" + name[0];
+			if(date.toString().contains("May 17 2") || date.toString().contains("May 17 3") || date.toString().contains("May 17 4")){
+				System.out.println("	NAME CHANGE HAHA");
+				answer = "IAM fax:" + name[0];
+			}else{
+                        	answer = "IAM " + PLAYERNAME;
+                        	//answer = "IAM fex:" + name[0];
+			}
                         System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     }
@@ -291,7 +297,7 @@ public class Server {
                     //System.out.println("I will give you a move, give me a god damned second..");
 					// If we are fighting two players..	
 					//if(board.getPlayerSet().size() <= 2){
-					if(playerId == 4 || playerId == 3){
+					if(playerId == 4 || playerId == 2){
 					    answer = "TESUJI " + AI.getMove2(playerId, board);
 					}else{
 		                	    answer = "TESUJI " + AI.getMove(playerId, board);
