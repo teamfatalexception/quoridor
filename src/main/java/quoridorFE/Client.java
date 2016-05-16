@@ -425,14 +425,13 @@ public class Client  {
 	        	    viewer.refresh();
 			}
 			// Gotta check if there is a winner yet!
-			int temp1 = isWinner();
-    			if(temp1 != 0){
-	    		    System.out.println("There is a winner! Player #" + temp1 + " has won!");
-			    //broadcast(clients, "");
-    	    	            cleanUp(clients);
-    	    		    //System.exit(0);
-		    	    //Now have to wait for player to end game.
-    		        }
+			int winner = isWinner();
+			if(winner != 0){
+    		    System.out.println("There is a winner! Player #" + winner + " has won!");
+    		    viewer.showWinner(winner);
+    		    //broadcast(clients, "");
+	            cleanUp(clients);
+		    }
 			long END = System.currentTimeMillis();
     		// Make thread sleep for a moment before requesting the next move.
     		try {
@@ -683,7 +682,7 @@ public class Client  {
 							    cleanUp(clients);
 								//System.exit(0);
 						}*/
-					    } else {
+					} else {
 						System.out.println("BAM, KICKED!");
 						board.removePlayer(currentPlayer.getID());
 						viewer.refresh();
@@ -713,11 +712,12 @@ public class Client  {
 				}
 				int winner = isWinner();
 				if(winner != 0){
-                                        System.out.println("Player #" + winner + " has won!");
-                                        // TODO tell the servers who won
-                                        cleanUp(clients);
-                                        //System.exit(0);
-                                }
+	                System.out.println("Player #" + winner + " has won!");
+	                viewer.showWinner(winner);
+	                // TODO tell the servers who won
+	                cleanUp(clients);
+	                //System.exit(0);
+                }
 		//System.exit(0);
 		//Thread.stop();
 		//Thread.currentThread().stop();
