@@ -156,10 +156,15 @@ public class Viewer extends Application {
     }
     
     public void showWinner(int player) {
-        centerPane.getChildren().add(new Rectangle(centerPane.getHeight(), centerPane.getWidth(), Color.gray(0.5, 0.5)));
-        Text winnerText = new Text("Player " + player + " wins!");
-        winnerText.setStyle("-fx-text-inner-color: WHITE");
-        centerPane.getChildren().add(winnerText);
+    	Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+		        centerPane.getChildren().add(new Rectangle(centerPane.getHeight(), centerPane.getWidth(), Color.gray(0.5, 0.5)));
+		        Text winnerText = new Text("Player " + player + " wins!");
+		        winnerText.setStyle("-fx-text-inner-color: WHITE");
+		        centerPane.getChildren().add(winnerText);
+            }
+        });
     }
     
     private Tile getTileByCoords(int x, int y) {
