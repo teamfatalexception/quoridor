@@ -150,7 +150,7 @@ public class FEai {
 	    //for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
 	    for(Player playeri : qboard.getPlayerSet()){
 		//if their length is shorter than ours, block them.
-  	        if(shortestPathToWin(playeri.getID(), qboard) <= shortestPathToWin(player, qboard) && playeri.getID() != player){
+  	        if(shortestPathToWin(playeri.getID(), qboard) < shortestPathToWin(player, qboard) && playeri.getID() != player){
 		    //move = blockPlayer(i, qboard);
 		    shortestPlayer = playeri.getID();
 	        }

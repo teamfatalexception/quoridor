@@ -291,10 +291,10 @@ public class Server {
                     //System.out.println("I will give you a move, give me a god damned second..");
 					// If we are fighting two players..	
 					//if(board.getPlayerSet().size() <= 2){
-					if(id == 2){
+					if(playerId == 4 || playerId == 3){
 					    answer = "TESUJI " + AI.getMove2(playerId, board);
 					}else{
-		                answer = "TESUJI " + AI.getMove(playerId, board);
+		                	    answer = "TESUJI " + AI.getMove(playerId, board);
 					}
                     System.out.println("Sending: " + answer);
                     writeMsg(answer);
