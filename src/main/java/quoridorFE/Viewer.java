@@ -159,9 +159,12 @@ public class Viewer extends Application {
     	Platform.runLater(new Runnable() {
             @Override
             public void run() {
-		        centerPane.getChildren().add(new Rectangle(centerPane.getHeight(), centerPane.getWidth(), Color.gray(0.5, 0.5)));
+		        centerPane.getChildren().add(new Rectangle(centerPane.getHeight(), centerPane.getWidth(), Color.gray(0.2, 0.4)));
 		        Text winnerText = new Text("Player " + player + " wins!");
-		        winnerText.setStyle("-fx-text-inner-color: WHITE");
+		        winnerText.setFill(Color.WHITE);
+		        winnerText.setStyle("-fx-font: 92 arial-bold;");
+		        winnerText.setX(-60);
+		        winnerText.setY(250);
 		        centerPane.getChildren().add(winnerText);
             }
         });
