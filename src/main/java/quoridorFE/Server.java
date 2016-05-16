@@ -25,6 +25,8 @@ public class Server {
 
     private static FEai AI = new FEai();
 
+    public static String[] name = {"stinkyDog", "perfectPath", "mirrorMove"};
+
 	private QuoridorBoard board;
 	public static Viewer viewer = null;
 
@@ -232,7 +234,8 @@ public class Server {
                         if(message.equalsIgnoreCase("HELLO")) {
                             // Flip the hello toggle and build the IAM message
                             helloSpin = false;
-                            answer = "IAM " + PLAYERNAME;
+                            //answer = "IAM " + PLAYERNAME;
+			    answer = "IAM fex:" + name[0];
                             System.out.println("Sending: " + answer);
                             writeMsg(answer);
                         }
@@ -289,8 +292,8 @@ public class Server {
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
                         //System.out.println("I will give you a move, give me a god damned second..");
 			// If we are fighting two players..	
-			if(board.getPlayerSet().size() <= 2){
-			//if(id == 2){
+			//if(board.getPlayerSet().size() <= 2){
+			if(id == 2){
 			    answer = "TESUJI " + AI.getMove2(playerId, board);
 			}else{
                     	    answer = "TESUJI " + AI.getMove(playerId, board);

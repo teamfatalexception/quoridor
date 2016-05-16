@@ -314,9 +314,7 @@ public class Client  {
         	turnList.add(p);
         }
         Collections.sort(turnList);
-        whosTurnIsIt = turnList.listIterator(0);
-        
-                             
+        whosTurnIsIt = turnList.listIterator(0);        
         if(gui_only) {
 		
 			System.out.println("GUI is launching!!");
@@ -399,9 +397,7 @@ public class Client  {
 
 
         while(automate) {
-        
 			//System.out.println("	Nope");
-			
 			//If automation is on we do . . .
 			System.out.println("Automating");
             // We want the turn time to be fixed so delay - start == new delay
@@ -445,37 +441,40 @@ public class Client  {
         		Thread.currentThread().interrupt();
     		}										
         }
-	System.out.println("GAME OVER\nPRESS ENTER TO EXIT");
+	System.out.println("GAME OVER\nEnter something to leave");
 	Scanner sc = new Scanner(System.in);
 	sc.next();
+	//Thread.currentThread().stop();
+	//System.exit(0);
     }
 
 
     // Basically a simple method that shuts down all the servers.
     public static void cleanUp(ArrayList<Client> clients){
-        System.out.println("  Cleaning up!");
+        //System.out.println("  Cleaning up!");
         listen_loop = false;
 	automate = false;
         // FIXME could be for each loop
         for(int i=0; i<clients.size(); i++){
 	    if(clients.get(i) != null){
             	try{
-                    System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
+                    //System.out.println("    Asking player " + clients.get(i).port + " to shutdown.");
                     clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
                     //clients.get(i).disconnect();
             	}catch(Exception e){
                     //System.out.print(e);
                     //System.out.println("    Sending to: " + clients.get(i).port);
             	}
-	        try {
-        	    Thread.sleep(10);
-        	} catch(InterruptedException ex) {
+	        //try {
+        	  //  Thread.sleep(10);
+        	//} catch(InterruptedException ex) {
         	    //Thread.currentThread().interrupt();
-        	}
+        	//}
 	    }else{
 	    	System.out.println("Player not found.. skipping.");
 	    }
         }
+	//System.exit(0);
     }
 
 
@@ -692,19 +691,19 @@ public class Client  {
 							// if there is no next then we are at the end and must set the iterator to the beginning
 							turnList.remove(currentPlayer);
 							whosTurnIsIt = turnList.listIterator(turnList.indexOf(turnList.getFirst()));
-						    } else {
+						} else {
 							Player nextPlayer = whosTurnIsIt.next();
 							turnList.remove(currentPlayer);
-							    whosTurnIsIt = turnList.listIterator(turnList.indexOf(nextPlayer));
-						    }
+						        whosTurnIsIt = turnList.listIterator(turnList.indexOf(nextPlayer));
+						}
 						broadcast(clients, "GOTE " + currentPlayer.getID());
 						//int winner = isWinner();
-				        /*if(winner != 0){
+				        	/*if(winner != 0){
 						    System.out.println("Player #" + winner + " has won!");
 						    // TODO tell the servers who won
 						    cleanUp(clients);
 							//System.exit(0);
-				        }*/
+				        	}*/
 				    }
 					
 				    boardLock.release();
@@ -712,16 +711,21 @@ public class Client  {
 				} else {
 					System.out.println("I didn't quite catch that..");
 				}
-				/*int winner = isWinner();
+				int winner = isWinner();
 				if(winner != 0){
                                         System.out.println("Player #" + winner + " has won!");
                                         // TODO tell the servers who won
                                         cleanUp(clients);
                                         //System.exit(0);
-                                }*/
-
+                                }
+		//System.exit(0);
+		//Thread.stop();
+		//Thread.currentThread().stop();
             }
+	    //Thread.currentThread().stop();
         }
+	//Thread.currentThread().interrupt();
+	//System.exit(0);
     }
     // this is a method to print out a "prompt" for the game, it tells you how to send
     //moves and such.
