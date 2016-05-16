@@ -257,6 +257,7 @@ public class QuoridorBoard {
 	 * @return False for an invalid move, True for a valid one.
 	 */
 	public synchronized boolean isValidMove(int player, int x, int y, char orientation) {
+		////System.err.println("	CALLING IS VALID MOVE!");
 		// check for out of bounds
 		if (x > 7 || y > 7) return false;
 		
@@ -405,6 +406,10 @@ public class QuoridorBoard {
 			if (placedWall.y > 0) invalidWallSet.add(new Wall(placedWall.x, placedWall.y - 1, 'v'));
 			if (placedWall.y < 7) invalidWallSet.add(new Wall(placedWall.x, placedWall.y + 1, 'v'));
 		}
+		//for(Wall w: invalidWallSet){
+		//	System.err.println("	"+w);
+		//}
+
 	}
 	
 	/**

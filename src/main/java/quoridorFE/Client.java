@@ -445,6 +445,9 @@ public class Client  {
         		Thread.currentThread().interrupt();
     		}										
         }
+	System.out.println("GAME OVER\nPRESS ENTER TO EXIT");
+	Scanner sc = new Scanner(System.in);
+	sc.next();
     }
 
 
@@ -452,7 +455,7 @@ public class Client  {
     public static void cleanUp(ArrayList<Client> clients){
         System.out.println("  Cleaning up!");
         listen_loop = false;
-	//automate = false;
+	automate = false;
         // FIXME could be for each loop
         for(int i=0; i<clients.size(); i++){
 	    if(clients.get(i) != null){
@@ -461,9 +464,14 @@ public class Client  {
                     clients.get(i).sendMessage("KIKASHI " + currentPlayer.getID());
                     //clients.get(i).disconnect();
             	}catch(Exception e){
-                    System.out.print(e);
-                    System.out.println("    Sending to: " + clients.get(i).port);
+                    //System.out.print(e);
+                    //System.out.println("    Sending to: " + clients.get(i).port);
             	}
+	        try {
+        	    Thread.sleep(10);
+        	} catch(InterruptedException ex) {
+        	    //Thread.currentThread().interrupt();
+        	}
 	    }else{
 	    	System.out.println("Player not found.. skipping.");
 	    }
@@ -509,7 +517,7 @@ public class Client  {
 
 		//If only one player remains!
 		if(board.getPlayerSet().size() <= 1){
-			System.out.println("One player remains, end of game!");
+			//System.out.println("One player remains, end of game!");
 			return board.getPlayerSet().iterator().next().getID();
 		}
 		
@@ -616,13 +624,13 @@ public class Client  {
 						//System.out.println("ERROR 2?");
 					    broadcast(clients, "ATARI " + currentPlayer.getID() + " [(" + my_cord[1] + ", " + my_cord[2] + "), " + my_cord[3] + "]");
 					    viewer.refresh();
-					    int winner = isWinner();
+					/*    int winner = isWinner();
 				        if(winner != 0){
 						    System.out.println("Player #" + winner + " has won!");
 						    // TODO tell the servers who won
 						    cleanUp(clients);
 							//System.exit(0);
-				        }
+				        }*/
 					}else{
 					    System.out.println("BAM, KICKED!");
 					    board.removePlayer(currentPlayer.getID());
@@ -640,13 +648,13 @@ public class Client  {
 					    
 					    //players.add(currentPlayer.getID() -1, null);
 					    broadcast(clients, "GOTE " + currentPlayer.getID());
-					    int temp2 = isWinner();
+					    /*int temp2 = isWinner();
 					    if(temp2 != 0){
 					        System.out.println("Player #" + temp2 + " has won!");
 					        // TODO tell the servers who won
 					        cleanUp(clients);
 					        //System.exit(0);
-					    }
+					    }*/
 					    
 					}
 					
@@ -670,33 +678,33 @@ public class Client  {
 				    	viewer.refresh();
 				    	broadcast(clients, "ATARI " + currentPlayer.getID() + " (" + my_cord[1] + ", " + my_cord[2] + ") ");
 				    	int winner = isWinner();
-				        if(winner != 0){
-						    System.out.println("Player #" + winner + " has won!");
-						    // TODO tell the servers who won
-						    cleanUp(clients);
-							//System.exit(0);
-				        }
-				    } else {
-				    	System.out.println("BAM, KICKED!");
-				        board.removePlayer(currentPlayer.getID());
-				        viewer.refresh();
-				        if (!whosTurnIsIt.hasNext()) {
-					    	// if there is no next then we are at the end and must set the iterator to the beginning
-					    	turnList.remove(currentPlayer);
-					    	whosTurnIsIt = turnList.listIterator(turnList.indexOf(turnList.getFirst()));
+				        /*if(winner != 0){
+							    System.out.println("Player #" + winner + " has won!");
+							    // TODO tell the servers who won
+							    cleanUp(clients);
+								//System.exit(0);
+						}*/
 					    } else {
-					    	Player nextPlayer = whosTurnIsIt.next();
-					    	turnList.remove(currentPlayer);
-						    whosTurnIsIt = turnList.listIterator(turnList.indexOf(nextPlayer));
-					    }
-				        broadcast(clients, "GOTE " + currentPlayer.getID());
-					int winner = isWinner();
-				        if(winner != 0){
+						System.out.println("BAM, KICKED!");
+						board.removePlayer(currentPlayer.getID());
+						viewer.refresh();
+						if (!whosTurnIsIt.hasNext()) {
+							// if there is no next then we are at the end and must set the iterator to the beginning
+							turnList.remove(currentPlayer);
+							whosTurnIsIt = turnList.listIterator(turnList.indexOf(turnList.getFirst()));
+						    } else {
+							Player nextPlayer = whosTurnIsIt.next();
+							turnList.remove(currentPlayer);
+							    whosTurnIsIt = turnList.listIterator(turnList.indexOf(nextPlayer));
+						    }
+						broadcast(clients, "GOTE " + currentPlayer.getID());
+						//int winner = isWinner();
+				        /*if(winner != 0){
 						    System.out.println("Player #" + winner + " has won!");
 						    // TODO tell the servers who won
 						    cleanUp(clients);
 							//System.exit(0);
-				        }
+				        }*/
 				    }
 					
 				    boardLock.release();
@@ -704,6 +712,13 @@ public class Client  {
 				} else {
 					System.out.println("I didn't quite catch that..");
 				}
+				/*int winner = isWinner();
+				if(winner != 0){
+                                        System.out.println("Player #" + winner + " has won!");
+                                        // TODO tell the servers who won
+                                        cleanUp(clients);
+                                        //System.exit(0);
+                                }*/
 
             }
         }

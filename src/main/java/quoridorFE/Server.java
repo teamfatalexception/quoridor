@@ -287,10 +287,14 @@ public class Server {
         		}*/
 
                     } else if(message.contains("MYOUSHU")){ // I'm being requested for a move.
-                        System.out.println("I will give you a move, give me a god damned second..");
+                        //System.out.println("I will give you a move, give me a god damned second..");
 			// If we are fighting two players..	
-			//if(board.getPlayerSet().size() <= 2){
-                    	answer = "TESUJI " + AI.getMove(playerId, board);
+			if(board.getPlayerSet().size() <= 2){
+			//if(id == 2){
+			    answer = "TESUJI " + AI.getMove2(playerId, board);
+			}else{
+                    	    answer = "TESUJI " + AI.getMove(playerId, board);
+			}
                         System.out.println("Sending: " + answer);
                         writeMsg(answer);
                     } else if(message.contains("ATARI")){ // Someone has just moved legally and it's being broadcast.
@@ -306,15 +310,24 @@ public class Server {
 						// Is a wall move
 						if(message.toLowerCase().contains("h") || message.toLowerCase().contains("v")){
 							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
-							board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
-							//viewer.refresh();
-							System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
+							if(board.isValidMove(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0)) ){
+							    board.placeWall(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]), sc[4].charAt(0));
+							    //viewer.refresh();
+							    System.out.println("placed wall at [(" + sc[2] +", "+ sc[3] +") " + sc[4] + "]");
+							}else{
+							    System.out.println("	ERROR, client gave illeagl move!");
+							}
 						}else{
-							// ..else is a pawn move
-							// FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
-							board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
-							//viewer.refresh();
-							System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
+                                                        if(board.isValidMove(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]) )){
+							    // ..else is a pawn move
+							    // FIXME THIS IS NOT CHECKING TO SEE IF IT'S A VALID MOVE
+							    board.movePawn(Integer.parseInt(sc[1]), Integer.parseInt(sc[2]), Integer.parseInt(sc[3]));
+							    //viewer.refresh();
+							    System.out.println("placed pawn at (" + sc[2] +", "+ sc[3] +")");
+							}else{
+                                                            System.out.println("        ERROR, client gave illeagl move!");
+                                                        }
+
 						}
                         //System.out.println("Recieved: " + message);
                     } else if(message.contains("GOTE")){ // Someone made and illegal move and is now gone.

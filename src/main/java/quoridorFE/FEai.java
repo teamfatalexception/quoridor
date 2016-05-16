@@ -118,21 +118,26 @@ public class FEai {
 		    or = attempt.charAt(9);
             	    if (qboard.isValidMove(player, x, y, or)) {
                 	// we found a good move
-            		return true;
-            	    }
+            		verdict = true;
+           	    }
+		    // check if wall forms an 
 		}else{
 		    // It is a pawn move.
 		    x = Integer.parseInt(""+attempt.charAt(1));
 	     	    y = Integer.parseInt(""+attempt.charAt(4));
             	    if (qboard.isValidMove(player, x, y) ) {
                 	// we found a good move
-                	return true;
+                	verdict = true;
             	    }
 		}
 	        // Hardcoded checking.
 		if(x > 7  || y > 7){
 			verdict = false;
 		}
+		//Check if walls are crossed.
+		//if(){
+
+		//}
 		return verdict;
 	}
 	
@@ -142,11 +147,12 @@ public class FEai {
 	    //iterate through other players.
 	    int shortestPlayer = 0;
 	    String move;// = getMoveShortestPath(player, qboard);
-	    for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
+	    //for(int i=0; i<qboard.getPlayerSet().size()+1; i++){
+	    for(Player playeri : qboard.getPlayerSet()){
 		//if their length is shorter than ours, block them.
-  	        if(shortestPathToWin(i, qboard) <= shortestPathToWin(player, qboard) && i != player){
+  	        if(shortestPathToWin(playeri.getID(), qboard) <= shortestPathToWin(player, qboard) && playeri.getID() != player){
 		    //move = blockPlayer(i, qboard);
-		    shortestPlayer = i;
+		    shortestPlayer = playeri.getID();
 	        }
 	    }
 	    if(shortestPlayer != 0){
@@ -156,7 +162,7 @@ public class FEai {
 		}
 	    }
 	    return getMoveShortestPath(player, qboard);
-	}//*/
+	}
 
 	
 	/**
@@ -171,14 +177,15 @@ public class FEai {
 	    }
 	    // SMART - If we can place a wall that will let us walk to victory lets place it!
 	    //String tunnel = tunnelWall(player, qboard);
-	    /*if(tunnel != ""){
+	    //System.out.println("	TUNNEL:" + tunnel);
+	    /*if(!tunnel.equals("")){
 		System.out.println("Tunnel:"+tunnel);
-		if(isValid(player, qboard, tunnel)){
+		//if(isValid(player, qboard, tunnel)){
 		    System.out.println("Time to Tunnel to Victory, for the emporeur!");
 		    // Make it so we will only do shortest path from then on.
-		    weight = 9001;
+		    //weight = 9001;
 		    return tunnel;
-		}
+		//}
 	    }*/
 	    int r = ran.nextInt(100);
 	    boolean keepgoing = true;
@@ -187,7 +194,7 @@ public class FEai {
 	    while(keepgoing){
 	        // Lets select a move based on that number. Later we will have a weighted system generated based on board state.
 		//System.out.println(""+r);
-		if(count > 5){
+		if(count > 4){
 			output = getMoveShortestPath(player, qboard);
 			keepgoing = false;
 			System.out.println("	I've had it with these god damned snakes on this god damned plane.");
@@ -205,10 +212,10 @@ public class FEai {
         	    	msg = msg.replace('[', ' ');
         	   	msg = msg.replace(']', ' ');
 			String[] my_cord = msg.split("\\s+");
-			System.out.println("	Handing to isValid" + msg);
+			//System.out.println("	Handing to isValid" + msg);
 
 			// Checking if it is illegal.
-			if(output.toLowerCase().contains("v") || output.toLowerCase().contains("h") && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
+			if((output.toLowerCase().contains("v") || output.toLowerCase().contains("h")) && qboard.isValidMove(player, Integer.parseInt(my_cord[1]), Integer.parseInt(my_cord[2]), my_cord[3].charAt(0))){
 			    keepgoing = false;
 			    System.out.println("        LEGAL MOVE:" + output);
 			    //return output;
@@ -288,22 +295,18 @@ public class FEai {
 
 	    // Iterate through all players
 	    // FIXME this could be a for each loop
-	    for(int i=1; i<qboard.getPlayerSet().size()+1; i++){
-			// If it is us or the player has been kicked.
-			if(i == player || qboard.getNodeByPlayerNumber(i) == null) {
-			    //System.out.println(qboard.getNodeByPlayerNumber(i));
-			} else {
-			    // Check for shortest path.
-			    int temp = shortestPathToWin(i, qboard);
-   	            	    if(temp < playerPair[1]){
-				System.out.println("	New shortest is:" + i + "!");
-				playerPair[0] = i;
-				playerPair[1] = temp;
-   	            	    }
-		        }
+	    //for(int i=0; i<qboard.getPlayerSet().size(); i++){
+	    for(Player playeri : qboard.getPlayerSet()){
+		if(playeri.getID() != player){
+		    int temp = shortestPathToWin(playeri.getID(), qboard);
+                    if(temp <= playerPair[1]){
+                	System.out.println("    New shortest is:" + playeri.getID() + "!");
+                	playerPair[0] = playeri.getID();
+                	playerPair[1] = temp;
+                    }
+		}		       
 	    }
 	    // Now that we have the closest player lets return a blocking wall on him.
-	    
 	    String temp = blockPlayer(playerPair[0], qboard);
 	    System.out.println("temp"+temp);
 	    return temp;
